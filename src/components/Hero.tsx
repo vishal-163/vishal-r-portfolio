@@ -9,7 +9,7 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center px-4 sm:px-6 md:px-8 py-20 pt-24 relative overflow-hidden">
-      
+
       {/* Background glow */}
       <div className="absolute top-1/4 -left-32 w-64 md:w-96 h-64 md:h-96 bg-cyan-500/10 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/4 -right-32 w-64 md:w-96 h-64 md:h-96 bg-emerald-500/10 rounded-full blur-[120px]" />
@@ -27,23 +27,13 @@ const Hero = () => {
             Welcome to my portfolio
           </p>
 
-          {/* NAME */}
+          {/* NAME (STATIC - IMPORTANT) */}
           <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight mb-4">
-            {" "}
+            Hi, I'm{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              <TypeAnimation
-                sequence={[
-                  "Vishal R",
-                  5000,
-                  "",
-                  800,
-                ]}
-                speed={50}
-                repeat={Infinity}
-                cursor={false}
-              />
+              Vishal R
             </span>
-            <span className="ml-1 text-cyan-400 text-lg relative top-2 blink">_</span>
+            <span className="ml-1 text-cyan-400 text-base align-baseline blink">_</span>
           </h1>
 
           {/* ROLE */}
@@ -58,7 +48,6 @@ const Hero = () => {
                 2000,
                 "",
                 500,
-
                 "CS Undergraduate",
                 2000,
                 "",
@@ -68,7 +57,7 @@ const Hero = () => {
               repeat={Infinity}
               cursor={false}
             />
-            <span className="ml-1 text-cyan-400 text-base blink">_</span>
+            <span className="ml-1 text-cyan-400 text-sm blink">_</span>
           </p>
 
           <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-lg mx-auto md:mx-0 leading-relaxed">
@@ -78,7 +67,7 @@ const Hero = () => {
           </p>
 
           {/* BUTTONS */}
-          <div className="flex flex-col sm:flex-row gap-3 items-center md:items-start justify-center md:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 items-center md:items-start justify-center md:justify-start">
             <button onClick={() => scrollTo("#projects")} className="btn-primary-glow w-full sm:w-auto">
               View Projects
             </button>
@@ -106,11 +95,16 @@ const Hero = () => {
           className="flex justify-center"
         >
           <div className="relative">
-            <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_30px_rgba(6,182,212,0.4)] animate-float">
+
+            {/* Glow background */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400/20 to-emerald-400/20 blur-2xl scale-110" />
+
+            {/* Image */}
+            <div className="relative w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-2 border-cyan-400 glow-blue animate-float">
               <img
                 src={profileImg}
                 alt="Vishal R"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover mix-blend-multiply"
               />
             </div>
 
