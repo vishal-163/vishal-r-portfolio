@@ -49,13 +49,13 @@ const Contact = () => {
           </div>
 
           <div className="flex justify-center gap-4">
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-neon-blue transition-colors group">
+            <a href="https://www.linkedin.com/in/vishal-ravi-653a8a33b/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-neon-blue transition-colors group">
               <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center group-hover:bg-neon-blue/20 transition-colors border border-glass-border">
                 <Linkedin className="w-5 h-5 text-neon-blue" />
               </div>
               LinkedIn
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-neon-blue transition-colors group">
+            <a href="https://github.com/vishal-163" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-neon-blue transition-colors group">
               <div className="w-12 h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center group-hover:bg-neon-blue/20 transition-colors border border-glass-border">
                 <Github className="w-5 h-5 text-neon-blue" />
               </div>
