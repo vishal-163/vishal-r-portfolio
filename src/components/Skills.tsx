@@ -5,7 +5,7 @@ const categories = [
   {
     title: "Frontend",
     color: "from-blue-500 to-cyan-400",
-    skills: ["React.js", "Next.js 14", "HTML & Tailwind CSS", "shadcn/ui", "Framer Motion"],
+    skills: ["React.js","Flutter","CSS", "Next.js 14","Dart", "HTML","Tailwind CSS", "shadcn/ui", "Framer Motion"],
   },
   {
     title: "Backend",
