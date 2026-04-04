@@ -54,6 +54,11 @@ const Hero = () => {
                 2000,
                 "",
                 500,
+                "Building Scalable Web & AI Systems",
+                2000,
+                "",
+                500,
+
                 "CS Undergraduate",
                 2000,
                 "",
