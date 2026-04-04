@@ -10,7 +10,7 @@ const categories = [
   {
     title: "Backend",
     color: "from-violet-500 to-purple-400",
-    skills: ["Node.js", "Express.js", "REST APIs", "JWT Authentication", "RBAC"],
+    skills: ["Node.js", "Express.js", "REST APIs", "JWT Authentication", "RBAC","Python","Java(Learning)"],
   },
   {
     title: "Databases",
