@@ -25,7 +25,7 @@ const categories = [
   {
     title: "Tools",
     color: "from-pink-500 to-rose-400",
-    skills: ["Git & GitHub", "Docker", "Vercel & Netlify", "VS Code"],
+    skills: ["Git","GitHub", "Docker", "Vercel","Netlify", "VS Code"],
   },
 ];
 
