@@ -35,9 +35,9 @@ const About = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-muted-foreground text-lg leading-relaxed max-w-3xl mx-auto text-center mb-16"
         >
-          Vishal is a Computer Science student with strong experience in full stack development and AI-integrated systems. 
-          He has worked on scalable applications using modern technologies like React, Next.js, Node.js, and PostgreSQL. 
-          He is currently building an advanced Smart Military Vest system focused on real-time health monitoring and emergency 
+          I am a Computer Science student with strong experience in full stack development and AI-integrated systems. 
+          I have worked on scalable applications using modern technologies like React, Next.js, Node.js, and PostgreSQL. 
+          I am currently building an advanced Smart Military Vest system focused on real-time health monitoring and emergency 
           response using IoT and secure communication protocols.
         </motion.p>
 

@@ -45,9 +45,14 @@ const Hero = () => {
             <button onClick={() => scrollTo("#projects")} className="btn-primary-glow">
               View Projects
             </button>
-            <button className="btn-outline-glow">
-              Download Resume
-            </button>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-outline-glow flex items-center justify-center"
+          >
+            Download Resume
+          </a>
             <button onClick={() => scrollTo("#contact")} className="btn-outline-glow">
               Contact Me
             </button>

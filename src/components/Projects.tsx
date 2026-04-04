@@ -13,6 +13,7 @@ const projects = [
       "Real-time data sync",
       "Structured JSON output for UI rendering",
     ],
+    github:"https://github.com/vishal-163/AI-TRIP-PLANNER.git",
     featured: false,
     tag: null,
   },
@@ -26,8 +27,10 @@ const projects = [
       "Dual-channel transmission (LoRa + GSM)",
       "Intelligent distress detection system",
     ],
+    github:null,
     featured: true,
     tag: "In Progress",
+    
   },
 ];
 
@@ -108,9 +111,14 @@ const Projects = () => {
               </div>
 
               <div className="flex gap-4">
-                <button className="btn-outline-glow flex items-center gap-2 text-sm !px-4 !py-2">
-                  <Github className="w-4 h-4" /> GitHub
-                </button>
+                {project.github && (
+                  <button
+                    onClick={() => window.open(project.github, "_blank")}
+                    className="btn-outline-glow flex items-center gap-2 text-sm !px-4 !py-2"
+                  >
+                    <Github className="w-4 h-4" /> GitHub
+                  </button>
+                )}
               </div>
             </motion.div>
           ))}
