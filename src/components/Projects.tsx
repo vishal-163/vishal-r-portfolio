@@ -111,9 +111,6 @@ const Projects = () => {
                 <button className="btn-outline-glow flex items-center gap-2 text-sm !px-4 !py-2">
                   <Github className="w-4 h-4" /> GitHub
                 </button>
-                <button className="btn-outline-glow flex items-center gap-2 text-sm !px-4 !py-2">
-                  <ExternalLink className="w-4 h-4" /> Live Demo
-                </button>
               </div>
             </motion.div>
           ))}
