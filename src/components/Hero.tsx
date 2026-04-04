@@ -72,8 +72,9 @@ const Hero = () => {
           </p>
 
           <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-lg mx-auto md:mx-0 leading-relaxed">
-            Computer Science student with hands-on experience in React, Next.js, Node.js, and AI-powered applications. 
-            Passionate about building production-grade systems that solve real-world problems.
+            Computer Science student and aspiring Full Stack Developer with a strong interest in building scalable web and AI-driven applications. 
+            I have hands-on experience with technologies like React, HTML, CSS, Python and PostgreSQL, 
+            and I enjoy working across both frontend and backend to create efficient systems.
           </p>
 
           {/* BUTTONS */}
