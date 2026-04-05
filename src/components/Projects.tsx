@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Github } from "lucide-react";
 import { useTilt } from "@/hooks/useTilt";
 
+const VP = { once: false, amount: 0.1 };
+
 const projects = [
   {
     title: "AI Trip Planner",
@@ -23,7 +25,7 @@ const projects = [
     description: "Defence-grade IoT system for real-time soldier health monitoring and automated emergency alerts.",
     tech: ["ESP32", "Sensors", "LoRa", "GSM", "GPS"],
     features: [
-      "Designing a defence-grade wearable system for real-time soldier health monitoring including heart rate, SpO2,temperature, and motion tracking.",
+      "Designing a defence-grade wearable system for real-time soldier health monitoring including heart rate, SpO2, temperature, and motion tracking.",
       "Built multi-sensor integration using I2C and SPI protocols with on-device preprocessing for efficient data aggregation.",
       "Architecting dual-channel communication using LoRa and GSM/4G with AES-256 encryption for secure and reliable transmission.",
       "Developing an intelligent alert system for automated distress signal generation based on health thresholds.",
@@ -43,40 +45,36 @@ interface ProjectCardProps {
 function ProjectCard({ project, index }: ProjectCardProps) {
   const shouldReduceMotion = useReducedMotion();
   const { ref, style, onMouseMove, onMouseLeave } = useTilt(6);
-
-  const finalState = { opacity: 1, y: 0 };
+  // Odd cards slide from right, even from left
+  const xFrom = index % 2 === 0 ? -70 : 70;
 
   return (
     <motion.div
       ref={ref as React.RefObject<HTMLDivElement>}
-      initial={shouldReduceMotion ? finalState : { opacity: 0, y: 40 }}
-      whileInView={finalState}
-      viewport={{ once: true }}
-      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, delay: index * 0.1 }}
-      className={`glass-card-hover p-5 sm:p-6 md:p-8 relative overflow-hidden group ${
-        project.featured ? "border-cyan-400/30" : ""
-      }`}
+      initial={shouldReduceMotion ? {} : { opacity: 0, x: xFrom }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={VP}
+      transition={shouldReduceMotion ? { duration: 0 } : {
+        duration: 0.65,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className={`glass-card-hover p-5 sm:p-6 md:p-8 relative overflow-hidden group ${project.featured ? "border-cyan-400/30" : ""}`}
       style={shouldReduceMotion ? undefined : style}
       onMouseMove={shouldReduceMotion ? undefined : onMouseMove}
       onMouseLeave={shouldReduceMotion ? undefined : onMouseLeave}
     >
-      {/* Top highlight bar */}
       {project.featured && (
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400" />
       )}
 
-      {/* Title */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <h3 className="font-heading text-lg sm:text-xl md:text-2xl font-bold">
-          {project.title}
-        </h3>
-
+        <h3 className="font-heading text-lg sm:text-xl md:text-2xl font-bold">{project.title}</h3>
         {project.tag && (
           <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-emerald-400/20 text-emerald-400 border border-emerald-400/30">
             {project.tag}
           </span>
         )}
-
         {project.featured && (
           <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-cyan-400/20 text-cyan-400 border border-cyan-400/30">
             Featured
@@ -84,45 +82,46 @@ function ProjectCard({ project, index }: ProjectCardProps) {
         )}
       </div>
 
-      {/* Description */}
-      <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6 max-w-2xl">
-        {project.description}
-      </p>
+      <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6 max-w-2xl">{project.description}</p>
 
-      {/* Grid */}
       <div className="grid sm:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
-
-        {/* Features */}
         <div>
-          <h4 className="text-xs font-semibold text-cyan-400 mb-2 uppercase tracking-wider">
-            Key Features
-          </h4>
+          <h4 className="text-xs font-semibold text-cyan-400 mb-2 uppercase tracking-wider">Key Features</h4>
           <ul className="space-y-1.5">
-            {project.features.map((f) => (
-              <li key={f} className="text-xs md:text-sm text-muted-foreground flex gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5" />
+            {project.features.map((f, fi) => (
+              <motion.li
+                key={f}
+                initial={shouldReduceMotion ? {} : { opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={VP}
+                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.35, delay: 0.2 + fi * 0.06 }}
+                className="text-xs md:text-sm text-muted-foreground flex gap-2"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
                 {f}
-              </li>
+              </motion.li>
             ))}
           </ul>
         </div>
-
-        {/* Tech */}
         <div>
-          <h4 className="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wider">
-            Tech Stack
-          </h4>
+          <h4 className="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wider">Tech Stack</h4>
           <div className="flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span key={t} className="px-2 py-1 text-[10px] md:text-xs rounded-lg bg-muted/50 border border-white/10">
+            {project.tech.map((t, ti) => (
+              <motion.span
+                key={t}
+                initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.7 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={VP}
+                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, delay: 0.25 + ti * 0.05, ease: "backOut" }}
+                className="px-2 py-1 text-[10px] md:text-xs rounded-lg bg-muted/50 border border-white/10"
+              >
                 {t}
-              </span>
+              </motion.span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* GitHub */}
       {project.github && (
         <button
           onClick={() => window.open(project.github!, "_blank")}
@@ -137,18 +136,17 @@ function ProjectCard({ project, index }: ProjectCardProps) {
 
 const Projects = () => {
   const shouldReduceMotion = useReducedMotion();
-  const finalState = { opacity: 1, y: 0 };
 
   return (
     <section id="projects" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
 
-        {/* Heading */}
+        {/* Heading — zoom in from center */}
         <motion.div
-          initial={shouldReduceMotion ? finalState : { opacity: 0, y: 30 }}
-          whileInView={finalState}
-          viewport={{ once: true }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6 }}
+          initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.75 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={VP}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
           className="text-center mb-10 md:mb-16"
         >
           <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
@@ -157,7 +155,7 @@ const Projects = () => {
           <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 to-emerald-400 mx-auto rounded-full" />
         </motion.div>
 
-        {/* Projects */}
+        {/* Cards — alternating left/right slide */}
         <div className="space-y-6 md:space-y-8">
           {projects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
