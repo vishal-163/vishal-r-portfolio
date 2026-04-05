@@ -3,6 +3,18 @@
  * These are kept side-effect-free so they can be unit/property tested easily.
  */
 
+/**
+ * Detects whether the device is truly low-end.
+ * Only triggers on 1–2 CPU cores OR explicit prefers-reduced-motion.
+ * Most modern phones/laptops have 4+ cores so they get particles.
+ */
+export function isLowEndDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const lowCPU = typeof navigator !== "undefined" && navigator.hardwareConcurrency <= 2;
+  return reducedMotion || lowCPU;
+}
+
 export interface Particle {
   x: number;
   y: number;
@@ -15,12 +27,12 @@ export interface Particle {
 
 /**
  * Returns the number of particles to render based on viewport width.
- * >= 100 for width > 1024, >= 60 for 768–1024, >= 40 for < 768.
+ * Counts are kept lean for performance: ~50% of original values.
  */
 export function getParticleCount(width: number): number {
-  if (width > 1024) return 120;
-  if (width >= 768) return 70;
-  return 40;
+  if (width > 1024) return 60;
+  if (width >= 768) return 35;
+  return 20;
 }
 
 /**

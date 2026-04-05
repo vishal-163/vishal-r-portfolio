@@ -1,61 +1,52 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { getParallaxOffset } from "@/lib/animationUtils";
-
-interface AuroraBlob {
-  color: "cyan" | "emerald";
-  initialX: string;
-  initialY: string;
-  size: string;
-  duration: number;
-}
-
-const BLOBS: AuroraBlob[] = [
-  {
-    color: "cyan",
-    initialX: "-10%",
-    initialY: "-10%",
-    size: "600px",
-    duration: 8,
-  },
-  {
-    color: "emerald",
-    initialX: "auto",
-    initialY: "auto",
-    size: "600px",
-    duration: 7,
-  },
-];
+import { getParallaxOffset, isLowEndDevice } from "@/lib/animationUtils";
 
 export default function AuroraBackground() {
   const [scrollY, setScrollY] = useState(0);
+  const rafRef = useRef<number | null>(null);
+  const pendingScrollY = useRef(0);
+
+  const lowEnd = typeof window !== "undefined" ? isLowEndDevice() : false;
   const reducedMotion =
     typeof window !== "undefined"
       ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
       : false;
 
+  const isStatic = lowEnd || reducedMotion;
+
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    if (isStatic) return; // no scroll listener needed for static blobs
+
+    const handleScroll = () => {
+      pendingScrollY.current = window.scrollY;
+      if (rafRef.current !== null) return; // already scheduled
+      rafRef.current = requestAnimationFrame(() => {
+        setScrollY(pendingScrollY.current);
+        rafRef.current = null;
+      });
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isStatic]);
 
-  const parallaxOffset = getParallaxOffset(scrollY, 0.04);
+  const parallaxOffset = isStatic ? 0 : getParallaxOffset(scrollY, 0.04);
 
-  const blobAnimate = reducedMotion
-    ? { scale: 1, opacity: 0.4 }
-    : { scale: [0.9, 1.1], opacity: [0.4, 0.7] };
+  // Smaller blobs on low-end / mobile
+  const blobSize = typeof window !== "undefined" && window.innerWidth < 768 ? "350px" : "500px";
 
-  const blobInitial = { scale: 0.9, opacity: 0.4 };
+  const blobInitial = { scale: 0.9, opacity: 0.35 };
+  const blobAnimate = isStatic
+    ? blobInitial
+    : { scale: [0.9, 1.1] as number[], opacity: [0.35, 0.6] as number[] };
 
-  const blobTransition = reducedMotion
+  const blobTransition = isStatic
     ? undefined
-    : {
-        duration: 0, // overridden per blob
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        ease: "easeInOut",
-      };
+    : { repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut" as const };
 
   return (
     <div
@@ -63,66 +54,40 @@ export default function AuroraBackground() {
       style={{ zIndex: 0 }}
       aria-hidden="true"
     >
-      {/* Cyan blob — top-left corner */}
+      {/* Cyan blob — top-left */}
       <motion.div
-        className="absolute rounded-full bg-cyan-500/20 blur-3xl"
+        className="absolute rounded-full bg-cyan-500/15 blur-3xl"
         style={{
-          width: BLOBS[0].size,
-          height: BLOBS[0].size,
-          left: BLOBS[0].initialX,
-          top: BLOBS[0].initialY,
+          width: blobSize,
+          height: blobSize,
+          left: "-8%",
+          top: "-8%",
           translateY: parallaxOffset,
-          willChange: "transform",
+          willChange: isStatic ? "auto" : "transform",
           position: "fixed",
           pointerEvents: "none",
         }}
         initial={blobInitial}
-        animate={
-          reducedMotion
-            ? blobInitial
-            : { scale: [0.9, 1.1], opacity: [0.4, 0.7] }
-        }
-        transition={
-          reducedMotion
-            ? undefined
-            : {
-                duration: BLOBS[0].duration,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }
-        }
+        animate={blobAnimate}
+        transition={blobTransition ? { ...blobTransition, duration: 8 } : undefined}
       />
 
-      {/* Emerald blob — bottom-right corner */}
+      {/* Emerald blob — bottom-right */}
       <motion.div
-        className="absolute rounded-full bg-emerald-500/20 blur-3xl"
+        className="absolute rounded-full bg-emerald-500/15 blur-3xl"
         style={{
-          width: BLOBS[1].size,
-          height: BLOBS[1].size,
-          right: "-10%",
-          bottom: "-10%",
+          width: blobSize,
+          height: blobSize,
+          right: "-8%",
+          bottom: "-8%",
           translateY: parallaxOffset,
-          willChange: "transform",
+          willChange: isStatic ? "auto" : "transform",
           position: "fixed",
           pointerEvents: "none",
         }}
         initial={blobInitial}
-        animate={
-          reducedMotion
-            ? blobInitial
-            : { scale: [0.9, 1.1], opacity: [0.4, 0.7] }
-        }
-        transition={
-          reducedMotion
-            ? undefined
-            : {
-                duration: BLOBS[1].duration,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }
-        }
+        animate={blobAnimate}
+        transition={blobTransition ? { ...blobTransition, duration: 7 } : undefined}
       />
     </div>
   );
