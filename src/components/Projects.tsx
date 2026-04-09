@@ -147,12 +147,14 @@ const Projects = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={VP}
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-          className="text-center mb-10 md:mb-16"
+          className="mb-10 md:mb-16"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
-            Featured <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Projects</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 to-emerald-400 mx-auto rounded-full" />
+          <div className="section-heading inline-block">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
+              Featured <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Projects</span>
+            </h2>
+            <p className="font-mono text-xs text-white/25 mt-1">// projects.ts</p>
+          </div>
         </motion.div>
 
         {/* Cards — alternating left/right slide */}

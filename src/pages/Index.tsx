@@ -12,7 +12,6 @@ const Skills = lazy(() => import("@/components/Skills"));
 const Projects = lazy(() => import("@/components/Projects"));
 const Education = lazy(() => import("@/components/Education"));
 const Contact = lazy(() => import("@/components/Contact"));
-const Footer = lazy(() => import("@/components/Footer"));
 
 const SectionFallback = () => (
   <div className="py-28 flex items-center justify-center">
@@ -32,25 +31,27 @@ const Index = () => (
     <main className="relative z-10">
       {/* Hero loads eagerly — first paint */}
       <Hero />
+      <div className="section-divider" />
       <Suspense fallback={<SectionFallback />}>
         <About />
       </Suspense>
+      <div className="section-divider" />
       <Suspense fallback={<SectionFallback />}>
         <Skills />
       </Suspense>
+      <div className="section-divider" />
       <Suspense fallback={<SectionFallback />}>
         <Projects />
       </Suspense>
+      <div className="section-divider" />
       <Suspense fallback={<SectionFallback />}>
         <Education />
       </Suspense>
+      <div className="section-divider" />
       <Suspense fallback={<SectionFallback />}>
         <Contact />
       </Suspense>
     </main>
-    <Suspense fallback={null}>
-      <Footer />
-    </Suspense>
   </>
 );
 

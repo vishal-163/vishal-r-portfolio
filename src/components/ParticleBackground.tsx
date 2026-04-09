@@ -132,7 +132,7 @@ const ParticleBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ opacity: 0.6, willChange: "transform", zIndex: 1 }}
+      style={{ opacity: 0.35, willChange: "transform", zIndex: 1 }}
     />
   );
 };

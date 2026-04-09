@@ -1,94 +1,76 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { getParallaxOffset, isLowEndDevice } from "@/lib/animationUtils";
-
+/**
+ * AuroraBackground — pure CSS ambient light layer.
+ * No Framer Motion, no JS animation loop.
+ * Uses CSS keyframes for a very slow, GPU-composited pulse.
+ * Zero JS overhead on scroll or resize.
+ */
 export default function AuroraBackground() {
-  const [scrollY, setScrollY] = useState(0);
-  const rafRef = useRef<number | null>(null);
-  const pendingScrollY = useRef(0);
-
-  const lowEnd = typeof window !== "undefined" ? isLowEndDevice() : false;
-  const reducedMotion =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
-
-  const isStatic = lowEnd || reducedMotion;
-
-  useEffect(() => {
-    if (isStatic) return; // no scroll listener needed for static blobs
-
-    const handleScroll = () => {
-      pendingScrollY.current = window.scrollY;
-      if (rafRef.current !== null) return; // already scheduled
-      rafRef.current = requestAnimationFrame(() => {
-        setScrollY(pendingScrollY.current);
-        rafRef.current = null;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [isStatic]);
-
-  const parallaxOffset = isStatic ? 0 : getParallaxOffset(scrollY, 0.04);
-
-  // Smaller blobs on low-end / mobile
-  const blobSize = typeof window !== "undefined" && window.innerWidth < 768 ? "350px" : "500px";
-
-  const blobInitial = { scale: 0.9, opacity: 0.35 };
-  const blobAnimate = isStatic
-    ? blobInitial
-    : { scale: [0.9, 1.1] as number[], opacity: [0.35, 0.6] as number[] };
-
-  const blobTransition = isStatic
-    ? undefined
-    : { repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut" as const };
-
   return (
     <div
-      className="fixed inset-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 pointer-events-none overflow-hidden"
       style={{ zIndex: 0 }}
       aria-hidden="true"
     >
-      {/* Cyan blob — top-left */}
-      <motion.div
-        className="absolute rounded-full bg-cyan-500/15 blur-3xl"
+      {/* Top-left cyan ambient */}
+      <div
         style={{
-          width: blobSize,
-          height: blobSize,
-          left: "-8%",
-          top: "-8%",
-          translateY: parallaxOffset,
-          willChange: isStatic ? "auto" : "transform",
           position: "fixed",
-          pointerEvents: "none",
+          width: "55vw",
+          height: "55vw",
+          maxWidth: 600,
+          maxHeight: 600,
+          left: "-15%",
+          top: "-15%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(6,182,212,0.09) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          animation: "aurora-pulse-a 12s ease-in-out infinite",
+          willChange: "opacity",
         }}
-        initial={blobInitial}
-        animate={blobAnimate}
-        transition={blobTransition ? { ...blobTransition, duration: 8 } : undefined}
       />
 
-      {/* Emerald blob — bottom-right */}
-      <motion.div
-        className="absolute rounded-full bg-emerald-500/15 blur-3xl"
+      {/* Bottom-right emerald ambient */}
+      <div
         style={{
-          width: blobSize,
-          height: blobSize,
-          right: "-8%",
-          bottom: "-8%",
-          translateY: parallaxOffset,
-          willChange: isStatic ? "auto" : "transform",
           position: "fixed",
+          width: "50vw",
+          height: "50vw",
+          maxWidth: 550,
+          maxHeight: 550,
+          right: "-12%",
+          bottom: "-12%",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          animation: "aurora-pulse-b 14s ease-in-out infinite",
+          willChange: "opacity",
+        }}
+      />
+
+      {/* Center subtle vignette depth */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "radial-gradient(ellipse 120% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.18) 100%)",
           pointerEvents: "none",
         }}
-        initial={blobInitial}
-        animate={blobAnimate}
-        transition={blobTransition ? { ...blobTransition, duration: 7 } : undefined}
       />
+
+      <style>{`
+        @keyframes aurora-pulse-a {
+          0%, 100% { opacity: 0.7; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.06); }
+        }
+        @keyframes aurora-pulse-b {
+          0%, 100% { opacity: 0.6; transform: scale(1.04); }
+          50% { opacity: 0.9; transform: scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes aurora-pulse-a { 0%, 100% { opacity: 0.7; } }
+          @keyframes aurora-pulse-b { 0%, 100% { opacity: 0.6; } }
+        }
+      `}</style>
     </div>
   );
 }

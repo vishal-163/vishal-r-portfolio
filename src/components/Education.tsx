@@ -27,12 +27,14 @@ const Education = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
           transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 14 }}
-          className="text-center mb-10 md:mb-16"
+          className="mb-10 md:mb-16"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
-            Education & <span className="gradient-text">Languages</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto rounded-full" />
+          <div className="section-heading inline-block">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
+              Education & <span className="gradient-text">Languages</span>
+            </h2>
+            <p className="font-mono text-xs text-white/25 mt-1">// education.json</p>
+          </div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-4 md:gap-8">

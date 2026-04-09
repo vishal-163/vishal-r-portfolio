@@ -59,12 +59,14 @@ const About = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={VP}
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-10 md:mb-16"
+          className="mb-10 md:mb-16"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
-            About <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Me</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 to-emerald-400 mx-auto rounded-full" />
+          <div className="section-heading inline-block">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
+              About <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Me</span>
+            </h2>
+            <p className="font-mono text-xs text-white/25 mt-1">// who_am_i.ts</p>
+          </div>
         </motion.div>
 
         {/* Description — blur + fade reveal */}

@@ -29,12 +29,14 @@ const Contact = () => {
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={VP}
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-          className="text-center mb-10 md:mb-16"
+          className="mb-10 md:mb-16"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
-            Get In <span className="gradient-text">Touch</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto rounded-full" />
+          <div className="section-heading inline-block">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
+              Get In <span className="gradient-text">Touch</span>
+            </h2>
+            <p className="font-mono text-xs text-white/25 mt-1">// contact.ts</p>
+          </div>
         </motion.div>
 
         {/* Card — spring bounce up */}

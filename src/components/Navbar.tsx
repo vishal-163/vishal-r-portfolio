@@ -68,9 +68,9 @@ const Navbar = () => {
         {/* Logo */}
         <button
           onClick={() => scrollTo("#home")}
-          className="font-bold text-xl bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent"
+          className="font-mono text-sm font-medium text-cyan-400 tracking-tight flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded"
         >
-          Vishal R
+          <span className="text-white/30">~/</span>vishal-r
         </button>
 
         {/* Desktop nav */}
