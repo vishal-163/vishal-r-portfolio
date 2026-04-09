@@ -76,7 +76,7 @@ const Hero = () => {
       : {
           initial: { opacity: 0, y: 16 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.45, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] },
+          transition: { duration: 0.45, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] as const },
         };
 
   return (
@@ -122,7 +122,7 @@ const Hero = () => {
                 <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight heading-glow">
                   Hi, I'm{" "}
                   <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                    Vishal R1
+                    Vishal R
                   </span>
                   <span className="ml-1 text-cyan-400 text-base align-baseline blink">_</span>
                 </h1>
@@ -187,7 +187,7 @@ const Hero = () => {
         <motion.div
           initial={prefersReduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={prefersReduced ? {} : { duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={prefersReduced ? {} : { duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
           className="flex justify-center"
         >
           <div
