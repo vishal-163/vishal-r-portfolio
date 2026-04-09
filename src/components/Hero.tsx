@@ -122,7 +122,7 @@ const Hero = () => {
                 <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight heading-glow">
                   Hi, I'm{" "}
                   <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                    Vishal R
+                    Vishal R1
                   </span>
                   <span className="ml-1 text-cyan-400 text-base align-baseline blink">_</span>
                 </h1>
