@@ -19,8 +19,8 @@ const Contact = () => {
   const { ref, style, onMouseMove, onMouseLeave } = useTilt(6);
 
   return (
-    <section id="contact" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative">
-      <div className="absolute bottom-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-neon-blue/5 rounded-full blur-[150px]" />
+    <section id="contact" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
+      <div className="absolute bottom-0 right-0 w-[min(500px,80vw)] h-[min(500px,80vw)] bg-neon-blue/5 rounded-full blur-[150px] pointer-events-none" />
       <div className="max-w-3xl mx-auto relative z-10">
 
         {/* Heading — scales up from center */}

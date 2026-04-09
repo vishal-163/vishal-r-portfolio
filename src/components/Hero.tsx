@@ -82,7 +82,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center px-4 sm:px-6 md:px-8 py-20 pt-24 relative overflow-hidden"
+      className="min-h-screen flex items-center px-4 sm:px-6 md:px-8 py-20 pt-24 relative overflow-hidden w-full"
     >
       {/* Subtle dot grid — very faint */}
       <div
@@ -95,9 +95,9 @@ const Hero = () => {
         }}
       />
 
-      {/* Ambient glows — very subtle */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3" />
+      {/* Ambient glows — contained within viewport */}
+      <div className="absolute top-0 left-0 w-[60vw] max-w-[500px] h-[60vw] max-h-[500px] bg-cyan-500/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[50vw] max-w-[400px] h-[50vw] max-h-[400px] bg-emerald-500/5 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto w-full flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:gap-16 items-center relative z-10">
 

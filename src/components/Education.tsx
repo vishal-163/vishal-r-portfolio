@@ -18,7 +18,7 @@ const Education = () => {
   const tiltRight = useTilt(6);
 
   return (
-    <section id="education" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative">
+    <section id="education" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
       <div className="max-w-7xl mx-auto">
 
         {/* Heading — rises with spring */}

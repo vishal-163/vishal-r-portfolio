@@ -28,7 +28,7 @@ const Index = () => (
     {/* z-1: particle canvas above aurora */}
     <ParticleBackground />
     <Navbar />
-    <main className="relative z-10">
+    <main className="relative z-10 w-full overflow-x-hidden">
       {/* Hero loads eagerly — first paint */}
       <Hero />
       <div className="section-divider" />

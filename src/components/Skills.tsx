@@ -103,8 +103,8 @@ const Skills = () => {
   const inView = useInView(ref, { once: false, margin: "-100px" });
 
   return (
-    <section id="skills" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-neon-purple/5 rounded-full blur-[150px]" />
+    <section id="skills" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(600px,90vw)] h-[min(600px,90vw)] bg-neon-purple/5 rounded-full blur-[150px] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10" ref={ref}>
 
         {/* Heading — bounces down */}

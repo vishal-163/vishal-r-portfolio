@@ -50,7 +50,7 @@ const About = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="about" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-x-hidden">
+    <section id="about" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
       <div className="max-w-7xl mx-auto">
 
         {/* Heading — slides in from left */}

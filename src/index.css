@@ -53,10 +53,15 @@
     @apply border-border;
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     @apply text-foreground font-body antialiased;
     cursor: none;
     overflow-x: hidden;
+    max-width: 100vw;
     /* Multi-layer premium background */
     background-color: hsl(var(--background));
     background-image:
