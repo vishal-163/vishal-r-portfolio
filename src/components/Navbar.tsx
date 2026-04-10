@@ -1,124 +1,78 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
 
 const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
+  { label: "Home",      href: "#home" },
+  { label: "About",     href: "#about" },
+  { label: "Skills",    href: "#skills" },
+  { label: "Projects",  href: "#projects" },
   { label: "Education", href: "#education" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact",   href: "#contact" },
 ];
 
-// Mobile menu stagger variants
-const mobileMenuVariants = {
-  closed: { opacity: 0, transition: { staggerChildren: 0.06, staggerDirection: -1 } },
-  open: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0 },
-  },
-};
-
-const mobileItemVariants: Variants = {
-  closed: { opacity: 0, y: -12 },
-  open: { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" as const } },
-};
-
-const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("home");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+export default function Navbar() {
+  const [active, setActive]       = useState("home");
+  const [mobileOpen, setMobile]   = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 50);
-
-      const sections = navItems.map((n) => n.href.slice(1));
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.getBoundingClientRect().top <= 120) {
-          setActive(sections[i]);
-          break;
-        }
+      const ids = navItems.map(n => n.href.slice(1));
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (el && el.getBoundingClientRect().top <= 80) { setActive(ids[i]); break; }
       }
     };
-
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollTo = (href: string) => {
-    setMobileOpen(false);
+  const go = (href: string) => {
+    setMobile(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-white/10"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-16">
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      height: 56,
+      background: "rgba(5,8,16,0.85)",
+      backdropFilter: "blur(20px) saturate(180%)",
+      WebkitBackdropFilter: "blur(20px) saturate(180%)",
+      borderBottom: "1px solid rgba(0,212,170,0.08)",
+      display: "flex", alignItems: "center",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
         {/* Logo */}
-        <button
-          onClick={() => scrollTo("#home")}
-          className="font-mono text-sm font-medium text-cyan-400 tracking-tight flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded"
-        >
-          <span className="text-white/30">~/</span>vishal-r
+        <button onClick={() => go("#home")} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+          <code style={{
+            fontFamily: "var(--mono)", fontSize: 13, fontWeight: 600,
+            color: "var(--accent)",
+            border: "1px solid var(--accent)",
+            borderRadius: 6, padding: "2px 8px",
+          }}>~/vishal-r</code>
         </button>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => {
+        {/* Desktop links */}
+        <div className="hidden md:flex" style={{ gap: 4 }}>
+          {navItems.map(item => {
             const id = item.href.slice(1);
             const isActive = active === id;
             return (
-              <button
-                key={item.href}
-                onClick={() => scrollTo(item.href)}
-                onMouseEnter={() => setHoveredItem(id)}
-                onMouseLeave={() => setHoveredItem(null)}
-                className="relative text-sm font-medium pb-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded"
+              <button key={id} onClick={() => go(item.href)} style={{
+                background: isActive ? "rgba(0,212,170,0.1)" : "none",
+                border: "none",
+                borderLeft: isActive ? "2px solid var(--accent)" : "2px solid transparent",
+                borderRadius: isActive ? "0 4px 4px 0" : 4,
+                color: isActive ? "var(--accent)" : "rgba(255,255,255,0.55)",
+                fontFamily: "var(--sans)", fontSize: "1rem", fontWeight: 500,
+                padding: "6px 14px",
+                cursor: "pointer",
+                transition: "all 200ms var(--ease)",
+              }}
+              onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,212,170,0.08)"; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
+              onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.background = "none"; (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.55)"; } }}
               >
-                {/* Hover background highlight */}
-                <AnimatePresence>
-                  {hoveredItem === id && (
-                    <motion.span
-                      layoutId="nav-hover"
-                      className="absolute inset-0 rounded bg-white/5"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  )}
-                </AnimatePresence>
-
-                {/* Label */}
-                <span
-                  className={`relative z-10 transition-colors duration-200 ${
-                    isActive
-                      ? "bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent"
-                      : "text-foreground hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                </span>
-
-                {/* Sliding active underline */}
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
+                {item.label}
               </button>
             );
           })}
@@ -126,56 +80,40 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded"
-          aria-label="Toggle mobile menu"
+          className="md:hidden"
+          onClick={() => setMobile(!mobileOpen)}
+          aria-label="Toggle menu"
+          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", fontSize: 20, lineHeight: 1 }}
         >
-          <span className={`block w-6 h-0.5 bg-white transition-all ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`block w-6 h-0.5 bg-white transition-all ${mobileOpen ? "opacity-0" : ""}`} />
-          <span className={`block w-6 h-0.5 bg-white transition-all ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          {mobileOpen ? "✕" : "☰"}
         </button>
       </div>
 
       {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden bg-background/90 backdrop-blur-md px-4 pb-4 border-t border-white/10"
-          >
-            <motion.ul
-              variants={mobileMenuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="flex flex-col"
-            >
-              {navItems.map((item) => {
-                const id = item.href.slice(1);
-                return (
-                  <motion.li key={item.href} variants={mobileItemVariants}>
-                    <button
-                      onClick={() => scrollTo(item.href)}
-                      className={`block w-full text-left py-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded ${
-                        active === id
-                          ? "text-cyan-400"
-                          : "text-foreground hover:text-cyan-400"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  </motion.li>
-                );
-              })}
-            </motion.ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      {mobileOpen && (
+        <div style={{
+          position: "absolute", top: 56, left: 0, right: 0,
+          background: "rgba(5,8,16,0.96)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid var(--border)",
+          padding: "8px 0",
+        }}>
+          {navItems.map(item => {
+            const id = item.href.slice(1);
+            return (
+              <button key={id} onClick={() => go(item.href)} style={{
+                display: "block", width: "100%", textAlign: "left",
+                padding: "12px 24px",
+                background: "none", border: "none", cursor: "pointer",
+                color: active === id ? "var(--accent)" : "var(--text-muted)",
+                fontFamily: "var(--sans)", fontSize: 14,
+              }}>
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </nav>
   );
-};
-
-export default Navbar;
+}

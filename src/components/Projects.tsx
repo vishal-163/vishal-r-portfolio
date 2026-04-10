@@ -1,14 +1,11 @@
-import { motion, useReducedMotion } from "framer-motion";
 import { Github } from "lucide-react";
-import { useTilt } from "@/hooks/useTilt";
-
-const VP = { once: false, amount: 0.1 };
 
 const projects = [
   {
     title: "AI Trip Planner",
     description: "AI-powered mobile app that generates personalized travel itineraries based on user preferences, budget, and duration.",
     tech: ["Flutter", "Supabase", "OpenAI API", "Gemini API", "PostgreSQL"],
+    techColors: ["#3b82f6","#00d4aa","#f59e0b","#f59e0b","#00d4aa"],
     features: [
       "Built a cross-platform mobile application generating personalized AI-based travel itineraries based on user preferences, budget, and duration, reducing manual planning effort significantly.",
       "Designed a modular three-tier architecture with Flutter frontend, Supabase backend, and a dedicated AI service layer for scalable integration.",
@@ -17,13 +14,14 @@ const projects = [
       "Developed full CRUD operations with real-time synchronization using Supabase subscriptions for dynamic updates.",
     ],
     github: "https://github.com/vishal-163/AI-TRIP-PLANNER.git",
-    featured: false,
     tag: "Completed",
+    tagColor: "#00d4aa",
   },
   {
     title: "Smart Military Vest",
     description: "Defence-grade IoT system for real-time soldier health monitoring and automated emergency alerts.",
     tech: ["ESP32", "Sensors", "LoRa", "GSM", "GPS"],
+    techColors: ["#f59e0b","#94a3b8","#7c3aed","#3b82f6","#00d4aa"],
     features: [
       "Designing a defence-grade wearable system for real-time soldier health monitoring including heart rate, SpO2, temperature, and motion tracking.",
       "Built multi-sensor integration using I2C and SPI protocols with on-device preprocessing for efficient data aggregation.",
@@ -32,140 +30,85 @@ const projects = [
       "Planning scalable backend architecture using MQTT, time-series database, and analytics dashboard for command centre monitoring.",
     ],
     github: null,
-    featured: false,
     tag: "In Progress",
+    tagColor: "#f59e0b",
   },
 ];
 
-interface ProjectCardProps {
-  project: typeof projects[number];
-  index: number;
-}
-
-function ProjectCard({ project, index }: ProjectCardProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const { ref, style, onMouseMove, onMouseLeave } = useTilt(6);
-  // Odd cards slide from right, even from left
-  const xFrom = index % 2 === 0 ? -70 : 70;
-
+export default function Projects() {
   return (
-    <motion.div
-      ref={ref as React.RefObject<HTMLDivElement>}
-      initial={shouldReduceMotion ? {} : { opacity: 0, x: xFrom }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={VP}
-      transition={shouldReduceMotion ? { duration: 0 } : {
-        duration: 0.65,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className={`glass-card-hover p-5 sm:p-6 md:p-8 relative overflow-hidden group ${project.featured ? "border-cyan-400/30" : ""}`}
-      style={shouldReduceMotion ? undefined : style}
-      onMouseMove={shouldReduceMotion ? undefined : onMouseMove}
-      onMouseLeave={shouldReduceMotion ? undefined : onMouseLeave}
-    >
-      {project.featured && (
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400" />
-      )}
+    <section id="projects" style={{ padding: "80px 24px", position: "relative", zIndex: 10 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        <h3 className="font-heading text-lg sm:text-xl md:text-2xl font-bold">{project.title}</h3>
-        {project.tag && (
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-emerald-400/20 text-emerald-400 border border-emerald-400/30">
-            {project.tag}
-          </span>
-        )}
-        {project.featured && (
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-cyan-400/20 text-cyan-400 border border-cyan-400/30">
-            Featured
-          </span>
-        )}
-      </div>
-
-      <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6 max-w-2xl">{project.description}</p>
-
-      <div className="grid sm:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
-        <div>
-          <h4 className="text-xs font-semibold text-cyan-400 mb-2 uppercase tracking-wider">Key Features</h4>
-          <ul className="space-y-1.5">
-            {project.features.map((f, fi) => (
-              <motion.li
-                key={f}
-                initial={shouldReduceMotion ? {} : { opacity: 0, x: -16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={VP}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.35, delay: 0.2 + fi * 0.06 }}
-                className="text-xs md:text-sm text-muted-foreground flex gap-2"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
-                {f}
-              </motion.li>
-            ))}
-          </ul>
+        {/* Heading */}
+        <div style={{ marginBottom: 48 }}>
+          <h2 style={{ fontFamily: "var(--mono)", fontSize: "clamp(1.4rem, 3vw, 2rem)", fontWeight: 600, color: "#fff" }}>
+            <span style={{ color: "var(--accent)" }}>&lt;</span>
+            Projects
+            <span style={{ color: "var(--accent)" }}> /&gt;</span>
+          </h2>
         </div>
-        <div>
-          <h4 className="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wider">Tech Stack</h4>
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t, ti) => (
-              <motion.span
-                key={t}
-                initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.7 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={VP}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, delay: 0.25 + ti * 0.05, ease: "backOut" }}
-                className="px-2 py-1 text-[10px] md:text-xs rounded-lg bg-muted/50 border border-white/10"
-              >
-                {t}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {project.github && (
-        <button
-          onClick={() => window.open(project.github!, "_blank")}
-          className="btn-outline-glow flex items-center gap-2 text-xs md:text-sm"
-        >
-          <Github className="w-4 h-4" /> GitHub
-        </button>
-      )}
-    </motion.div>
-  );
-}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }} className="md:projects-grid">
+          {projects.map(p => (
+            <div key={p.title} className="repo-card" style={{ padding: "20px 24px" }}>
 
-const Projects = () => {
-  const shouldReduceMotion = useReducedMotion();
+              {/* Top row */}
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: "1.1rem", fontWeight: 600, color: "#fff" }}>{p.title}</span>
+                  <span style={{
+                    fontFamily: "var(--mono)", fontSize: "0.8rem", fontWeight: 500,
+                    padding: "3px 10px", borderRadius: 4,
+                    border: `1px solid ${p.tagColor}40`,
+                    color: p.tagColor,
+                    background: `${p.tagColor}10`,
+                  }}>{p.tag}</span>
+                </div>
+                {p.github && (
+                  <a href={p.github} target="_blank" rel="noopener noreferrer"
+                    style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 5, fontSize: "0.9rem", fontFamily: "var(--mono)", textDecoration: "none" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}
+                  >
+                    <Github size={14} /> view
+                  </a>
+                )}
+              </div>
 
-  return (
-    <section id="projects" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-x-hidden">
-      <div className="max-w-7xl mx-auto">
+              {/* Description */}
+              <p style={{ fontSize: "1rem", color: "var(--text-muted)", lineHeight: 1.75, marginBottom: 16 }}>{p.description}</p>
 
-        {/* Heading — zoom in from center */}
-        <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.75 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={VP}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-          className="mb-10 md:mb-16"
-        >
-          <div className="section-heading inline-block">
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
-              Featured <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Projects</span>
-            </h2>
-            <p className="font-mono text-xs text-white/25 mt-1">// projects.ts</p>
-          </div>
-        </motion.div>
+              {/* Features expand */}
+              <details style={{ marginBottom: 16 }}>
+                <summary style={{ fontFamily: "var(--mono)", fontSize: "0.9rem", color: "var(--accent)", cursor: "pointer", userSelect: "none", marginBottom: 10, opacity: 0.85 }}>
+                  &gt;_ key features ({p.features.length})
+                </summary>
+                <ul style={{ paddingLeft: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+                  {p.features.map(f => (
+                    <li key={f} style={{ fontSize: "0.95rem", color: "var(--text-muted)", lineHeight: 1.7, display: "flex", gap: 8 }}>
+                      <span style={{ color: "var(--accent)", flexShrink: 0 }}>›</span>{f}
+                    </li>
+                  ))}
+                </ul>
+              </details>
 
-        {/* Cards — alternating left/right slide */}
-        <div className="space-y-6 md:space-y-8">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} />
+              {/* Tech chips */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {p.tech.map((t, i) => (
+                  <span key={t} className="chip" style={{ borderColor: `${p.techColors[i]}40`, color: p.techColors[i] }}>{t}</span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 768px) {
+          .md\\:projects-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+      `}</style>
     </section>
   );
-};
-
-export default Projects;
+}

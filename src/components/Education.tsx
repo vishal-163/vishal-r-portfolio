@@ -1,133 +1,85 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { GraduationCap, Globe } from "lucide-react";
-import { useTilt } from "@/hooks/useTilt";
-
-const VP = { once: false, amount: 0.15 };
-
 const languages = [
-  { name: "English", level: "Fluent" },
-  { name: "Kannada", level: "Fluent" },
-  { name: "Hindi", level: "Fluent" },
-  { name: "Telugu", level: "Native" },
-  { name: "Tamil", level: "Fluent" },
+  { name: "English", level: "Fluent",  pct: 95 },
+  { name: "Kannada", level: "Fluent",  pct: 90 },
+  { name: "Hindi",   level: "Fluent",  pct: 88 },
+  { name: "Telugu",  level: "Native",  pct: 100 },
+  { name: "Tamil",   level: "Fluent",  pct: 85 },
 ];
 
-const Education = () => {
-  const shouldReduceMotion = useReducedMotion();
-  const tiltLeft = useTilt(6);
-  const tiltRight = useTilt(6);
+const fields = [
+  { label: "DEGREE",    value: "Bachelor of Engineering" },
+  { label: "MAJOR",     value: "Computer Science & Engineering" },
+  { label: "INSTITUTE", value: "K.S. Institute of Technology" },
+  { label: "LOCATION",  value: "Bangalore, India" },
+  { label: "GRAD",      value: "Expected 2027" },
+];
 
+export default function Education() {
   return (
-    <section id="education" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
-      <div className="max-w-7xl mx-auto">
+    <section id="education" style={{ padding: "80px 24px", position: "relative", zIndex: 10 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* Heading — rises with spring */}
-        <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VP}
-          transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 14 }}
-          className="mb-10 md:mb-16"
-        >
-          <div className="section-heading inline-block">
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
-              Education & <span className="gradient-text">Languages</span>
-            </h2>
-            <p className="font-mono text-xs text-white/25 mt-1">// education.json</p>
+        {/* Heading */}
+        <div style={{ marginBottom: 48 }}>
+          <h2 style={{ fontFamily: "var(--mono)", fontSize: "clamp(1.4rem, 3vw, 2rem)", fontWeight: 600, color: "#fff" }}>
+            <span style={{ color: "var(--accent)" }}>&lt;</span>
+            Education
+            <span style={{ color: "var(--accent)" }}> /&gt;</span>
+          </h2>
+        </div>
+
+        {/* Terminal window */}
+        <div className="terminal-card">
+          {/* Title bar */}
+          <div className="terminal-bar">
+            <span className="terminal-dot" style={{ background: "#ff5f57" }} />
+            <span className="terminal-dot" style={{ background: "#febc2e" }} />
+            <span className="terminal-dot" style={{ background: "#28c840" }} />
+            <span style={{ fontFamily: "var(--mono)", fontSize: "0.85rem", color: "var(--text-dim)", marginLeft: 8 }}>education.json</span>
           </div>
-        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+          {/* Content */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 0 }} className="md:edu-grid">
 
-          {/* Education card — slides from left */}
-          <motion.div
-            ref={tiltLeft.ref as React.RefObject<HTMLDivElement>}
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: -60, rotateY: -12 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-            viewport={VP}
-            transition={shouldReduceMotion ? { duration: 0 } : {
-              duration: 0.65,
-              delay: 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            style={{ transformPerspective: 900, ...(shouldReduceMotion ? {} : tiltLeft.style) }}
-            onMouseMove={shouldReduceMotion ? undefined : tiltLeft.onMouseMove}
-            onMouseLeave={shouldReduceMotion ? undefined : tiltLeft.onMouseLeave}
-            className="glass-card-hover p-5 md:p-8"
-          >
-            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-neon-blue/10 flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 md:w-7 md:h-7 text-neon-blue" />
+            {/* Left: fields */}
+            <div style={{ padding: "28px 32px", borderRight: "1px solid var(--border)" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {fields.map(f => (
+                  <div key={f.label} style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: "0.85rem", color: "var(--accent)", opacity: 0.65, minWidth: 90, letterSpacing: "0.08em" }}>{f.label}</span>
+                    <span style={{ color: "var(--accent)", opacity: 0.4, fontSize: "1rem" }}>›</span>
+                    <span style={{ fontSize: "1rem", color: "#fff", fontWeight: 500 }}>{f.value}</span>
+                  </div>
+                ))}
               </div>
-              <h3 className="font-heading text-lg md:text-xl font-semibold">Education</h3>
             </div>
-            <div className="space-y-1.5 md:space-y-2">
-              {[
-                { label: "Bachelor of Engineering", className: "font-heading font-semibold text-base md:text-lg" },
-                { label: "Computer Science & Engineering", className: "text-neon-blue font-medium text-sm md:text-base" },
-                { label: "K.S. Institute of Technology, Bangalore", className: "text-muted-foreground text-sm md:text-base" },
-                { label: "Expected Graduation: 2027", className: "text-xs md:text-sm text-muted-foreground" },
-              ].map((line, li) => (
-                <motion.p
-                  key={line.label}
-                  initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={VP}
-                  transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, delay: 0.25 + li * 0.08 }}
-                  className={line.className}
-                >
-                  {line.label}
-                </motion.p>
-              ))}
-            </div>
-          </motion.div>
 
-          {/* Languages card — slides from right */}
-          <motion.div
-            ref={tiltRight.ref as React.RefObject<HTMLDivElement>}
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: 60, rotateY: 12 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-            viewport={VP}
-            transition={shouldReduceMotion ? { duration: 0 } : {
-              duration: 0.65,
-              delay: 0.2,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            style={{ transformPerspective: 900, ...(shouldReduceMotion ? {} : tiltRight.style) }}
-            onMouseMove={shouldReduceMotion ? undefined : tiltRight.onMouseMove}
-            onMouseLeave={shouldReduceMotion ? undefined : tiltRight.onMouseLeave}
-            className="glass-card-hover p-5 md:p-8"
-          >
-            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-neon-purple/10 flex items-center justify-center">
-                <Globe className="w-5 h-5 md:w-7 md:h-7 text-neon-purple" />
+            {/* Right: language bars */}
+            <div style={{ padding: "28px 32px" }}>
+              <p style={{ fontFamily: "var(--mono)", fontSize: "0.85rem", color: "var(--text-dim)", marginBottom: 20, letterSpacing: "0.08em" }}>LANGUAGES</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {languages.map(l => (
+                  <div key={l.name}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                      <span style={{ fontSize: "1rem", color: "var(--text)", fontWeight: 500 }}>{l.name}</span>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "0.9rem", color: "var(--text-muted)" }}>{l.level}</span>
+                    </div>
+                    <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                      <div className="lang-bar-fill" style={{ width: `${l.pct}%` }} />
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h3 className="font-heading text-lg md:text-xl font-semibold">Languages</h3>
             </div>
-            <div className="flex flex-wrap gap-2 md:gap-3">
-              {languages.map((lang, i) => (
-                <motion.div
-                  key={lang.name}
-                  initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 + (i % 3) * 8, scale: 0.8 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={VP}
-                  transition={shouldReduceMotion ? { duration: 0 } : {
-                    duration: 0.4,
-                    delay: 0.3 + i * 0.07,
-                    ease: "backOut",
-                  }}
-                  className="px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-muted/50 border border-glass-border"
-                >
-                  <span className="font-medium text-xs md:text-sm">{lang.name}</span>
-                  <span className="text-[10px] md:text-xs text-muted-foreground ml-1.5 md:ml-2">({lang.level})</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 640px) {
+          .md\\:edu-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+      `}</style>
     </section>
   );
-};
-
-export default Education;
+}

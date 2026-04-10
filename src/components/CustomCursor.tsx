@@ -66,25 +66,11 @@ const CustomCursor = () => {
     const handleMouseLeave = () => setVisible(false);
     const handleMouseEnter = () => setVisible(true);
 
-    const handleMouseDown = (e: MouseEvent) => {
-      const ripple = document.createElement("div");
-      const size = 20;
-      ripple.style.cssText = `
-        position:fixed;left:${e.clientX - size / 2}px;top:${e.clientY - size / 2}px;
-        width:${size}px;height:${size}px;border-radius:50%;
-        background:rgba(6,182,212,0.5);pointer-events:none;z-index:9998;
-        animation:cursor-ripple 400ms ease-out forwards;
-      `;
-      document.body.appendChild(ripple);
-      ripple.addEventListener("animationend", () => ripple.remove());
-    };
-
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseover", handleMouseOver, { passive: true });
     window.addEventListener("mouseout", handleMouseOut, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
-    window.addEventListener("mousedown", handleMouseDown);
 
     return () => {
       if (rafId.current !== null) cancelAnimationFrame(rafId.current);
@@ -93,7 +79,6 @@ const CustomCursor = () => {
       window.removeEventListener("mouseout", handleMouseOut);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
-      window.removeEventListener("mousedown", handleMouseDown);
     };
   }, [lowEnd, isMobile]);
 

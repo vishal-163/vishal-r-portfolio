@@ -1,121 +1,110 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { Mail, Phone, Linkedin, Github } from "lucide-react";
-import { useTilt } from "@/hooks/useTilt";
-
-const VP = { once: false, amount: 0.15 };
-
-const contactLinks = [
-  { icon: Mail, label: "vishalravi163@gmail.com", href: "mailto:vishalravi163@gmail.com", truncate: true },
-  { icon: Phone, label: "+91 8147741585", href: "tel:+918147741585", truncate: false },
+const links = [
+  { label: "email",    value: "vishalravi163@gmail.com",    href: "mailto:vishalravi163@gmail.com",                    short: "vishalravi163@gmail.com" },
+  { label: "phone",    value: "+91 8147741585",              href: "tel:+918147741585",                                 short: "+91 8147741585" },
+  { label: "linkedin", value: "linkedin.com/in/vishal-r",   href: "https://www.linkedin.com/in/vishal-ravi-653a8a33b/", short: "linkedin/vishal-r" },
+  { label: "github",   value: "github.com/vishal-163",      href: "https://github.com/vishal-163",                     short: "github/vishal-163" },
 ];
 
-const socialLinks = [
-  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/vishal-ravi-653a8a33b/", external: true },
-  { icon: Github, label: "GitHub", href: "https://github.com/vishal-163", external: true },
-];
-
-const Contact = () => {
-  const shouldReduceMotion = useReducedMotion();
-  const { ref, style, onMouseMove, onMouseLeave } = useTilt(6);
-
+export default function Contact() {
   return (
-    <section id="contact" className="px-4 sm:px-6 md:px-8 py-16 md:py-28 relative overflow-hidden w-full">
-      <div className="absolute bottom-0 right-0 w-[min(500px,80vw)] h-[min(500px,80vw)] bg-neon-blue/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="max-w-3xl mx-auto relative z-10">
+    <section id="contact" style={{ padding: "60px 16px 100px", position: "relative", zIndex: 10 }}>
+      <div style={{ maxWidth: 600, margin: "0 auto", width: "100%" }}>
 
-        {/* Heading — scales up from center */}
-        <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.7, y: 20 }}
-          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          viewport={VP}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-          className="mb-10 md:mb-16"
-        >
-          <div className="section-heading inline-block">
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl font-bold mb-1">
-              Get In <span className="gradient-text">Touch</span>
-            </h2>
-            <p className="font-mono text-xs text-white/25 mt-1">// contact.ts</p>
-          </div>
-        </motion.div>
+        {/* Heading */}
+        <div style={{ marginBottom: 40 }}>
+          <h2 style={{ fontFamily: "var(--mono)", fontSize: "clamp(1.6rem, 5vw, 2.2rem)", fontWeight: 600, color: "#fff" }}>
+            <span style={{ color: "var(--accent)" }}>&lt;</span>Contact<span style={{ color: "var(--accent)" }}> /&gt;</span>
+          </h2>
+        </div>
 
-        {/* Card — spring bounce up */}
-        <motion.div
-          ref={ref as React.RefObject<HTMLDivElement>}
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VP}
-          transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 100, damping: 14, delay: 0.1 }}
-          className="glass-card-hover p-6 md:p-10 text-center"
-          style={shouldReduceMotion ? undefined : style}
-          onMouseMove={shouldReduceMotion ? undefined : onMouseMove}
-          onMouseLeave={shouldReduceMotion ? undefined : onMouseLeave}
-        >
-          <motion.h3
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={VP}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
-            className="font-heading text-xl md:text-2xl font-semibold mb-4 md:mb-6"
-          >
-            Let's work together
-          </motion.h3>
-
-          <motion.p
-            initial={shouldReduceMotion ? {} : { opacity: 0, filter: "blur(6px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
-            viewport={VP}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.25 }}
-            className="text-muted-foreground text-sm md:text-base mb-8 md:mb-10 leading-relaxed max-w-xl mx-auto"
-          >
-            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-          </motion.p>
-
-          {/* Contact links — fan up from bottom */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 md:mb-10">
-            {contactLinks.map(({ icon: Icon, label, href, truncate }, i) => (
-              <motion.a
-                key={href}
-                href={href}
-                initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={VP}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, delay: 0.3 + i * 0.1, ease: "backOut" }}
-                className="flex items-center gap-3 text-sm md:text-base text-muted-foreground hover:text-neon-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg"
-              >
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center group-hover:bg-neon-blue/20 transition-colors">
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 text-neon-blue" />
-                </div>
-                <span className={truncate ? "truncate" : ""}>{label}</span>
-              </motion.a>
-            ))}
+        <div className="terminal-card">
+          {/* Title bar */}
+          <div className="terminal-bar">
+            <span className="terminal-dot" style={{ background: "#ff5f57" }} />
+            <span className="terminal-dot" style={{ background: "#febc2e" }} />
+            <span className="terminal-dot" style={{ background: "#28c840" }} />
+            <span style={{ fontFamily: "var(--mono)", fontSize: "0.85rem", color: "var(--text-dim)", marginLeft: 8 }}>contact.ts</span>
           </div>
 
-          {/* Social links — staggered scale-in */}
-          <div className="flex justify-center gap-4">
-            {socialLinks.map(({ icon: Icon, label, href }, i) => (
-              <motion.a
-                key={href}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.5, rotate: -10 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={VP}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, delay: 0.45 + i * 0.1, ease: "backOut" }}
-                className="flex items-center gap-2 md:gap-3 text-sm md:text-base text-muted-foreground hover:text-neon-blue transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg"
-              >
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-neon-blue/10 flex items-center justify-center group-hover:bg-neon-blue/20 transition-colors border border-glass-border">
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 text-neon-blue" />
-                </div>
-                {label}
-              </motion.a>
-            ))}
+          <div style={{ padding: "24px 20px" }}>
+            {/* Command line */}
+            <p style={{ fontFamily: "var(--mono)", fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: 20 }}>
+              <span style={{ color: "var(--accent)" }}>$</span> deploy contact.ts
+              <span className="blink" style={{ color: "var(--accent)", marginLeft: 4 }}>_</span>
+            </p>
+
+            {/* Contact rows — mobile-safe layout */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
+              {links.map(l => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target={l.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    padding: "12px 14px",
+                    border: "1px solid rgba(0,212,170,0.15)",
+                    borderRadius: 6,
+                    textDecoration: "none",
+                    transition: "background 200ms, border-color 200ms",
+                    minWidth: 0,
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(0,212,170,0.06)";
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,212,170,0.35)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,212,170,0.15)";
+                  }}
+                >
+                  {/* Check + label */}
+                  <span style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "1rem", flexShrink: 0 }}>✓</span>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: "0.8rem", color: "var(--text-dim)", flexShrink: 0, minWidth: 64 }}>{l.label}</span>
+
+                  {/* Value — truncates cleanly */}
+                  <span style={{
+                    fontSize: "0.95rem",
+                    color: "rgba(255,255,255,0.75)",
+                    flex: 1,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    minWidth: 0,
+                  }}>{l.short}</span>
+
+                  {/* Arrow — always visible, right-aligned */}
+                  <span style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "0.8rem",
+                    color: "var(--accent)",
+                    flexShrink: 0,
+                    opacity: 0.6,
+                  }}>→</span>
+                </a>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <button
+              className="btn-primary"
+              style={{ width: "100%", justifyContent: "center", padding: "14px 24px", fontSize: "1rem" }}
+              onClick={() => window.location.href = "mailto:vishalravi163@gmail.com"}
+            >
+              &gt; initiate_contact()
+            </button>
+
+            {/* Status */}
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#00d4aa", flexShrink: 0, display: "inline-block" }} />
+              <span style={{ fontFamily: "var(--mono)", fontSize: "0.85rem", color: "var(--text-muted)" }}>ready to deploy</span>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}
