@@ -5,7 +5,7 @@ const projects = [
     title: "AI Trip Planner",
     description: "AI-powered mobile app that generates personalized travel itineraries based on user preferences, budget, and duration.",
     tech: ["Flutter", "Supabase", "OpenAI API", "Gemini API", "PostgreSQL"],
-    techColors: ["#3b82f6","#00d4aa","#f59e0b","#f59e0b","#00d4aa"],
+    techColors: ["#3b82f6", "#00d4aa", "#f59e0b", "#f59e0b", "#00d4aa"],
     features: [
       "Built a cross-platform mobile application generating personalized AI-based travel itineraries based on user preferences, budget, and duration, reducing manual planning effort significantly.",
       "Designed a modular three-tier architecture with Flutter frontend, Supabase backend, and a dedicated AI service layer for scalable integration.",
@@ -21,7 +21,7 @@ const projects = [
     title: "Smart Military Vest",
     description: "Defence-grade IoT system for real-time soldier health monitoring and automated emergency alerts.",
     tech: ["ESP32", "Sensors", "LoRa", "GSM", "GPS"],
-    techColors: ["#f59e0b","#94a3b8","#7c3aed","#3b82f6","#00d4aa"],
+    techColors: ["#f59e0b", "#94a3b8", "#7c3aed", "#3b82f6", "#00d4aa"],
     features: [
       "Designing a defence-grade wearable system for real-time soldier health monitoring including heart rate, SpO2, temperature, and motion tracking.",
       "Built multi-sensor integration using I2C and SPI protocols with on-device preprocessing for efficient data aggregation.",
@@ -67,11 +67,33 @@ export default function Projects() {
                 </div>
                 {p.github && (
                   <a href={p.github} target="_blank" rel="noopener noreferrer"
-                    style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 5, fontSize: "0.9rem", fontFamily: "var(--mono)", textDecoration: "none" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}
+                    style={{
+                      color: "#fff",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      fontSize: "0.85rem",
+                      fontFamily: "var(--mono)",
+                      textDecoration: "none",
+                      padding: "6px 12px",
+                      borderRadius: "999px",
+                      transition: "all 0.2s ease",
+                      flexShrink: 0
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = "rgba(0, 255, 148, 0.1)";
+                      e.currentTarget.style.borderColor = "rgba(0, 255, 148, 0.3)";
+                      e.currentTarget.style.color = "var(--accent)";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                      e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                      e.currentTarget.style.color = "#fff";
+                    }}
                   >
-                    <Github size={14} /> view
+                    <Github size={16} /> View
                   </a>
                 )}
               </div>

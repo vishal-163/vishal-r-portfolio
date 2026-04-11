@@ -16,20 +16,11 @@
       --ink: #050810;
       --glass: rgba(255, 255, 255, 0.03);
       --rim: rgba(255, 255, 255, 0.08);
-      /* ELECTRIC CHROME palette */
-      --cyan: #00E5FF;
-      --magenta: #00FF94;
-      --teal: #00D4AA;
-      --hi: #F0F0F0;
-      --muted: #4A5568;
-      /* legacy aliases */
-      --gold: #00E5FF;
-      --ember: #00FF94;
-      --glow-a: #00E5FF;
-      --glow-b: #00FF94;
-      --glow-c: #00D4AA;
-      --amber: #00FF94;
-      --text-hi: #F0F0F0;
+      --glow-a: #a78bfa;
+      --glow-b: #38bdf8;
+      --glow-c: #34d399;
+      --amber: #f59e0b;
+      --text-hi: #f1f5f9;
       --text-mid: #94a3b8;
       --text-lo: #64748b;
       --f-display: 'Outfit', sans-serif;
@@ -88,7 +79,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: var(--cyan);
+      background: var(--glow-a);
       border-radius: 2px
     }
 
@@ -99,30 +90,47 @@
       left: 0;
       height: 3px;
       width: 0%;
-      background: linear-gradient(to right, var(--cyan), var(--magenta));
+      background: linear-gradient(to right, var(--glow-a), var(--glow-b));
       z-index: 9999;
       transition: width 0.1s linear
     }
 
     /* ─── CURSOR ─────────────────────────────────────────────────────────────── */
-    /* old cursor elements hidden — new cursor built in JS */
-    #cur-dot,
+    #cur-dot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: var(--glow-a);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: exclusion;
+      transition: transform 0.1s
+    }
+
     #cur-ring {
-      display: none !important
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid var(--glow-a);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: exclusion;
+      transition: transform 0.12s ease, width 0.2s, height 0.2s, opacity 0.2s
     }
 
-    html,
-    body,
-    * {
-      cursor: none !important
-    }
+    @media(hover:none) {
 
-    @media(hover:none) and (pointer:coarse) {
+      #cur-dot,
+      #cur-ring {
+        display: none
+      }
 
-      html,
-      body,
-      * {
-        cursor: auto !important
+      body {
+        cursor: auto
       }
     }
 
@@ -134,8 +142,9 @@
       z-index: 0;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 60% at 80% 10%, rgba(0, 26, 31, 0.8) 0%, rgba(0, 18, 22, 0.5) 40%, transparent 70%),
-        radial-gradient(ellipse 70% 55% at 10% 85%, rgba(26, 0, 16, 0.7) 0%, rgba(13, 0, 26, 0.4) 40%, transparent 70%);
+        radial-gradient(ellipse 80% 60% at 80% 10%, rgba(26, 5, 51, 0.7) 0%, rgba(10, 26, 58, 0.5) 40%, transparent 70%),
+        radial-gradient(ellipse 70% 55% at 10% 85%, rgba(0, 26, 46, 0.6) 0%, rgba(13, 5, 32, 0.4) 40%, transparent 70%);
+      filter: blur(0px);
     }
 
     body::after {
@@ -184,7 +193,7 @@
     }
 
     .glass:hover {
-      box-shadow: 0 0 40px rgba(0, 229, 255, 0.09), 0 0 0 1px rgba(0, 229, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07)
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.12), 0 0 0 1px rgba(167, 139, 250, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.07)
     }
 
     /* ─── SECTION HEADING ────────────────────────────────────────────────────── */
@@ -201,11 +210,11 @@
     }
 
     .sec-head h2 .lt {
-      color: var(--gold)
+      color: var(--glow-a)
     }
 
     .sec-head h2 .gt {
-      color: var(--ember)
+      color: var(--glow-b)
     }
 
     .sec-head hr {
@@ -214,292 +223,6 @@
       height: 1px;
       background: linear-gradient(to right, rgba(255, 255, 255, 0.06), transparent);
       width: 60px
-    }
-
-    /* ─── RESPONSIVE OVERHAUL ────────────────────────────────────────────────── */
-
-    /* 1. Box sizing already set above. Ensure images are responsive */
-    img,
-    video {
-      max-width: 100%;
-      height: auto
-    }
-
-    /* 2. Prevent any horizontal overflow */
-    html,
-    body {
-      overflow-x: hidden;
-      max-width: 100vw
-    }
-
-    /* 3. Touch devices — remove custom cursor */
-    @media(hover:none) and (pointer:coarse) {
-
-      #cur-dot,
-      #cur-ring {
-        display: none !important
-      }
-
-      body {
-        cursor: auto
-      }
-
-      a,
-      button,
-      [onclick],
-      summary {
-        cursor: pointer
-      }
-    }
-
-    /* 4. Minimum tap targets */
-    a,
-    button,
-    summary,
-    .editor-tab,
-    .sidebar-file,
-    .nav-links a,
-    #nav-mobile a {
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .nav-links a,
-    .editor-tab {
-      display: inline-flex;
-      align-items: center
-    }
-
-    #nav-mobile a {
-      display: flex;
-      align-items: center;
-      min-height: 48px
-    }
-
-    /* 5. NAV — prevent overflow on small screens */
-    #nav {
-      max-width: calc(100vw - 32px);
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    @media(max-width:768px) {
-
-      .nav-links,
-      .nav-status {
-        display: none
-      }
-
-      .nav-burger {
-        display: flex
-      }
-    }
-
-    /* 6. HERO — responsive two-column → single column */
-    .hero-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(24px, 5vw, 80px);
-      align-items: center;
-    }
-
-    .hero-grid>div:first-child {
-      flex: 1 1 min(100%, 480px)
-    }
-
-    .sys-card {
-      flex: 0 0 min(100%, 320px);
-      width: min(100%, 320px)
-    }
-
-    .hero-name .line1 {
-      font-size: clamp(2.8rem, 10vw, 9rem);
-      white-space: normal;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-
-    .hero-bio {
-      max-width: 100%
-    }
-
-    .hero-btns {
-      flex-wrap: wrap
-    }
-
-    .btn-primary,
-    .btn-ghost {
-      min-height: 44px;
-      font-size: clamp(0.7rem, 1.8vw, 0.85rem)
-    }
-
-    @media(max-width:768px) {
-      .hero-grid {
-        flex-direction: column;
-        text-align: center
-      }
-
-      .hero-bio {
-        margin: 0 auto 24px;
-        text-align: left
-      }
-
-      .hero-btns {
-        justify-content: center
-      }
-
-      .sys-card {
-        width: min(100%, 320px);
-        margin: 0 auto
-      }
-
-      #home {
-        padding-top: 80px
-      }
-    }
-
-    /* 7. ABOUT — two-column → single */
-    .about-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-      gap: 24px;
-    }
-
-    /* 8. SKILLS — editor responsive */
-    .editor-bar {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch
-    }
-
-    .editor-bar::-webkit-scrollbar {
-      display: none
-    }
-
-    @media(max-width:600px) {
-      .editor-body {
-        grid-template-columns: 1fr
-      }
-
-      .editor-sidebar {
-        display: none
-      }
-
-      .editor-bar {
-        padding: 0 8px
-      }
-
-      .editor-tab {
-        padding: 10px 12px;
-        font-size: 0.72rem
-      }
-    }
-
-    .skill-pane {
-      display: none;
-      flex-wrap: wrap;
-      gap: 8px
-    }
-
-    .skill-pane.active {
-      display: flex
-    }
-
-    .skill-tag {
-      font-size: clamp(0.7rem, 1.8vw, 0.78rem)
-    }
-
-    /* 9. PROJECTS — auto-fit grid */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-      gap: 24px;
-    }
-
-    .proj-tags {
-      flex-wrap: wrap
-    }
-
-    .proj-features {
-      overflow-wrap: break-word;
-      word-break: break-word
-    }
-
-    /* 10. EDUCATION — two-column → single */
-    .edu-body {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    }
-
-    @media(max-width:640px) {
-      .edu-json {
-        border-right: none;
-        border-bottom: 1px solid var(--rim)
-      }
-
-      .edu-json,
-      .edu-langs {
-        padding: 20px 16px
-      }
-
-      .json-line {
-        font-size: 0.78rem;
-        flex-wrap: wrap
-      }
-    }
-
-    /* 11. CONTACT — auto-fit cards */
-    .contact-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-      gap: 16px;
-    }
-
-    @media(max-width:480px) {
-      .btn-cta {
-        width: 100%;
-        justify-content: center;
-        padding: 16px 20px;
-        font-size: 0.85rem
-      }
-
-      .contact-val {
-        font-size: 0.8rem
-      }
-    }
-
-    /* 12. Section padding responsive */
-    section {
-      padding: clamp(48px, 8vw, 120px) 0
-    }
-
-    .wrap {
-      padding: 0 clamp(12px, 4vw, 48px)
-    }
-
-    /* 13. Section headings responsive */
-    .sec-head h2 {
-      font-size: clamp(2rem, 6vw, 4rem)
-    }
-
-    /* 14. Sys card responsive */
-    @media(max-width:400px) {
-      .sys-inner {
-        padding: 12px
-      }
-
-      .sys-row {
-        font-size: 0.65rem
-      }
-
-      .sys-key {
-        min-width: 60px
-      }
-    }
-
-    /* 15. Nav links font size */
-    .nav-links a {
-      font-size: clamp(0.65rem, 1.5vw, 0.85rem)
     }
 
     /* ─── SCROLL REVEAL ──────────────────────────────────────────────────────── */
@@ -521,7 +244,6 @@
         transition: none
       }
     }
-
 
     /* ═══════════════════════════════════════════════════════════════════════════
    NAVBAR
@@ -586,7 +308,7 @@
       margin-left: 8px;
       font-family: var(--f-mono);
       font-size: 0.7rem;
-      color: var(--teal)
+      color: var(--glow-c)
     }
 
     .nav-status::before {
@@ -594,7 +316,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--teal);
+      background: var(--glow-c);
       display: inline-block;
       animation: pulse-dot 2s ease-in-out infinite
     }
@@ -681,7 +403,7 @@
 
   <!-- NAVBAR -->
   <nav id="nav">
-    <span class="nav-logo">~/VR</span>
+    <span class="nav-logo">~/vr</span>
     <div class="nav-links">
       <a href="#home" class="active">Home</a>
       <a href="#about">About</a>
@@ -736,8 +458,8 @@
       font-family: var(--f-mono);
       font-size: 0.7rem;
       letter-spacing: 0.15em;
-      color: var(--teal);
-      border: 1px solid rgba(0, 212, 170, 0.3);
+      color: var(--glow-c);
+      border: 1px solid rgba(52, 211, 153, 0.3);
       border-radius: 999px;
       padding: 4px 12px;
       margin-bottom: 24px;
@@ -748,7 +470,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--teal);
+      background: var(--glow-c);
       display: inline-block
     }
 
@@ -767,9 +489,9 @@
     }
 
     .hero-name .r-outline {
-      -webkit-text-stroke: 2px var(--cyan);
+      -webkit-text-stroke: 2px var(--glow-a);
       color: transparent;
-      filter: drop-shadow(0 0 40px rgba(0, 229, 255, 0.45));
+      filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.5));
     }
 
     .hero-typewriter {
@@ -780,15 +502,15 @@
     }
 
     .hero-typewriter .prefix {
-      color: var(--cyan)
+      color: var(--glow-a)
     }
 
     .hero-typewriter .phrase {
-      color: var(--teal)
+      color: var(--glow-b)
     }
 
     .hero-typewriter .cursor {
-      color: var(--magenta);
+      color: var(--glow-a);
       animation: blink 1s step-end infinite
     }
 
@@ -834,19 +556,19 @@
       font-family: var(--f-mono);
       font-size: 0.85rem;
       font-weight: 600;
-      color: #050810;
+      color: #fff;
       padding: 12px 24px;
-      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      background: linear-gradient(135deg, var(--glow-a), var(--glow-b));
       clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
       border-radius: 0;
       border: none;
       cursor: none;
       transition: filter 0.2s, transform 0.2s;
-      box-shadow: 0 0 24px rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 24px rgba(167, 139, 250, 0.3);
     }
 
     .btn-primary:hover {
-      filter: brightness(1.12);
+      filter: brightness(1.15);
       transform: translateY(-2px)
     }
 
@@ -854,18 +576,18 @@
       font-family: var(--f-mono);
       font-size: 0.85rem;
       font-weight: 500;
-      color: var(--cyan);
+      color: var(--glow-a);
       padding: 11px 22px;
       background: transparent;
-      border: 1px solid rgba(0, 229, 255, 0.5);
+      border: 1px solid rgba(167, 139, 250, 0.4);
       border-radius: 8px;
       cursor: none;
       transition: background 0.2s, color 0.2s, transform 0.2s;
     }
 
     .btn-ghost:hover {
-      background: rgba(0, 229, 255, 0.08);
-      color: var(--hi);
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--text-hi);
       transform: translateY(-2px)
     }
 
@@ -876,7 +598,7 @@
       position: relative;
       border-radius: 20px;
       padding: 2px;
-      background: conic-gradient(from var(--angle, 0deg), var(--cyan), var(--magenta), transparent, var(--cyan));
+      background: conic-gradient(from var(--angle, 0deg), var(--glow-a), var(--glow-b), transparent, var(--glow-a));
       animation: spin-border 4s linear infinite;
     }
 
@@ -904,7 +626,7 @@
     .sys-status {
       font-family: var(--f-mono);
       font-size: 0.7rem;
-      color: var(--teal);
+      color: var(--glow-c);
       display: flex;
       align-items: center;
       gap: 6px
@@ -916,38 +638,37 @@
     }
 
     .sys-portrait {
-      background: transparent;
+      background: linear-gradient(135deg, #0d1020 0%, #0a0d18 50%, #080b14 100%);
       border: 1px solid var(--rim);
       border-radius: 12px;
-      height: auto;
+      height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
-      padding: 0;
-    }
-
-    .sys-portrait::before {
-      display: none !important;
-      content: none !important;
     }
 
     .sys-portrait::after {
-      display: none !important;
-      content: none !important;
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(8, 11, 20, 0.15) 0%, transparent 20%, transparent 70%, rgba(8, 11, 20, 0.6) 100%),
+        linear-gradient(to right, rgba(8, 11, 20, 0.4) 0%, transparent 15%, transparent 85%, rgba(8, 11, 20, 0.4) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sys-portrait::before {
+      display: none;
     }
 
     .sys-portrait img {
       width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-      object-position: center;
-      border-radius: 12px;
-      position: relative;
-      z-index: 1;
-      background: transparent;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px
     }
 
     .sys-portrait .initials {
@@ -957,6 +678,30 @@
       -webkit-text-stroke: 2px var(--glow-a);
       color: transparent;
       filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.4));
+    }
+
+    /* Corner brackets */
+    .sys-portrait::before,
+    .sys-portrait::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--glow-a);
+      border-style: solid;
+      opacity: 0.8;
+    }
+
+    .sys-portrait::before {
+      top: 8px;
+      left: 8px;
+      border-width: 2px 0 0 2px
+    }
+
+    .sys-portrait::after {
+      bottom: 8px;
+      right: 8px;
+      border-width: 0 2px 2px 0
     }
 
     .sys-stats {
@@ -1005,7 +750,7 @@
     .hero-orb-a {
       width: 400px;
       height: 400px;
-      background: rgba(0, 229, 255, 0.06);
+      background: rgba(167, 139, 250, 0.12);
       top: -100px;
       right: -100px;
       animation-delay: 0s
@@ -1014,7 +759,7 @@
     .hero-orb-b {
       width: 350px;
       height: 350px;
-      background: rgba(0, 255, 148, 0.05);
+      background: rgba(56, 189, 248, 0.1);
       bottom: -80px;
       left: -80px;
       animation-delay: -6s
@@ -1048,32 +793,33 @@
       <div class="hero-orb hero-orb-b"></div>
       <div class="hero-grid reveal">
         <div>
-          <div class="hero-label"> ASPIRING FULL STACK DEVELOPER</div>
+          <div class="hero-label">FULL STACK DEVELOPER</div>
           <div class="hero-name">
             <span class="line1">Vishal <span class="r-outline">R</span></span>
           </div>
           <div class="hero-typewriter">
-            <span class="prefix">&gt;_ </span><span class="phrase" id="phrase"></span><span class="cursor">_ </span>
+            <span class="prefix">&gt;_ </span><span class="phrase" id="phrase"></span><span class="cursor">|</span>
           </div>
           <p class="hero-bio">Computer Science student and aspiring Full Stack Developer with a strong interest in
             building scalable web and AI-driven applications. I have hands-on experience with technologies like React,
             HTML, CSS, Python and PostgreSQL, and I enjoy working across both frontend and backend to create efficient
             systems.</p>
           <div class="hero-btns">
-            <button class="btn-primary" onclick="scrollToSection('#projects')">view_projects()</button>
+            <button class="btn-primary" onclick="scrollTo('#projects')">view_projects()</button>
             <a class="btn-ghost" href="resume.pdf" target="_blank">view_resume()</a>
-            <button class="btn-ghost" onclick="scrollToSection('#contact')">contact_me()</button>
+            <button class="btn-ghost" onclick="scrollTo('#contact')">contact_me()</button>
           </div>
         </div>
         <div class="sys-card">
           <div class="sys-inner">
             <div class="sys-status">SYSTEM ONLINE</div>
             <div class="sys-portrait">
-              <img src="/photo.png" alt="Vishal R" />
+              <img src="/photo.png" alt="Vishal R"
+                style="width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:12px;filter:brightness(0.92) contrast(1.05)" />
             </div>
             <div class="sys-stats">
               <div class="sys-row"><span class="sys-key">STATUS</span><span class="sys-sep">&gt;</span><span
-                  class="sys-val" style="color:var(--teal)">Available</span></div>
+                  class="sys-val" style="color:var(--glow-c)">Available</span></div>
               <div class="sys-row"><span class="sys-key">LOCATION</span><span class="sys-sep">&gt;</span><span
                   class="sys-val">Bangalore, IN</span></div>
               <div class="sys-row"><span class="sys-key">FOCUS</span><span class="sys-sep">&gt;</span><span
@@ -1122,13 +868,13 @@
       top: 0;
       bottom: 0;
       width: 3px;
-      background: linear-gradient(to bottom, var(--cyan), var(--magenta));
+      background: linear-gradient(to bottom, var(--glow-a), var(--glow-b));
       border-radius: 3px 0 0 3px;
     }
 
     .feat-card:hover {
       transform: translateX(4px);
-      box-shadow: 0 0 24px rgba(0, 229, 255, 0.08)
+      box-shadow: 0 0 24px rgba(167, 139, 250, 0.1)
     }
 
     .feat-icon {
@@ -1136,8 +882,8 @@
       height: 36px;
       border-radius: 8px;
       flex-shrink: 0;
-      background: rgba(0, 229, 255, 0.07);
-      border: 1px solid rgba(0, 229, 255, 0.2);
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1244,9 +990,9 @@
     }
 
     .editor-tab.active {
-      color: var(--cyan);
-      border-bottom-color: var(--cyan);
-      background: rgba(0, 229, 255, 0.05)
+      color: var(--glow-a);
+      border-bottom-color: var(--glow-a);
+      background: rgba(167, 139, 250, 0.05)
     }
 
     .editor-body {
@@ -1306,9 +1052,9 @@
     }
 
     .sidebar-file.active {
-      color: var(--cyan);
-      border-left-color: var(--cyan);
-      background: rgba(0, 229, 255, 0.06)
+      color: var(--glow-a);
+      border-left-color: var(--glow-a);
+      background: rgba(167, 139, 250, 0.06)
     }
 
     .editor-panel {
@@ -1351,35 +1097,34 @@
       transform: translateY(-1px)
     }
 
-    /* Frontend=cyan, Backend=magenta, Databases=teal, AI=magenta, Tools=dim white */
     .tag-violet {
-      border-color: rgba(0, 229, 255, 0.4);
-      color: var(--cyan);
-      background: rgba(0, 229, 255, 0.06)
+      border-color: rgba(167, 139, 250, 0.4);
+      color: var(--glow-a);
+      background: rgba(167, 139, 250, 0.06)
     }
 
     .tag-sky {
-      border-color: rgba(0, 255, 148, 0.4);
-      color: var(--magenta);
-      background: rgba(0, 255, 148, 0.06)
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--glow-b);
+      background: rgba(56, 189, 248, 0.06)
     }
 
     .tag-emerald {
-      border-color: rgba(0, 212, 170, 0.4);
-      color: var(--teal);
-      background: rgba(0, 212, 170, 0.06)
+      border-color: rgba(52, 211, 153, 0.4);
+      color: var(--glow-c);
+      background: rgba(52, 211, 153, 0.06)
     }
 
     .tag-amber {
-      border-color: rgba(0, 255, 148, 0.4);
-      color: var(--magenta);
-      background: rgba(0, 255, 148, 0.06)
+      border-color: rgba(245, 158, 11, 0.4);
+      color: var(--amber);
+      background: rgba(245, 158, 11, 0.06)
     }
 
     .tag-muted {
-      border-color: rgba(240, 240, 240, 0.2);
-      color: rgba(240, 240, 240, 0.5);
-      background: rgba(240, 240, 240, 0.04)
+      border-color: rgba(100, 116, 139, 0.4);
+      color: var(--text-mid);
+      background: rgba(100, 116, 139, 0.06)
     }
   </style>
 
@@ -1522,25 +1267,24 @@
       gap: 24px
     }
 
-    /* Completed=teal border, In Progress=cyan border */
     .proj-card {
       padding: 24px;
       border-radius: 16px;
       background: var(--glass);
       border: 1px solid var(--rim);
-      border-left: 3px solid var(--teal);
+      border-left: 3px solid var(--glow-c);
       transition: transform 0.3s var(--ease), box-shadow 0.3s;
       position: relative;
       overflow: hidden;
     }
 
     .proj-card.in-progress {
-      border-left-color: var(--cyan)
+      border-left-color: var(--amber)
     }
 
     .proj-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 0 40px rgba(0, 229, 255, 0.09)
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.12)
     }
 
     .proj-top {
@@ -1568,15 +1312,15 @@
     }
 
     .badge-done {
-      background: rgba(0, 212, 170, 0.12);
-      color: var(--teal);
-      border: 1px solid rgba(0, 212, 170, 0.3)
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--glow-c);
+      border: 1px solid rgba(52, 211, 153, 0.3)
     }
 
     .badge-wip {
-      background: rgba(0, 229, 255, 0.1);
-      color: var(--cyan);
-      border: 1px solid rgba(0, 229, 255, 0.3)
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.3)
     }
 
     .proj-link {
@@ -1588,32 +1332,7 @@
     }
 
     .proj-link:hover {
-      color: var(--cyan)
-    }
-
-    .proj-link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--f-mono);
-      font-size: 0.75rem;
-      color: var(--hi);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 5px 14px;
-      border-radius: 999px;
-      transition: all 0.2s;
-      cursor: none;
-      flex-shrink: 0;
-      text-decoration: none;
-    }
-
-    .proj-link-btn:hover {
-      background: rgba(0, 255, 148, 0.1);
-      border-color: rgba(0, 255, 148, 0.3);
-      color: var(--cyan);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 255, 148, 0.2);
+      color: var(--glow-a)
     }
 
     .proj-desc {
@@ -1630,7 +1349,7 @@
     .proj-details summary {
       font-family: var(--f-mono);
       font-size: 0.8rem;
-      color: var(--cyan);
+      color: var(--glow-a);
       cursor: none;
       list-style: none;
       display: flex;
@@ -1676,7 +1395,7 @@
 
     .proj-feat::before {
       content: "›";
-      color: var(--cyan);
+      color: var(--glow-a);
       flex-shrink: 0
     }
 
@@ -1745,9 +1464,8 @@
       flex-wrap: wrap
     }
 
-    /* Education JSON: keys=cyan, values=teal */
     .json-key {
-      color: var(--cyan)
+      color: var(--glow-b)
     }
 
     .json-colon {
@@ -1755,7 +1473,7 @@
     }
 
     .json-val {
-      color: var(--teal)
+      color: var(--glow-c)
     }
 
     .json-punct {
@@ -1802,10 +1520,9 @@
       overflow: hidden
     }
 
-    /* Language bars: teal → cyan sweep */
     .lang-fill {
       height: 100%;
-      background: linear-gradient(to right, var(--teal), var(--cyan));
+      background: linear-gradient(to right, var(--glow-c), var(--glow-a));
       border-radius: 2px;
       width: 0%;
       transition: width 1s var(--ease)
@@ -1827,14 +1544,7 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
               <span class="proj-badge badge-done">Completed</span>
-              <a class="proj-link-btn" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
-                  fill="currentColor">
-                  <path
-                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-                View
-              </a>
+              <a class="proj-link" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank">⎋ view</a>
             </div>
           </div>
           <p class="proj-desc">AI-powered mobile app that generates personalized travel itineraries based on user
@@ -1990,7 +1700,7 @@
 
     .contact-sub em {
       font-style: normal;
-      color: var(--cyan)
+      color: var(--glow-a)
     }
 
     .contact-cards {
@@ -2018,23 +1728,23 @@
     }
 
     .contact-card.email:hover {
-      box-shadow: 0 0 32px rgba(0, 229, 255, 0.12);
-      border-color: rgba(0, 229, 255, 0.3)
+      box-shadow: 0 0 32px rgba(167, 139, 250, 0.15);
+      border-color: rgba(167, 139, 250, 0.3)
     }
 
     .contact-card.linkedin:hover {
-      box-shadow: 0 0 32px rgba(0, 212, 170, 0.12);
-      border-color: rgba(0, 212, 170, 0.3)
+      box-shadow: 0 0 32px rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.3)
     }
 
     .contact-card.github:hover {
-      box-shadow: 0 0 32px rgba(0, 212, 170, 0.12);
-      border-color: rgba(0, 212, 170, 0.3)
+      box-shadow: 0 0 32px rgba(52, 211, 153, 0.15);
+      border-color: rgba(52, 211, 153, 0.3)
     }
 
     .contact-card.phone:hover {
-      box-shadow: 0 0 32px rgba(0, 255, 148, 0.12);
-      border-color: rgba(0, 255, 148, 0.3)
+      box-shadow: 0 0 32px rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.3)
     }
 
     .contact-icon {
@@ -2063,20 +1773,20 @@
       font-family: var(--f-mono);
       font-size: 1rem;
       font-weight: 600;
-      color: #050810;
+      color: #fff;
       padding: 16px 40px;
-      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      background: linear-gradient(135deg, var(--glow-a), var(--glow-b));
       clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
       border: none;
       cursor: none;
-      box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.3);
       transition: filter 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
     .btn-cta:hover {
-      filter: brightness(1.1);
+      filter: brightness(1.12);
       transform: translateY(-3px);
-      box-shadow: 0 0 60px rgba(0, 229, 255, 0.3)
+      box-shadow: 0 0 60px rgba(167, 139, 250, 0.4)
     }
 
     footer {
@@ -2110,22 +1820,12 @@
           <div class="contact-val">+91 8147741585</div>
         </a>
         <a class="contact-card linkedin" href="https://www.linkedin.com/in/vishal-ravi-653a8a33b/" target="_blank">
-          <div class="contact-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-            </svg>
-          </div>
+          <div class="contact-icon">💼</div>
           <div class="contact-label">LINKEDIN</div>
           <div class="contact-val">linkedin/vishal-r</div>
         </a>
         <a class="contact-card github" href="https://github.com/vishal-163" target="_blank">
-          <div class="contact-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-            </svg>
-          </div>
+          <div class="contact-icon">🐙</div>
           <div class="contact-label">GITHUB</div>
           <div class="contact-val">github/vishal-163</div>
         </a>
@@ -2139,91 +1839,15 @@
 
 
   <script>
-    // ─── TERMINAL ARROW CURSOR ────────────────────────────────────────────────
-    (function () {
-      if (window.matchMedia('(hover:none) and (pointer:coarse)').matches) {
-        document.documentElement.style.cursor = 'auto';
-        return;
-      }
-
-      function lerp(a, b, t) { return a + (b - a) * t }
-
-      // Arrow — CSS triangle pointing NW
-      const arrow = document.createElement('div');
-      Object.assign(arrow.style, {
-        position: 'fixed', pointerEvents: 'none', zIndex: '99999',
-        width: 0, height: 0,
-        borderStyle: 'solid',
-        borderWidth: '0 8px 18px 8px',
-        borderColor: 'transparent transparent #00E5FF transparent',
-        transform: 'translate(-50%, -50%) rotate(-30deg)',
-        transformOrigin: 'top center',
-        filter: 'drop-shadow(0 0 4px rgba(0,229,255,0.8))',
-      });
-
-      // Trail dots
-      const trailCfg = [
-        { size: 4, color: 'rgba(0,229,255,0.5)', lerp: 0.18 },
-        { size: 3, color: 'rgba(0,229,255,0.25)', lerp: 0.11 },
-        { size: 2, color: 'rgba(0,229,255,0.12)', lerp: 0.07 },
-      ];
-      const trails = trailCfg.map(c => {
-        const d = document.createElement('div');
-        Object.assign(d.style, {
-          position: 'fixed', pointerEvents: 'none', zIndex: '99998',
-          width: c.size + 'px', height: c.size + 'px', borderRadius: '50%',
-          background: c.color, transform: 'translate(-50%,-50%)',
-        });
-        document.body.appendChild(d);
-        return { el: d, x: 0, y: 0, lerpF: c.lerp };
-      });
-
-      // Scan line
-      const scan = document.createElement('div');
-      Object.assign(scan.style, {
-        position: 'fixed', pointerEvents: 'none', zIndex: '99997',
-        width: '1px', height: '18px',
-        background: 'rgba(0,229,255,0.2)',
-        transform: 'translate(0,-50%)',
-      });
-
-      document.body.append(arrow, scan);
-
-      let mx = 0, my = 0, sx = 0, sy = 0;
-      let rafActive = true;
-
-      document.addEventListener('mousemove', e => {
-        mx = e.clientX; my = e.clientY;
-        // Arrow moves instantly — tip at cursor point
-        arrow.style.left = (mx - 1) + 'px';
-        arrow.style.top = (my - 1) + 'px';
-      }, { passive: true });
-
-      document.addEventListener('visibilitychange', () => {
-        rafActive = !document.hidden;
-      });
-
-      (function loop() {
-        requestAnimationFrame(loop);
-        if (!rafActive) return;
-
-        // Trail dots
-        let px = mx, py = my;
-        trails.forEach(t => {
-          t.x = lerp(t.x, px, t.lerpF);
-          t.y = lerp(t.y, py, t.lerpF);
-          t.el.style.left = t.x + 'px';
-          t.el.style.top = t.y + 'px';
-          px = t.x; py = t.y;
-        });
-
-        // Scan line follows with lerp, offset right of arrow
-        sx = lerp(sx, mx + 16, 0.14);
-        sy = lerp(sy, my, 0.14);
-        scan.style.left = sx + 'px';
-        scan.style.top = sy + 'px';
-      })();
-    })();
+    // ─── CURSOR ───────────────────────────────────────────────────────────────
+    const dot = document.getElementById('cur-dot'), ring = document.getElementById('cur-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px' });
+    (function lerp() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(lerp) })();
+    document.querySelectorAll('a,button,[onclick]').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.width = '44px'; ring.style.height = '44px'; dot.style.transform = 'translate(-50%,-50%) scale(1.5)' });
+      el.addEventListener('mouseleave', () => { ring.style.width = '28px'; ring.style.height = '28px'; dot.style.transform = 'translate(-50%,-50%) scale(1)' });
+    });
 
     // ─── SCROLL PROGRESS ─────────────────────────────────────────────────────
     const bar = document.getElementById('progress');
@@ -2278,7 +1902,7 @@
     if (eduCard) lro.observe(eduCard);
 
     // ─── SCROLL HELPER ────────────────────────────────────────────────────────
-    function scrollToSection(id) { document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' }) }
+    function scrollTo(id) { document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' }) }
   </script>
 </body>
 
