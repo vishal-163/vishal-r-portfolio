@@ -116,10 +116,8 @@ export default async function handler(
     res.status(200).json({ message: responseText });
 
     // Log to Supabase asynchronously (non-blocking for the user response)
-    // We don't 'return' the res above, allowing the function to continue 
-    // until the end of the script or until it's terminated by Vercel.
     try {
-      if (lastUserMessage && responseText) {
+      if (supabase && lastUserMessage && responseText) {
         await supabase.from('chat_logs').insert([
           { message: lastUserMessage, response: responseText }
         ]);

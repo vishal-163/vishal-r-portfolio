@@ -27,6 +27,10 @@ export default async function handler(
     return res.status(401).json({ error: "Unauthorized access" });
   }
 
+  if (!supabase) {
+    return res.status(503).json({ error: "Supabase service is not configured." });
+  }
+
   try {
     const { data, error } = await supabase
       .from("chat_logs")
