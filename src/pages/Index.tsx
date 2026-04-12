@@ -10,6 +10,7 @@ const Skills    = lazy(() => import("@/components/Skills"));
 const Projects  = lazy(() => import("@/components/Projects"));
 const Education = lazy(() => import("@/components/Education"));
 const Contact   = lazy(() => import("@/components/Contact"));
+const AIAvatar  = lazy(() => import("@/components/AIAvatar"));
 
 const Fallback = () => (
   <div style={{ padding: "80px 0", display: "flex", justifyContent: "center" }}>
@@ -46,6 +47,7 @@ export default function Index() {
           <Suspense fallback={<Fallback />}><Contact /></Suspense>
         </main>
       </div>
+      <Suspense fallback={null}><AIAvatar /></Suspense>
     </>
   );
 }
