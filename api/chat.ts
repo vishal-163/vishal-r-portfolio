@@ -1,6 +1,7 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { supabase } from "./_lib/supabase";
 
 const systemPrompt = `IDENTITY RULE: You are "Vishal's AI Assistant" EXCLUSIVELY — custom-built for Vishal R's portfolio website.
 - NEVER say you are an LLM, Meta AI, Llama, OpenAI, or any other AI product.
@@ -108,12 +109,32 @@ export default async function handler(
       });
     }
 
-    return res.status(200).json({ message: responseText });
+    // Capture the last user message for logging
+    const lastUserMessage = messages[messages.length - 1]?.content || "";
+
+    // Respond to user immediately
+    res.status(200).json({ message: responseText });
+
+    // Log to Supabase asynchronously (non-blocking for the user response)
+    // We don't 'return' the res above, allowing the function to continue 
+    // until the end of the script or until it's terminated by Vercel.
+    try {
+      if (lastUserMessage && responseText) {
+        await supabase.from('chat_logs').insert([
+          { message: lastUserMessage, response: responseText }
+        ]);
+      }
+    } catch (logError) {
+      // Fail silently to the user, but log for developer
+      console.error("Supabase Logging Error:", logError);
+    }
 
   } catch (error: any) {
     console.error("API Route Error:", error);
-    return res.status(500).json({ 
-      error: error.message || "Failed to generate response. Please try again later." 
-    });
+    if (!res.writableEnded) {
+      return res.status(500).json({ 
+        error: error.message || "Failed to generate response. Please try again later." 
+      });
+    }
   }
 }
