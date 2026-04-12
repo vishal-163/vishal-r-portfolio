@@ -72,7 +72,7 @@ img,video{max-width:100%;height:auto}
 .boot-line.show{opacity:1;transform:translateX(0)}
 .boot-ok{color:var(--green);margin-right:8px}
 .boot-bar-wrap{width:min(360px,85vw);height:3px;background:rgba(0,255,136,0.1);border-radius:2px;overflow:hidden}
-.boot-bar{height:100%;width:0%;background:linear-gradient(to right,var(--green),var(--cyan));border-radius:2px;transition:width .08s linear}
+.boot-bar{height:100%;width:0%;background:linear-gradient(to right,var(--green),var(--cyan));border-radius:2px;transition:width .5s cubic-bezier(0.4,0,0.2,1)}
 
 /* ═══════════════════════════════════════════════════════════════════════
    MATRIX RAIN
@@ -311,7 +311,7 @@ section{padding:clamp(60px,8vw,100px) 0;position:relative}
   <div class="wrap nav-inner">
     <div class="nav-logo">
       <div class="nav-logo-box">VR</div>
-      vishal.r
+      Vishal R
     </div>
     <div class="nav-links">
       <a href="#home" class="active">home</a>
@@ -354,15 +354,9 @@ section{padding:clamp(60px,8vw,100px) 0;position:relative}
           and I enjoy working across both frontend and backend to create efficient systems.
         </p>
         <div class="hero-btns">
-          <button class="btn-solid" onclick="scrollTo('#projects')">&gt; view_projects()</button>
+          <button class="btn-solid" onclick="navTo('#projects')">&gt; view_projects()</button>
           <a class="btn-outline" href="/resume.pdf" target="_blank">↓ view_resume()</a>
-          <button class="btn-ghost btn-outline" onclick="scrollTo('#contact')">contact_me()</button>
-        </div>
-        <div class="hero-stats">
-          <div><div class="stat-val">10+</div><div class="stat-lbl">Projects</div></div>
-          <div><div class="stat-val">25+</div><div class="stat-lbl">Technologies</div></div>
-          <div><div class="stat-val">5</div><div class="stat-lbl">Languages</div></div>
-          <div><div class="stat-val">∞</div><div class="stat-lbl">Coffees</div></div>
+          <button class=" btn-outline" onclick="navTo('#contact')">contact_me()</button>
         </div>
       </div>
       <!-- RIGHT: photo + terminal -->
@@ -770,15 +764,24 @@ details[open] .proj-details summary::before{transform:rotate(90deg)}
 // ── BOOT ─────────────────────────────────────────────────────────────────
 const BOOT_LINES=['Initializing kernel...','Loading system modules...','Mounting filesystem...','Starting network services...','Loading portfolio.exe...','Compiling assets...','Connecting to database...','System ready. Welcome.'];
 const bootEl=document.getElementById('boot-lines'),bootBar=document.getElementById('boot-bar'),bootScreen=document.getElementById('boot');
+
+// Progress bar runs independently — smooth CSS animation over total boot time
+const TOTAL_BOOT_MS = BOOT_LINES.length * 380 + 800;
+bootBar.style.transition = `width ${TOTAL_BOOT_MS}ms cubic-bezier(0.1,0,0.2,1)`;
+setTimeout(()=>bootBar.style.width='100%', 50);
+
+// Lines load at their own pace
 let bl=0;
 function nextLine(){
-  if(bl>=BOOT_LINES.length){bootBar.style.width='100%';setTimeout(()=>bootScreen.classList.add('done'),700);return}
+  if(bl>=BOOT_LINES.length){
+    setTimeout(()=>bootScreen.classList.add('done'),700);
+    return;
+  }
   const d=document.createElement('div');d.className='boot-line';
   d.innerHTML=`<span class="boot-ok">[  OK  ]</span>${BOOT_LINES[bl]}`;
   bootEl.appendChild(d);
   requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('show')));
-  bootBar.style.width=((bl+1)/BOOT_LINES.length*100)+'%';
-  bl++;setTimeout(nextLine,bl===BOOT_LINES.length?500:200);
+  bl++;setTimeout(nextLine,bl===BOOT_LINES.length?800:380);
 }
 setTimeout(nextLine,400);
 
@@ -874,7 +877,7 @@ document.querySelectorAll('.tilt-card').forEach(card=>{
 });
 
 // ── SCROLL HELPER ────────────────────────────────────────────────────────
-function scrollTo(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth'})}
+function navTo(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth'})}
 </script>
 </body>
 </html>
