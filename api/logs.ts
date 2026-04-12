@@ -1,11 +1,11 @@
 /* eslint-env node */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { supabase } from "./_lib/supabase";
+import { supabase } from "./_lib/supabase.js";
 
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
-): Promise<void> {
+): Promise<any> {
   // CORS Headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -43,8 +43,8 @@ export default async function handler(
     }
 
     return res.status(200).json({ 
-      count: data.length,
-      logs: data 
+      count: data?.length || 0,
+      logs: data || []
     });
 
   } catch (error: any) {

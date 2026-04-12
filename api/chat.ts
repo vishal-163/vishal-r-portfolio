@@ -1,8 +1,9 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { supabase } from "./_lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 
+// IDENTITY PROMPT
 const systemPrompt = `IDENTITY RULE: You are "Vishal's AI Assistant" EXCLUSIVELY — custom-built for Vishal R's portfolio website.
 - NEVER say you are an LLM, Meta AI, Llama, OpenAI, or any other AI product.
 - If asked your identity/creator, reply ONLY: "I am Vishal's personal AI Assistant, built specifically for his portfolio!"
@@ -41,10 +42,15 @@ Portfolio: https://vishalr.vercel.app
 - If someone asks something you don't know about Vishal, say "I don't have that information, but you can contact Vishal directly at vishalravi163@gmail.com!"
 `;
 
+// Initialize Supabase inlined to avoid import issues locally
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
+const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
-): Promise<void> {
+): Promise<any> {
   // CORS Headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -58,29 +64,23 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    console.error("API Key Error - check GROQ_API_KEY in environment");
-    return res.status(500).json({ 
-      error: "AI service configuration error. Please try again later." 
-    });
-  }
-
-  // Validate request
-  const { messages } = req.body;
-
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    return res.status(400).json({ error: "Invalid messages format" });
-  }
-
-  // Prepend system prompt to the messages
-  const apiMessages = [
-    { role: "system", content: systemPrompt },
-    ...messages.slice(-15) // Limit history for token management
-  ];
-
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: "Configuration Error: GROQ_API_KEY is missing" });
+    }
+
+    if (!req.body || !req.body.messages) {
+      return res.status(400).json({ error: "Bad Request: Missing messages" });
+    }
+
+    const { messages } = req.body;
+    const apiMessages = [
+      { role: "system", content: systemPrompt },
+      ...messages.slice(-10)
+    ];
+
+    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,44 +94,43 @@ export default async function handler(
       })
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Groq API Error:", data);
-      throw new Error(data.error?.message || "Failed to get response from Groq");
-    }
-
-    const responseText = data.choices?.[0]?.message?.content || "";
-
-    if (!responseText) {
-      return res.status(500).json({ 
-        error: "AI returned empty response. Please try again." 
+    if (!groqRes.ok) {
+      const errorData = await groqRes.json().catch(() => ({}));
+      return res.status(groqRes.status).json({ 
+        error: errorData.error?.message || "Groq API error",
+        status: groqRes.status
       });
     }
 
-    // Capture the last user message for logging
+    const data = await groqRes.json();
+    const responseText = data.choices?.[0]?.message?.content || "";
+    
+    if (!responseText) {
+      return res.status(500).json({ error: "AI generated an empty response" });
+    }
+
     const lastUserMessage = messages[messages.length - 1]?.content || "";
 
-    // Respond to user immediately
+    // 1. Send success response back to UI ASAP
     res.status(200).json({ message: responseText });
 
-    // Log to Supabase asynchronously (non-blocking for the user response)
-    try {
-      if (supabase && lastUserMessage && responseText) {
-        await supabase.from('chat_logs').insert([
-          { message: lastUserMessage, response: responseText }
-        ]);
-      }
-    } catch (logError) {
-      // Fail silently to the user, but log for developer
-      console.error("Supabase Logging Error:", logError);
+    // 2. Log to Supabase (Non-blocking)
+    if (supabase && lastUserMessage) {
+      supabase.from('chat_logs').insert([
+        { message: lastUserMessage, response: responseText }
+      ]).then(({ error }) => {
+        if (error) console.error("Logging failed:", error.message);
+      }).catch(err => {
+        console.error("Logging catch error:", err);
+      });
     }
 
   } catch (error: any) {
-    console.error("API Route Error:", error);
+    console.error("HANDLED BACKEND ERROR:", error);
     if (!res.writableEnded) {
       return res.status(500).json({ 
-        error: error.message || "Failed to generate response. Please try again later." 
+        error: "Internal Server Error", 
+        message: error.message 
       });
     }
   }
