@@ -58,7 +58,7 @@ export default function Hero() {
 
             {/* Bio */}
             <p style={{ fontSize: "clamp(0.95rem, 2vw, 1.05rem)", color: "var(--text-muted)", lineHeight: 1.85, marginBottom: 28 }}>
-              Computer Science student and aspiring Full Stack Developer with a strong interest in
+              A Computer Science student and aspiring Full Stack Developer with a strong interest in
               building scalable web and AI-driven applications. I have hands-on experience with
               technologies like React, HTML, CSS, Python and PostgreSQL, and I enjoy working across
               both frontend and backend to create efficient systems.

@@ -1,7 +1,7 @@
 const languages = [
   { name: "English", level: "Fluent",  pct: 95 },
   { name: "Kannada", level: "Fluent",  pct: 90 },
-  { name: "Hindi",   level: "Fluent",  pct: 88 },
+  { name: "Hindi",   level: "Fluent",  pct: 80 },
   { name: "Telugu",  level: "Native",  pct: 100 },
   { name: "Tamil",   level: "Fluent",  pct: 85 },
 ];
