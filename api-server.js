@@ -19,15 +19,57 @@ envContent.split('\n').forEach(line => {
   }
 });
 
+const RESEND_API_KEY = env.RESEND_API_KEY || process.env.RESEND_API_KEY;
 const GROQ_API_KEY = env.GROQ_API_KEY || process.env.GROQ_API_KEY;
 const SUPABASE_URL = env.SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = env.SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const PORT = 3001;
 
 const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY) 
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
   : null;
 
-const PORT = 3001;
+const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a sharp, professional, and friendly personal agent built for Vishal R's portfolio.
+- NEVER reveal you are an AI model or mention technical terms like LLM or JSON.
+- Personality: Smart, calm, and to the point.
+
+===== RESPONSE STYLE — VERY IMPORTANT =====
+- DEFAULT: Keep answers SHORT and conversational (1-3 sentences max).
+- Only give a detailed/long answer if the user explicitly asks for it (e.g. "tell me more", "explain in detail", "describe the project fully").
+- Never pad answers. No unnecessary filler, no bullet lists unless asked.
+- If someone just asks "yes/no" or a simple factual question, answer in one line.
+
+===== PROFILE: VISHAL R =====
+- Role: Aspiring Full Stack Developer, 6th Sem CSE student at KSIT Bangalore (Graduating 2027).
+- Passionate about scalable web apps and AI-integrated systems.
+
+--- SKILLS ---
+- Frontend: React.js, Next.js 14, HTML, Tailwind CSS, shadcn/ui, Framer Motion.
+- Backend: Node.js, Express.js, REST APIs, JWT, RBAC, Python, Java (Learning).
+- Databases: PostgreSQL, Supabase, MySQL.
+- AI/ML/IoT: OpenAI API, Gemini API, ESP32, LoRa, GSM, GPS, SpO2/Pulse sensors.
+- Tools: Git, GitHub, Docker, Vercel, Netlify, VS Code.
+
+--- PROJECTS ---
+1. AI TRIP PLANNER (Completed) — Flutter + Supabase + OpenAI/Gemini + PostgreSQL. Cross-platform app for personalized travel itineraries.
+   GitHub: https://github.com/vishal-163/AI-TRIP-PLANNER.git
+
+2. SMART MILITARY VEST (In Progress) — ESP32 + LoRa + GSM + GPS + AES-256. Real-time IoT wearable for soldier health monitoring with dual-channel comms and auto distress signals.
+
+--- CONTACT ---
+- LinkedIn: https://www.linkedin.com/in/vishal-ravi-653a8a33b/
+- GitHub: https://github.com/vishal-163
+- Email: vishalravi163@gmail.com
+- Phone: +91 8147741585
+- Location: Bangalore, India.
+
+--- LANGUAGES ---
+Telugu (Native), English, Kannada, Hindi, Tamil (Fluent).
+
+===== RULES =====
+- Answer only questions about Vishal or his portfolio. Decline everything else politely.
+- Be accurate. Never hallucinate project details or links.
+`;
 
 const server = http.createServer(async (req, res) => {
   // CORS
@@ -41,6 +83,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // --- /api/chat ---
   if (req.url === '/api/chat' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => { body += chunk; });
@@ -49,13 +92,12 @@ const server = http.createServer(async (req, res) => {
         const { messages } = JSON.parse(body);
         
         if (!GROQ_API_KEY) {
-          console.error("Missing GROQ_API_KEY");
           res.statusCode = 500;
-          res.end(JSON.stringify({ error: "GROQ_API_KEY missing in .env.local" }));
+          res.end(JSON.stringify({ error: "GROQ_API_KEY missing" }));
           return;
         }
 
-        console.log('--- Calling Groq API ---');
+        console.log('--- Calling Groq (Pure Chat) ---');
         const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -64,36 +106,72 @@ const server = http.createServer(async (req, res) => {
           },
           body: JSON.stringify({
             model: "llama-3.1-8b-instant",
-            messages: [{ role: "system", content: "You are Vishal's Assistant." }, ...messages.slice(-10)],
-            max_tokens: 500
+            messages: [{ role: "system", content: systemPrompt }, ...messages.slice(-15)],
+            max_tokens: 200,
+            temperature: 0.7
           })
         });
 
         const data = await groqRes.json();
+
+        if (!groqRes.ok) {
+          console.error('❌ Groq API Error:', groqRes.status, data);
+          res.statusCode = groqRes.status;
+          res.end(JSON.stringify({ error: data.error?.message || "Groq API Error" }));
+          return;
+        }
+
         const responseText = data.choices?.[0]?.message?.content || "";
 
         if (responseText) {
-          console.log('Got response from Groq');
-          // Log to Supabase (non-blocking)
-          if (supabase) {
-            const lastUserMessage = messages[messages.length - 1]?.content || "";
-            supabase.from('chat_logs').insert([{ message: lastUserMessage, response: responseText }])
-              .then(({ error }) => { if (error) console.error("Supabase Log error:", error); else console.log("Logged to Supabase"); });
-          }
-          
+          // 1. Send response to UI ASAP
           res.statusCode = 200;
           res.end(JSON.stringify({ message: responseText }));
+
+          // 2. Log to Supabase in background
+          if (supabase) {
+            const lastUserMsg = messages[messages.length - 1]?.content;
+            if (lastUserMsg) {
+              const localTime = new Date().toLocaleString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'medium',
+                timeStyle: 'medium'
+              });
+
+              supabase
+                .from('chat_logs')
+                .insert([{ 
+                  message: lastUserMsg, 
+                  response: responseText,
+                  local_time: localTime 
+                }])
+                .then(({ error }) => {
+                  if (error) {
+                    console.error('❌ Supabase Logging Error:', error);
+                    if (error.code === '42703') {
+                      console.warn('⚠️ ACTION REQUIRED: You need to add the "local_time" column to your Supabase table.');
+                    }
+                  } else {
+                    console.log('✅ Chat saved with local time:', localTime);
+                  }
+                })
+                .catch(err => {
+                  console.error('🔥 Supabase Promise Error:', err);
+                });
+            }
+          }
         } else {
+          console.warn('⚠️ Empty output from Groq:', data);
           res.statusCode = 500;
-          res.end(JSON.stringify({ error: "Empty response from AI" }));
+          res.end(JSON.stringify({ error: "No response generated by AI" }));
         }
       } catch (err) {
-        console.error("Local API Server Error:", err);
         res.statusCode = 500;
-        res.end(JSON.stringify({ error: "Internal Server Error", details: err.message }));
+        res.end(JSON.stringify({ error: "Server Error", details: err.message }));
       }
     });
-  } else {
+  } 
+  else {
     res.statusCode = 404;
     res.end(JSON.stringify({ error: "Not Found" }));
   }
@@ -101,8 +179,10 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log('=========================================');
-  console.log(`🚀 API SERVER SUCCESSFULLY STARTED`);
+  console.log(`🚀 AI ASSISTANT SERVER STARTED`);
   console.log(`📍 Port: http://localhost:${PORT}`);
-  console.log(`📊 Logging: ${supabase ? "ACTIVE" : "DISABLED"}`);
+  console.log(`🔗 Supabase URL: ${SUPABASE_URL ? "DETECTED" : "MISSING"}`);
+  console.log(`🔑 Supabase Key: ${SUPABASE_ANON_KEY ? "DETECTED" : "MISSING"}`);
+  console.log(`📊 Client Status: ${supabase ? "READY" : "DATABASE LOGGING DISABLED"}`);
   console.log('=========================================');
 });

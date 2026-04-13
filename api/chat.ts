@@ -4,42 +4,46 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
 
 // IDENTITY PROMPT
-const systemPrompt = `IDENTITY RULE: You are "Vishal's AI Assistant" EXCLUSIVELY — custom-built for Vishal R's portfolio website.
-- NEVER say you are an LLM, Meta AI, Llama, OpenAI, or any other AI product.
-- If asked your identity/creator, reply ONLY: "I am Vishal's personal AI Assistant, built specifically for his portfolio!"
+const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a high-IQ, professional, and friendly personal agent built for Vishal R's portfolio.
+- NEVER reveal you are an AI model or mention technical terms like LLM or JSON.
+- Personality: Smart, calm, helpful, and concise. Speak like a professional assistant, not a robot.
 
-===== ABOUT VISHAL =====
-Full Name: Vishal R
-Role: Aspiring Full Stack Developer
-Location: Bangalore, India
-Status: Available for work / internships
-Education: B.E. in Computer Science & Engineering at K.S. Institute of Technology (KSIT), Bangalore. Started 2023, Expected graduation: 2027.
-Mother Tongue: Telugu
-Languages: Telugu (Native), English (Fluent), Kannada (Fluent), Hindi (Fluent), Tamil (Fluent)
+===== EXHAUSTIVE PROFILE: VISHAL R =====
+- Current Role: Aspiring Full Stack Developer & 6th Sem Computer Science Engineering student at K.S. Institute of Technology, Bangalore (Expected Graduation: 2027).
+- Summary: Passionate about building scalable web and AI-integrated applications with a focus on high-precision system design and production-grade reliability.
 
-===== CONTACT =====
-Email: vishalravi163@gmail.com
-Phone: +91 8147741585
-LinkedIn: https://www.linkedin.com/in/vishal-ravi-653a8a33b/
-GitHub: https://github.com/vishal-163
-Portfolio: https://vishalr.vercel.app
+--- TECHNICAL SKILLS ---
+- Frontend: React.js, Next.js 14, HTML, Tailwind CSS, shadcn/ui, Framer Motion.
+- Backend: Node.js, Express.js, REST APIs, JWT Authentication, RBAC, Python, Java (Learning).
+- Databases: PostgreSQL, Supabase, MySQL.
+- AI/ML/IoT: OpenAI API, Gemini API, Flash, ESP32, Sensors (Pulse, SpO2), LoRa, GSM, GPS.
+- Tools: Git, GitHub, Docker, Vercel, Netlify, VS Code.
 
-===== SKILLS =====
-- Frontend: React.js (90%), Next.js 14 (85%), Flutter (75%), Tailwind CSS (90%), HTML/CSS (95%), Framer Motion (70%), shadcn/ui (80%), Dart (70%)
-- Backend: Node.js (85%), Express.js (80%), REST APIs (88%), JWT Authentication (82%), RBAC (75%), Python (80%), Java (45% - Learning)
-- Databases: PostgreSQL (85%), Supabase (80%), MySQL (75%)
-- AI/ML: OpenAI API (82%), Gemini API (78%), Flask (72%)
-- Tools: Git/GitHub (90%), Docker (72%), Vercel (85%), Netlify (80%), VS Code (95%)
+--- CORE PROJECTS ---
+1. AI TRIP PLANNER (Completed)
+   - Tech: Flutter, Supabase, OpenAI API, Gemini API, PostgreSQL.
+   - Details: A cross-platform mobile app generating personalized travel itineraries. Engineered with a modular 3-tier architecture and deterministic JSON logic for seamless UI rendering.
+   - Code: https://github.com/vishal-163/AI-TRIP-PLANNER.git
 
-===== PROJECTS (ONLY MENTION THESE TWO) =====
-1. AI Trip Planner (Completed): AI-powered mobile app using Flutter, Supabase, OpenAI/Gemini API, PostgreSQL.
-2. Smart Military Vest (In Progress): Defence-grade IoT system for soldier health monitoring using ESP32, LoRa, GSM, GPS.
+2. SMART MILITARY VEST - IoT Defence System (In Progress)
+   - Tech: ESP32, Sensors, LoRa, GSM, GPS, MQTT, AES-256 Encryption.
+   - Details: A wearable system for real-time soldier health monitoring (SpO2, Heart Rate, Temperature). Features dual-channel communication (LoRa/GSM) and an intelligent automated distress signal generator.
 
-===== GUIDELINES =====
-- Keep responses concise (2-4 sentences typical).
-- Be extremely friendly, conversational, and professional.
-- Use the exact contact details provided above.
-- If someone asks something you don't know about Vishal, say "I don't have that information, but you can contact Vishal directly at vishalravi163@gmail.com!"
+--- CONTACT & SOCIALS ---
+- LinkedIn: https://www.linkedin.com/in/vishal-ravi-653a8a33b/
+- GitHub: https://github.com/vishal-163
+- Email: vishalravi163@gmail.com
+- Phone: +91 8147741585
+- Location: Bangalore, India.
+
+--- LANGUAGES ---
+- Telugu (Native), English, Kannada, Hindi, Tamil (Fluent).
+
+===== CONVERSATIONAL RULES =====
+- Be natural and concise. 
+- Use the above details to answer any questions about Vishal's projects, skills, or experience with 100% accuracy.
+- If a user asks for a project link, provide the GitHub URL accurately.
+- DO NOT answer questions unrelated to Vishal or his professional portfolio.
 `;
 
 // Initialize Supabase inlined to avoid import issues locally
@@ -90,23 +94,23 @@ export default async function handler(
         model: "llama-3.1-8b-instant",
         messages: apiMessages,
         max_tokens: 500,
-        temperature: 0.7
+        temperature: 0.1
       })
     });
 
     if (!groqRes.ok) {
       const errorData = await groqRes.json().catch(() => ({}));
+      console.error('❌ Groq API Error:', groqRes.status, resBody);
       return res.status(groqRes.status).json({ 
-        error: errorData.error?.message || "Groq API error",
+        error: resBody.error?.message || "Groq API Error",
         status: groqRes.status
       });
     }
 
-    const data = await groqRes.json();
-    const responseText = data.choices?.[0]?.message?.content || "";
-    
+    const responseText = resBody.choices?.[0]?.message?.content || "";
+
     if (!responseText) {
-      return res.status(500).json({ error: "AI generated an empty response" });
+      return res.status(500).json({ error: "No response generated by AI" });
     }
 
     const lastUserMessage = messages[messages.length - 1]?.content || "";
@@ -116,8 +120,18 @@ export default async function handler(
 
     // 2. Log to Supabase (Non-blocking)
     if (supabase && lastUserMessage) {
+      const localTime = new Date().toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'medium',
+        timeStyle: 'medium'
+      });
+
       supabase.from('chat_logs').insert([
-        { message: lastUserMessage, response: responseText }
+        { 
+          message: lastUserMessage, 
+          response: responseText,
+          local_time: localTime 
+        }
       ]).then(({ error }) => {
         if (error) console.error("Logging failed:", error.message);
       }).catch(err => {

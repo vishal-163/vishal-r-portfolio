@@ -1200,6 +1200,36 @@
       border-color: rgba(0, 255, 136, 0.3);
     }
 
+    /* --- AGENT EXTENSIONS --- */
+    .header-info { display: flex; align-items: center; gap: 8px; }
+    .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.5); transition: all 0.3s ease; }
+    .status-indicator.busy { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); animation: pulse 1.5s infinite; }
+    .message-wrapper { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+    
+    .confirmation-card { align-self: flex-start; width: 100%; max-width: 320px; background: rgba(0, 50, 25, 0.6); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px; overflow: hidden; animation: fadeIn 0.4s ease; margin-left: 4px; }
+    .card-header { background: rgba(0, 255, 136, 0.1); padding: 8px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); font-size: 13px; font-weight: 600; color: #00ff88; }
+    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #e2e8f0; }
+    .card-body p { margin: 0; }
+    .file-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .file-chip { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; padding: 2px 8px; font-size: 11px; display: flex; align-items: center; gap: 4px; }
+    .card-actions { display: flex; padding: 8px 12px; gap: 8px; background: rgba(0, 0, 0, 0.2); }
+    .confirm-btn, .cancel-btn { flex: 1; padding: 6px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+    .confirm-btn { background: #00ff88; color: #050810; }
+    .confirm-btn:hover { background: #00cc6e; transform: translateY(-1px); }
+    .cancel-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #e2e8f0; }
+
+    .file-preview-list { display: flex; gap: 8px; overflow-x: auto; padding: 8px 4px; margin-bottom: 4px; }
+    .file-preview { position: relative; flex-shrink: 0; width: 70px; height: 70px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px; }
+    .file-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+    .file-name { font-size: 9px; color: #94a3b8; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; margin-top: 2px; }
+    .remove-file { position: absolute; top: -5px; right: -5px; width: 18px; height: 18px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid #050f0a; }
+
+    .attach-button { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+    .attach-button:hover { transform: scale(1.1); }
+    .hidden-input { display: none; }
+    .spinner { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
     .send-button:focus-visible {
       outline: 2px solid #00ff88;
       outline-offset: 2px;
@@ -2496,9 +2526,13 @@
   <!-- AI AVATAR CHATBOT -->
   <div id="ai-chat-container">
     <!-- The Chat Widget -->
-    <div id="ai-chat-widget" role="dialog" aria-labelledby="chat-header-title" aria-modal="true" style="display:none;">
+    <div id="ai-chat-widget" role="dialog" aria-labelledby="chat-header-title" aria-modal="true" style="display:none;"
+      ondragover="event.preventDefault()" ondrop="handleFileDrop(event)">
       <div class="chat-header">
-        <h3 id="chat-header-title">Vishal's AI Assistant</h3>
+        <div class="header-info">
+          <h3 id="chat-header-title">Vishal's AI Assistant</h3>
+          <div id="ai-status-dot" class="status-indicator"></div>
+        </div>
         <button id="ai-chat-close" aria-label="Close chat">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2509,7 +2543,6 @@
       </div>
 
       <div class="messages-container" id="ai-messages">
-        <!-- Initial Message -->
         <div class="message assistant">Hi! I'm Vishal's AI Assistant. Ask me anything about his skills, projects, or
           experience!</div>
       </div>
@@ -2520,17 +2553,15 @@
           <button id="ai-error-close" aria-label="Clear error">✕</button>
         </div>
         <div class="input-form">
-          <input type="text" id="ai-input" class="chat-input" placeholder="Ask about my skills, projects..."
+          <input type="text" id="ai-input" class="chat-input" placeholder="Ask me anything..."
             aria-label="Message input" />
           <button id="ai-send-btn" class="send-button" aria-label="Send message">
-            <!-- Send Icon -->
             <svg id="ai-send-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
               fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m22 2-7 20-4-9-9-4Z" />
               <path d="M22 2 11 13" />
             </svg>
-            <!-- Loader Icon (Hidden default) -->
-            <svg id="ai-loader-icon" class="spinner-animation" style="display:none;" xmlns="http://www.w3.org/2000/svg"
+            <svg id="ai-loader-icon" class="spinner" style="display:none;" xmlns="http://www.w3.org/2000/svg"
               width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -2545,7 +2576,12 @@
       aria-controls="ai-chat-widget" title="Click to open Vishal's AI assistant">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ff88"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+        <path d="M12 8V4H8" />
+        <rect width="16" height="12" x="4" y="8" rx="2" />
+        <path d="M2 14h2" />
+        <path d="M20 14h2" />
+        <path d="M15 13v2" />
+        <path d="M9 13v2" />
       </svg>
     </button>
   </div>
@@ -2670,8 +2706,22 @@
     function navTo(id) { document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' }) }
   </script>
 
+  <!-- Supabase CDN for file storage -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <script type="module">
-    // ── AI AVATAR CHATBOT ────────────────────────────────────────────────────
+    // ── AI AGENT CHATBOT ─────────────────────────────────────────────────────
+
+    // ─── CONFIG ───────────────────────────────────────────────────────────────
+    const SUPABASE_URL = 'https://cuelksidwgkpczmshzmi.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1ZWxrc2lkd2drcGN6bXNoem1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTMzNDAsImV4cCI6MjA5MTU2OTM0MH0.KFDAXBPlXvb_GM0Vm9eZ5SFrSnsVyhfV1pla_o1LdNU';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const MAX_FILES = 10;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // Increased to 10MB
+    // Removed ALLOWED_TYPES to allow any file format
+
+    // ─── DOM REFS ─────────────────────────────────────────────────────────────
     const avatarBtn = document.getElementById('ai-avatar-btn');
     const chatWidget = document.getElementById('ai-chat-widget');
     const closeBtn = document.getElementById('ai-chat-close');
@@ -2683,11 +2733,70 @@
     const errorClose = document.getElementById('ai-error-close');
     const sendIcon = document.getElementById('ai-send-icon');
     const loaderIcon = document.getElementById('ai-loader-icon');
+    const fileInput = document.getElementById('ai-file-input');
+    const attachBtn = document.getElementById('ai-attach-btn');
+    const filePreviews = document.getElementById('ai-file-previews');
+    const statusDot = document.getElementById('ai-status-dot');
 
+    // ─── STATE ────────────────────────────────────────────────────────────────
     let isOpen = false;
     let isLoading = false;
+    let isUploading = false;
     let chatHistory = [];
+    let agentFiles = []; // { id, name, type, size, url }
+    let pendingAction = null;
+    let processedActions = new Set();
+    const sessionId = crypto.randomUUID();
 
+    // ─── UTILS ────────────────────────────────────────────────────────────────
+    function setStatus(busy) {
+      statusDot.classList.toggle('busy', busy);
+    }
+
+    function setLoading(val) {
+      isLoading = val;
+      setStatus(val);
+      inputField.disabled = val || isUploading;
+      sendBtn.disabled = val || isUploading;
+      sendIcon.style.display = val ? 'none' : 'block';
+      loaderIcon.style.display = val ? 'block' : 'none';
+    }
+
+    function scrollToBottom() {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function appendMessage(cssRole, text) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'message-wrapper';
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${cssRole}`;
+      msgDiv.textContent = text;
+      wrapper.appendChild(msgDiv);
+      messagesContainer.appendChild(wrapper);
+      scrollToBottom();
+      return wrapper;
+    }
+
+    function appendSystemMessage(text) {
+      appendMessage('system', text);
+    }
+
+    function showTyping() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'typing-indicator';
+      typingDiv.id = 'ai-typing-indicator';
+      typingDiv.innerHTML = '<span></span><span></span><span></span>';
+      messagesContainer.appendChild(typingDiv);
+      scrollToBottom();
+    }
+
+    function removeTyping() {
+      const t = document.getElementById('ai-typing-indicator');
+      if (t) t.remove();
+    }
+
+    // ─── CHAT TOGGLE ─────────────────────────────────────────────────────────
     function toggleChat() {
       isOpen = !isOpen;
       if (isOpen) {
@@ -2703,98 +2812,285 @@
 
     avatarBtn.addEventListener('click', toggleChat);
     closeBtn.addEventListener('click', toggleChat);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) toggleChat(); });
+    inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+    errorClose.addEventListener('click', () => { errorMsgContainer.style.display = 'none'; });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen) toggleChat();
-    });
+    // ─── FILE UPLOAD ─────────────────────────────────────────────────────────
+    attachBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelect);
 
-    inputField.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    window.handleFileDrop = function(e) {
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        processFiles(e.dataTransfer.files);
       }
-    });
+    };
 
-    errorClose.addEventListener('click', () => {
-      errorMsgContainer.style.display = 'none';
-    });
-
-    function scrollToBottom() {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    function handleFileSelect(e) {
+      if (e.target.files && e.target.files.length > 0) {
+        processFiles(e.target.files);
+        e.target.value = '';
+      }
     }
 
-    function appendMessage(cssRole, text) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = `message ${cssRole}`;
-      msgDiv.textContent = text;
-      messagesContainer.appendChild(msgDiv);
+    async function processFiles(fileList) {
+      if (agentFiles.length + fileList.length > MAX_FILES) {
+        showError(`Maximum ${MAX_FILES} files allowed.`);
+        return;
+      }
+
+      isUploading = true;
+      inputField.disabled = true;
+      sendBtn.disabled = true;
+      inputField.placeholder = 'Uploading files...';
+
+      for (const file of Array.from(fileList)) {
+        if (file.size > MAX_FILE_SIZE) {
+          showError(`${file.name} exceeds 5MB limit.`);
+          continue;
+        }
+        // Removed type check to allow any file format
+
+        const fileId = crypto.randomUUID();
+        const ext = file.name.split('.').pop();
+        const path = `${sessionId}/${fileId}.${ext}`;
+
+        const { data, error } = await supabaseClient.storage.from('assistant-files').upload(path, file);
+        if (error) {
+          console.error("Supabase Upload Error:", error);
+          showError(`Failed to upload ${file.name}: ${error.message}`);
+          continue;
+        }
+
+        const { data: { publicUrl } } = supabaseClient.storage.from('assistant-files').getPublicUrl(path);
+        const meta = { id: fileId, name: file.name, type: file.type, size: file.size, url: publicUrl };
+        agentFiles.push(meta);
+        addFilePreview(meta, file);
+      }
+
+      isUploading = false;
+      inputField.disabled = false;
+      sendBtn.disabled = false;
+      inputField.placeholder = 'Ask me anything...';
+    }
+
+    function addFilePreview(meta, rawFile) {
+      filePreviews.style.display = 'flex';
+      const thumb = document.createElement('div');
+      thumb.className = 'file-preview';
+      thumb.dataset.id = meta.id;
+
+      if (meta.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = meta.url;
+        img.alt = meta.name;
+        thumb.appendChild(img);
+      } else {
+        const icon = document.createElement('div');
+        icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>';
+        thumb.appendChild(icon);
+      }
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'file-name';
+      nameEl.textContent = meta.name;
+      thumb.appendChild(nameEl);
+
+      const rm = document.createElement('div');
+      rm.className = 'remove-file';
+      rm.innerHTML = '✕';
+      rm.title = 'Remove file';
+      rm.addEventListener('click', () => {
+        agentFiles = agentFiles.filter(f => f.id !== meta.id);
+        thumb.remove();
+        if (agentFiles.length === 0) filePreviews.style.display = 'none';
+      });
+      thumb.appendChild(rm);
+
+      filePreviews.appendChild(thumb);
+    }
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorMsgContainer.style.display = 'flex';
+    }
+
+    // ─── ACTION PARSING ───────────────────────────────────────────────────────
+    function extractAction(text) {
+      // Try direct parse
+      try {
+        const parsed = JSON.parse(text.trim());
+        if (parsed && parsed.action) return parsed;
+      } catch (_) {}
+
+      // Try regex extraction
+      const match = text.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+
+      try {
+        const parsed = JSON.parse(match[0]);
+        if (parsed && parsed.action) return parsed;
+      } catch (_) {}
+
+      // Try repair (add closing brace)
+      try {
+        const parsed = JSON.parse(match[0] + '}');
+        if (parsed && parsed.action) return parsed;
+      } catch (_) {}
+
+      return null;
+    }
+
+    // ─── CONFIRMATION CARD ───────────────────────────────────────────────────
+    function buildActionCard(action, wrapperEl) {
+      pendingAction = action;
+      const card = document.createElement('div');
+      card.className = 'confirmation-card';
+      const cardId = Date.now(); // Unique ID for this card instance
+
+      const filesToShow = action.files || [];
+      const fileNames = filesToShow.map(fid => {
+        const f = agentFiles.find(af => af.id === fid);
+        return f ? f.name : fid;
+      });
+
+      const autoSubject = action.subject || `Message from Portfolio Assistant`;
+
+      card.innerHTML = `
+        <div class="card-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span>Confirm Action</span>
+        </div>
+        <div class="card-body">
+          <p><strong>To:</strong> ${action.recipient}</p>
+          <p><strong>Subject:</strong> ${autoSubject}</p>
+          <p><strong>Files (${filesToShow.length}):</strong></p>
+          <div class="file-chips">
+            ${fileNames.length > 0 ? fileNames.map(n => `<span class="file-chip">📄 ${n}</span>`).join('') : '<span style="font-style:italic;opacity:0.6;">No files attached</span>'}
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="confirm-btn" id="confirm-${cardId}">Confirm</button>
+          <button class="cancel-btn" id="cancel-${cardId}">Cancel</button>
+        </div>`;
+
+      wrapperEl.appendChild(card);
       scrollToBottom();
+
+      // Attach listeners using the unique IDs
+      document.getElementById(`confirm-${cardId}`).addEventListener('click', () => {
+        card.remove();
+        executeAction({ ...action, subject: autoSubject });
+      });
+      document.getElementById(`cancel-${cardId}`).addEventListener('click', () => {
+        card.remove();
+        pendingAction = null;
+        appendMessage('assistant', 'Action cancelled. Let me know if you need anything else!');
+      });
     }
 
-    function showTyping() {
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'typing-indicator';
-      typingDiv.id = 'ai-typing-indicator';
-      typingDiv.innerHTML = '<span></span><span></span><span></span>';
-      messagesContainer.appendChild(typingDiv);
-      scrollToBottom();
-    }
-
-    function removeTyping() {
-      const typingDiv = document.getElementById('ai-typing-indicator');
-      if (typingDiv) typingDiv.remove();
-    }
-
+    // ─── SEND MESSAGE ─────────────────────────────────────────────────────────
     async function sendMessage() {
       const text = inputField.value.trim();
-      if (!text || isLoading) return;
+      if (!text || isLoading || isUploading) return;
 
       errorMsgContainer.style.display = 'none';
       inputField.value = '';
-      appendMessage('user', text);
+
+      const userWrapper = appendMessage('user', text);
       chatHistory.push({ role: 'user', content: text });
 
-      isLoading = true;
-      inputField.disabled = true;
-      sendBtn.disabled = true;
-      sendIcon.style.display = 'none';
-      loaderIcon.style.display = 'block';
+      setLoading(true);
       showTyping();
 
       try {
+        const fileContext = agentFiles.length > 0
+          ? `\n\n[USER HAS UPLOADED ${agentFiles.length} FILE(S). File IDs: ${agentFiles.map(f => `${f.name} (ID: ${f.id})`).join(', ')}]`
+          : '';
+
+        const messages = chatHistory.slice(-15).map((m, i) => ({
+          role: m.role,
+          content: i === chatHistory.length - 1 ? m.content + fileContext : m.content
+        }));
+
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: chatHistory.slice(-15)
-          })
+          body: JSON.stringify({ messages })
         });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Server returned ${response.status}. Is the local API server running?`);
+        }
 
         const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to get response');
+        removeTyping();
+        const botText = data.message || "I couldn't understand that. Can you try again?";
+
+        // Try to parse action
+        const action = extractAction(botText);
+        if (action && action.action) {
+          const cleanText = botText.replace(/\{[\s\S]*\}/, '').trim() || "I've prepared this action for you:";
+          const wrapper = appendMessage('assistant', cleanText);
+          chatHistory.push({ role: 'assistant', content: cleanText });
+          buildActionCard(action, wrapper);
+        } else {
+          appendMessage('assistant', botText);
+          chatHistory.push({ role: 'assistant', content: botText });
         }
 
-        removeTyping();
-        const botText = data.message || "I'm sorry, I couldn't understand that.";
-        appendMessage('assistant', botText);
-        chatHistory.push({ role: 'assistant', content: botText });
-
       } catch (err) {
-        console.error("AI Chat Error:", err);
+        console.error('AI Chat Error:', err);
         removeTyping();
-        const errMsg = err.message || "Failed to get response. Please try again.";
-        errorText.textContent = errMsg;
-        errorMsgContainer.style.display = 'flex';
+        const errMsg = err.message || 'Failed to get response. Please try again.';
+        showError(errMsg);
         appendMessage('assistant', `⚠️ ${errMsg}`);
       } finally {
-        isLoading = false;
-        inputField.disabled = false;
-        sendBtn.disabled = false;
-        sendIcon.style.display = 'block';
-        loaderIcon.style.display = 'none';
+        setLoading(false);
         setTimeout(() => inputField.focus(), 100);
+      }
+    }
+
+    // ─── EXECUTE ACTION ───────────────────────────────────────────────────────
+    async function executeAction(action) {
+      const actionId = crypto.randomUUID();
+
+      // Idempotency guard
+      if (processedActions.has(actionId)) return;
+      processedActions.add(actionId);
+
+      setLoading(true);
+      appendMessage('assistant', `⏳ Sending ${agentFiles.length} file(s)...`);
+
+      const timeout = (ms) => new Promise((_, rej) => setTimeout(() => rej(new Error('Request timed out')), ms));
+
+      try {
+        const filePayload = agentFiles.map(f => ({ id: f.id, name: f.name, type: f.type, url: f.url }));
+        const payload = { ...action, actionId, sessionId, files: filePayload };
+
+        const response = await Promise.race([
+          fetch('/api/agent/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }),
+          timeout(10000)
+        ]);
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Action failed');
+
+        appendMessage('assistant', `✅ ${data.message || 'Done! Files sent successfully.'}`);
+        pendingAction = null;
+
+      } catch (err) {
+        appendMessage('assistant', `❌ Failed to send. ${err.message || 'Please try again.'}`);
+        processedActions.delete(actionId);
+      } finally {
+        setLoading(false);
       }
     }
 
