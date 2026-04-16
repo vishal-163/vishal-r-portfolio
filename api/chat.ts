@@ -30,6 +30,7 @@ const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a high-IQ, p
    - Details: A wearable system for real-time soldier health monitoring (SpO2, Heart Rate, Temperature). Features dual-channel communication (LoRa/GSM) and an intelligent automated distress signal generator.
 
 --- CONTACT & SOCIALS ---
+- Name: VISHAL R
 - LinkedIn: https://www.linkedin.com/in/vishal-ravi-653a8a33b/
 - GitHub: https://github.com/vishal-163
 - Email: vishalravi163@gmail.com
@@ -43,7 +44,7 @@ const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a high-IQ, p
 - Be natural and concise. 
 - Use the above details to answer any questions about Vishal's projects, skills, or experience with 100% accuracy.
 - If a user asks for a project link, provide the GitHub URL accurately.
-- DO NOT answer questions unrelated to Vishal or his professional portfolio.
+- DO NOT answer questions unrelated to Vishal R or his professional portfolio.
 `;
 
 // Initialize Supabase inlined to avoid import issues locally
@@ -91,7 +92,7 @@ export default async function handler(
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "llama-3.3-70b-versatile",
         messages: apiMessages,
         max_tokens: 500,
         temperature: 0.1

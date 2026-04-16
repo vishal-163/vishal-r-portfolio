@@ -1110,6 +1110,53 @@
       border-bottom-left-radius: 4px;
     }
 
+    .thinking-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      align-self: flex-start;
+      background: rgba(0, 255, 136, 0.03);
+      border: 1px solid rgba(0, 255, 136, 0.1);
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--green);
+      animation: chatFadeIn 0.3s ease;
+    }
+
+    .thinking-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .thinking-dots span {
+      width: 4px;
+      height: 4px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: thinkingBounce 1.4s infinite ease-in-out both;
+    }
+
+    .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes thinkingBounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 15px;
+      background: var(--green);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
     .typing-indicator {
       display: flex;
       gap: 4px;
@@ -1119,22 +1166,6 @@
       border: 1px solid rgba(0, 255, 136, 0.1);
       border-radius: 12px;
       border-bottom-left-radius: 4px;
-    }
-
-    .typing-indicator span {
-      width: 6px;
-      height: 6px;
-      background: #00ff88;
-      border-radius: 50%;
-      animation: typingBounce 1.4s infinite ease-in-out both;
-    }
-
-    .typing-indicator span:nth-child(1) {
-      animation-delay: -0.32s;
-    }
-
-    .typing-indicator span:nth-child(2) {
-      animation-delay: -0.16s;
     }
 
     .input-area {
@@ -2768,33 +2799,76 @@
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    function appendMessage(cssRole, text) {
+    function appendSystemMessage(text) {
+      appendMessage('system', text);
+    }
+    function appendMessage(cssRole, text, shouldType = false) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
       const msgDiv = document.createElement('div');
       msgDiv.className = `message ${cssRole}`;
-      msgDiv.textContent = text;
-      wrapper.appendChild(msgDiv);
-      messagesContainer.appendChild(wrapper);
+      
+      if (shouldType && cssRole === 'assistant') {
+        msgDiv.textContent = ''; 
+        wrapper.appendChild(msgDiv);
+        messagesContainer.appendChild(wrapper);
+        return { wrapper, promise: typeMessage(msgDiv, text) };
+      } else {
+        msgDiv.textContent = text;
+        wrapper.appendChild(msgDiv);
+        messagesContainer.appendChild(wrapper);
+        scrollToBottom();
+        return wrapper;
+      }
+    }
+
+    async function typeMessage(element, text) {
+      const words = text.split(' ');
+      element.textContent = '';
+      
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      element.appendChild(cursor);
+
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i] + (i < words.length - 1 ? ' ' : '');
+        const wordNode = document.createTextNode(word);
+        element.insertBefore(wordNode, cursor);
+        scrollToBottom();
+
+        // Natural typing delay
+        let delay = 30 + Math.random() * 40; 
+        if (word.match(/[.,!?]/)) delay += 150; 
+        if (words.length < 10) delay *= 0.7; // Faster for short ones
+        
+        await new Promise(r => setTimeout(r, delay));
+      }
+      cursor.remove();
+    }
+
+    function getThinkingDelay(text) {
+      const len = text.length;
+      const complexity = (text.match(/explain|how|why|difference|architecture|stack|projects|built|skills/gi) || []).length;
+      
+      let range;
+      if (len < 15 && complexity === 0) range = [600, 1100];
+      else if (complexity > 1 || len > 100) range = [2200, 3800];
+      else range = [1100, 2200];
+      
+      return Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0];
+    }
+
+    function showThinking() {
+      const thinkingDiv = document.createElement('div');
+      thinkingDiv.className = 'thinking-indicator';
+      thinkingDiv.id = 'ai-thinking';
+      thinkingDiv.innerHTML = `<span>Thinking</span><div class="thinking-dots"><span></span><span></span><span></span></div>`;
+      messagesContainer.appendChild(thinkingDiv);
       scrollToBottom();
-      return wrapper;
     }
 
-    function appendSystemMessage(text) {
-      appendMessage('system', text);
-    }
-
-    function showTyping() {
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'typing-indicator';
-      typingDiv.id = 'ai-typing-indicator';
-      typingDiv.innerHTML = '<span></span><span></span><span></span>';
-      messagesContainer.appendChild(typingDiv);
-      scrollToBottom();
-    }
-
-    function removeTyping() {
-      const t = document.getElementById('ai-typing-indicator');
+    function removeThinking() {
+      const t = document.getElementById('ai-thinking');
       if (t) t.remove();
     }
 
@@ -3000,11 +3074,16 @@
       errorMsgContainer.style.display = 'none';
       inputField.value = '';
 
-      const userWrapper = appendMessage('user', text);
+      // User message
+      appendMessage('user', text);
       chatHistory.push({ role: 'user', content: text });
 
       setLoading(true);
-      showTyping();
+      
+      // Dynamic Thinking Effect
+      const thinkingDelay = getThinkingDelay(text);
+      const startTime = Date.now();
+      showThinking();
 
       try {
         const fileContext = agentFiles.length > 0
@@ -3016,62 +3095,61 @@
           content: i === chatHistory.length - 1 ? m.content + fileContext : m.content
         }));
 
-        const response = await fetch('/api/chat', {
+        // Parallel: API call
+        const apiPromise = fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages })
         });
+
+        const response = await apiPromise;
+
+        // Ensure minimum thinking time
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < thinkingDelay) {
+          await new Promise(r => setTimeout(r, thinkingDelay - elapsedTime));
+        }
 
         if (!response.ok) {
           let errorMessage = `Server error (${response.status})`;
           try {
             const errorData = await response.json();
             errorMessage = errorData.error || errorData.details || errorMessage;
-          } catch (_) {
-            // If we can't parse the error response, use the status code
-          }
-          
-          // Provide more helpful error messages
-          if (response.status === 500 && errorMessage.includes('GROQ')) {
-            errorMessage = 'AI service configuration error. Please check GROQ API key.';
-          } else if (response.status === 0 || response.type === 'opaque') {
-            errorMessage = 'Cannot connect to AI server. Is the API server running on port 3001?';
-          }
-          
+          } catch (_) {}
           throw new Error(errorMessage);
         }
 
         const data = await response.json();
+        removeThinking();
 
-        removeTyping();
         const botText = data.message || "I couldn't understand that. Can you try again?";
-
-        // Try to parse action
         const action = extractAction(botText);
+        
+        let finalText = botText;
+        let cleanText = botText;
         if (action && action.action) {
-          const cleanText = botText.replace(/\{[\s\S]*\}/, '').trim() || "I've prepared this action for you:";
-          const wrapper = appendMessage('assistant', cleanText);
-          chatHistory.push({ role: 'assistant', content: cleanText });
+          cleanText = botText.replace(/\{[\s\S]*\}/, '').trim() || "I've prepared this action for you:";
+        }
+
+        // Start Typing
+        const { wrapper, promise } = appendMessage('assistant', cleanText, true);
+        await promise;
+        
+        chatHistory.push({ role: 'assistant', content: cleanText });
+
+        if (action && action.action) {
           buildActionCard(action, wrapper);
-        } else {
-          appendMessage('assistant', botText);
-          chatHistory.push({ role: 'assistant', content: botText });
         }
 
       } catch (err) {
         console.error('AI Chat Error:', err);
-        removeTyping();
+        removeThinking();
         const errMsg = err.message || 'Failed to get response. Please try again.';
         showError(errMsg);
         appendMessage('assistant', `⚠️ ${errMsg}`);
       } finally {
-        // CRITICAL: Always reset loading state and re-enable button
         setLoading(false);
         isUploading = false;
-        inputField.disabled = false;
-        sendBtn.disabled = false;
-        sendIcon.style.display = 'block';
-        loaderIcon.style.display = 'none';
         setTimeout(() => inputField.focus(), 100);
       }
     }
