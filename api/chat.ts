@@ -117,29 +117,31 @@ export default async function handler(
 
     const lastUserMessage = messages[messages.length - 1]?.content || "";
 
-    // 1. Send success response back to UI ASAP
-    res.status(200).json({ message: responseText });
-
-    // 2. Log to Supabase (Non-blocking)
+    // 1. Log to Supabase (Wait for it to ensure it completes in serverless env)
     if (supabase && lastUserMessage) {
-      const localTime = new Date().toLocaleString('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'medium',
-        timeStyle: 'medium'
-      });
+      try {
+        const localTime = new Date().toLocaleString('en-IN', {
+          timeZone: 'Asia/Kolkata',
+          dateStyle: 'medium',
+          timeStyle: 'medium'
+        });
 
-      supabase.from('chat_logs').insert([
-        { 
-          message: lastUserMessage, 
-          response: responseText,
-          local_time: localTime 
-        }
-      ]).then(({ error }) => {
-        if (error) console.error("Logging failed:", error.message);
-      }).catch(err => {
-        console.error("Logging catch error:", err);
-      });
+        const { error } = await supabase.from('chat_logs').insert([
+          { 
+            message: lastUserMessage, 
+            response: responseText,
+            local_time: localTime 
+          }
+        ]);
+        
+        if (error) console.error("❌ Logging failed:", error.message);
+      } catch (err) {
+        console.error("❌ Logging catch error:", err);
+      }
     }
+
+    // 2. Send success response back to UI
+    return res.status(200).json({ message: responseText });
 
   } catch (error: any) {
     console.error("HANDLED BACKEND ERROR:", error);

@@ -3090,9 +3090,10 @@
           ? `\n\n[USER HAS UPLOADED ${agentFiles.length} FILE(S). File IDs: ${agentFiles.map(f => `${f.name} (ID: ${f.id})`).join(', ')}]`
           : '';
 
-        const messages = chatHistory.slice(-15).map((m, i) => ({
+        const slicedHistory = chatHistory.slice(-15);
+        const messages = slicedHistory.map((m, i) => ({
           role: m.role,
-          content: i === chatHistory.length - 1 ? m.content + fileContext : m.content
+          content: i === slicedHistory.length - 1 ? m.content + fileContext : m.content
         }));
 
         // Parallel: API call
