@@ -5,10 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Vishal R — Full Stack Developer</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%2314F195'/><text x='50%25' y='54%25' font-family='Arial, sans-serif' font-weight='900' font-size='46' fill='%23000000' text-anchor='middle' dominant-baseline='middle'>VR</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <style>
     /* ═══════════════════════════════════════════════════════════════════════
@@ -30,7 +32,7 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       background: #050f0a;
       color: #c8d8c8;
       overflow-x: hidden;
@@ -86,9 +88,9 @@
       --teal: #00d4aa;
       --cyan: #00e5ff;
       --dim: rgba(200, 216, 200, 0.5);
-      --mono: 'JetBrains Mono', monospace;
+      --mono: 'Fira Code', monospace;
       --orb: 'Orbitron', sans-serif;
-      --sans: 'Inter', sans-serif;
+      --sans: 'Space Grotesk', sans-serif;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -637,7 +639,7 @@
       display: inline-block;
       position: relative;
       color: #fff;
-      animation: glitch-strong 3s steps(1) infinite;
+      animation: glitch-strong 1.5s steps(1) infinite;
     }
 
     .hero-name .vishal-part::before,
@@ -655,105 +657,44 @@
 
     .hero-name .vishal-part::before {
       color: var(--cyan);
-      animation: glitch-before 3s steps(1) infinite;
+      animation: glitch-before 1.5s steps(1) infinite;
       clip-path: inset(0 0 60% 0);
     }
 
     .hero-name .vishal-part::after {
       color: var(--teal);
-      animation: glitch-after 3s steps(1) infinite;
+      animation: glitch-after 1.5s steps(1) infinite;
       clip-path: inset(40% 0 0 0);
     }
 
     @keyframes glitch-strong {
-
-      0%,
-      80% {
-        transform: none
-      }
-
-      82% {
-        transform: skewX(-3deg)
-      }
-
-      84% {
-        transform: skewX(3deg)
-      }
-
-      86%,
-      100% {
-        transform: none
-      }
+      0%, 40% { transform: skewX(0); }
+      50% { transform: skewX(-5deg); }
+      60% { transform: skewX(5deg); }
+      70% { transform: skewX(0); }
+      80% { transform: skewX(2deg); }
+      90% { transform: skewX(-2deg); }
+      100% { transform: skewX(0); }
     }
 
     @keyframes glitch-before {
-
-      0%,
-      80% {
-        transform: translateX(0);
-        opacity: 0
-      }
-
-      82% {
-        transform: translateX(-5px);
-        opacity: 1
-      }
-
-      84% {
-        transform: translateX(5px);
-        opacity: 1
-      }
-
-      86% {
-        transform: translateX(-3px);
-        opacity: 1
-      }
-
-      88% {
-        transform: translateX(3px);
-        opacity: 1
-      }
-
-      90%,
-      100% {
-        transform: translateX(0);
-        opacity: 0
-      }
+      0%, 40% { transform: translateX(0); opacity: 0; clip-path: inset(0 0 60% 0); }
+      50% { transform: translateX(-8px); opacity: 1; clip-path: inset(10% 0 40% 0); }
+      60% { transform: translateX(8px); opacity: 1; clip-path: inset(40% 0 10% 0); }
+      70% { transform: translateX(0); opacity: 0; clip-path: inset(0 0 60% 0); }
+      80% { transform: translateX(-4px); opacity: 1; clip-path: inset(20% 0 50% 0); }
+      90% { transform: translateX(4px); opacity: 1; clip-path: inset(60% 0 20% 0); }
+      100% { transform: translateX(0); opacity: 0; clip-path: inset(0 0 60% 0); }
     }
 
     @keyframes glitch-after {
-
-      0%,
-      80% {
-        transform: translateX(0);
-        opacity: 0
-      }
-
-      82% {
-        transform: translateX(5px);
-        opacity: 1
-      }
-
-      84% {
-        transform: translateX(-5px);
-        opacity: 1
-      }
-
-      86% {
-        transform: translateX(3px);
-        opacity: 1
-      }
-
-      88% {
-        transform: translateX(-3px);
-        opacity: 1
-      }
-
-      90%,
-      100% {
-        transform: translateX(0);
-        opacity: 0
-      }
+      0%, 40% { transform: translateX(0); opacity: 0; clip-path: inset(40% 0 0 0); }
+      50% { transform: translateX(8px); opacity: 1; clip-path: inset(40% 0 10% 0); }
+      60% { transform: translateX(-8px); opacity: 1; clip-path: inset(10% 0 40% 0); }
+      70% { transform: translateX(0); opacity: 0; clip-path: inset(40% 0 0 0); }
+      80% { transform: translateX(4px); opacity: 1; clip-path: inset(50% 0 20% 0); }
+      90% { transform: translateX(-4px); opacity: 1; clip-path: inset(20% 0 50% 0); }
+      100% { transform: translateX(0); opacity: 0; clip-path: inset(40% 0 0 0); }
     }
 
     /* R — gradient fill, same line as Vishal */
@@ -1139,12 +1080,27 @@
       animation: thinkingBounce 1.4s infinite ease-in-out both;
     }
 
-    .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
-    .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+    .thinking-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .thinking-dots span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
 
     @keyframes thinkingBounce {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-      40% { transform: scale(1.2); opacity: 1; }
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+      }
+
+      40% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
     }
 
     .typing-cursor {
@@ -1232,34 +1188,213 @@
     }
 
     /* --- AGENT EXTENSIONS --- */
-    .header-info { display: flex; align-items: center; gap: 8px; }
-    .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.5); transition: all 0.3s ease; }
-    .status-indicator.busy { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); animation: pulse 1.5s infinite; }
-    .message-wrapper { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
-    
-    .confirmation-card { align-self: flex-start; width: 100%; max-width: 320px; background: rgba(0, 50, 25, 0.6); border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px; overflow: hidden; animation: fadeIn 0.4s ease; margin-left: 4px; }
-    .card-header { background: rgba(0, 255, 136, 0.1); padding: 8px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0, 255, 136, 0.2); font-size: 13px; font-weight: 600; color: #00ff88; }
-    .card-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #e2e8f0; }
-    .card-body p { margin: 0; }
-    .file-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .file-chip { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; padding: 2px 8px; font-size: 11px; display: flex; align-items: center; gap: 4px; }
-    .card-actions { display: flex; padding: 8px 12px; gap: 8px; background: rgba(0, 0, 0, 0.2); }
-    .confirm-btn, .cancel-btn { flex: 1; padding: 6px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .confirm-btn { background: #00ff88; color: #050810; }
-    .confirm-btn:hover { background: #00cc6e; transform: translateY(-1px); }
-    .cancel-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #e2e8f0; }
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-    .file-preview-list { display: flex; gap: 8px; overflow-x: auto; padding: 8px 4px; margin-bottom: 4px; }
-    .file-preview { position: relative; flex-shrink: 0; width: 70px; height: 70px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px; }
-    .file-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
-    .file-name { font-size: 9px; color: #94a3b8; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; margin-top: 2px; }
-    .remove-file { position: absolute; top: -5px; right: -5px; width: 18px; height: 18px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: 2px solid #050f0a; }
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+      transition: all 0.3s ease;
+    }
 
-    .attach-button { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
-    .attach-button:hover { transform: scale(1.1); }
-    .hidden-input { display: none; }
-    .spinner { animation: spin 1s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .status-indicator.busy {
+      background: #f59e0b;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+      animation: pulse 1.5s infinite;
+    }
+
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .confirmation-card {
+      align-self: flex-start;
+      width: 100%;
+      max-width: 320px;
+      background: rgba(0, 50, 25, 0.6);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: fadeIn 0.4s ease;
+      margin-left: 4px;
+    }
+
+    .card-header {
+      background: rgba(0, 255, 136, 0.1);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+      font-size: 13px;
+      font-weight: 600;
+      color: #00ff88;
+    }
+
+    .card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: #e2e8f0;
+    }
+
+    .card-body p {
+      margin: 0;
+    }
+
+    .file-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .file-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-actions {
+      display: flex;
+      padding: 8px 12px;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .confirm-btn,
+    .cancel-btn {
+      flex: 1;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .confirm-btn {
+      background: #00ff88;
+      color: #050810;
+    }
+
+    .confirm-btn:hover {
+      background: #00cc6e;
+      transform: translateY(-1px);
+    }
+
+    .cancel-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+    }
+
+    .file-preview-list {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px 4px;
+      margin-bottom: 4px;
+    }
+
+    .file-preview {
+      position: relative;
+      flex-shrink: 0;
+      width: 70px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .file-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .file-name {
+      font-size: 9px;
+      color: #94a3b8;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .remove-file {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+      border: 2px solid #050f0a;
+    }
+
+    .attach-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .attach-button:hover {
+      transform: scale(1.1);
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     .send-button:focus-visible {
       outline: 2px solid #00ff88;
@@ -2594,9 +2729,9 @@
               <path d="m22 2-7 20-4-9-9-4Z" />
               <path d="M22 2 11 13" />
             </svg>
-            <svg id="ai-loader-icon" class="spinner" style="display:none;" xmlns="http://www.w3.org/2000/svg"
-              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+            <svg id="ai-loader-icon" class="spinner" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="16"
+              height="16" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>
           </button>
@@ -2807,9 +2942,9 @@
       wrapper.className = 'message-wrapper';
       const msgDiv = document.createElement('div');
       msgDiv.className = `message ${cssRole}`;
-      
+
       if (shouldType && cssRole === 'assistant') {
-        msgDiv.textContent = ''; 
+        msgDiv.textContent = '';
         wrapper.appendChild(msgDiv);
         messagesContainer.appendChild(wrapper);
         return { wrapper, promise: typeMessage(msgDiv, text) };
@@ -2825,7 +2960,7 @@
     async function typeMessage(element, text) {
       const words = text.split(' ');
       element.textContent = '';
-      
+
       const cursor = document.createElement('span');
       cursor.className = 'typing-cursor';
       element.appendChild(cursor);
@@ -2837,10 +2972,10 @@
         scrollToBottom();
 
         // Natural typing delay
-        let delay = 30 + Math.random() * 40; 
-        if (word.match(/[.,!?]/)) delay += 150; 
+        let delay = 30 + Math.random() * 40;
+        if (word.match(/[.,!?]/)) delay += 150;
         if (words.length < 10) delay *= 0.7; // Faster for short ones
-        
+
         await new Promise(r => setTimeout(r, delay));
       }
       cursor.remove();
@@ -2849,12 +2984,12 @@
     function getThinkingDelay(text) {
       const len = text.length;
       const complexity = (text.match(/explain|how|why|difference|architecture|stack|projects|built|skills/gi) || []).length;
-      
+
       let range;
       if (len < 15 && complexity === 0) range = [600, 1100];
       else if (complexity > 1 || len > 100) range = [2200, 3800];
       else range = [1100, 2200];
-      
+
       return Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0];
     }
 
@@ -2896,7 +3031,7 @@
     if (attachBtn) attachBtn.addEventListener('click', () => fileInput.click());
     if (fileInput) fileInput.addEventListener('change', handleFileSelect);
 
-    window.handleFileDrop = function(e) {
+    window.handleFileDrop = function (e) {
       e.preventDefault();
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         processFiles(e.dataTransfer.files);
@@ -2998,7 +3133,7 @@
       try {
         const parsed = JSON.parse(text.trim());
         if (parsed && parsed.action) return parsed;
-      } catch (_) {}
+      } catch (_) { }
 
       // Try regex extraction
       const match = text.match(/\{[\s\S]*\}/);
@@ -3007,13 +3142,13 @@
       try {
         const parsed = JSON.parse(match[0]);
         if (parsed && parsed.action) return parsed;
-      } catch (_) {}
+      } catch (_) { }
 
       // Try repair (add closing brace)
       try {
         const parsed = JSON.parse(match[0] + '}');
         if (parsed && parsed.action) return parsed;
-      } catch (_) {}
+      } catch (_) { }
 
       return null;
     }
@@ -3079,7 +3214,7 @@
       chatHistory.push({ role: 'user', content: text });
 
       setLoading(true);
-      
+
       // Dynamic Thinking Effect
       const thinkingDelay = getThinkingDelay(text);
       const startTime = Date.now();
@@ -3116,7 +3251,7 @@
           try {
             const errorData = await response.json();
             errorMessage = errorData.error || errorData.details || errorMessage;
-          } catch (_) {}
+          } catch (_) { }
           throw new Error(errorMessage);
         }
 
@@ -3125,7 +3260,7 @@
 
         const botText = data.message || "I couldn't understand that. Can you try again?";
         const action = extractAction(botText);
-        
+
         let finalText = botText;
         let cleanText = botText;
         if (action && action.action) {
@@ -3135,7 +3270,7 @@
         // Start Typing
         const { wrapper, promise } = appendMessage('assistant', cleanText, true);
         await promise;
-        
+
         chatHistory.push({ role: 'assistant', content: cleanText });
 
         if (action && action.action) {
