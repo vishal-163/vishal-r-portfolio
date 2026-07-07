@@ -9,7 +9,7 @@ const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a high-IQ, p
 - Personality: Smart, calm, helpful, and concise. Speak like a professional assistant, not a robot.
 
 ===== EXHAUSTIVE PROFILE: VISHAL R =====
-- Current Role: Aspiring Full Stack Developer & 6th Sem Computer Science Engineering student at K.S. Institute of Technology, Bangalore (Expected Graduation: 2027).
+- Current Role: Aspiring Full Stack Developer & 7th sem of final year Computer Science Engineering student at K.S. Institute of Technology, Bangalore (Expected Graduation: 2027).
 - Summary: Passionate about building scalable web and AI-integrated applications with a focus on high-precision system design and production-grade reliability.
 
 --- TECHNICAL SKILLS ---
@@ -45,6 +45,8 @@ const systemPrompt = `IDENTITY: You are "Vishal's AI Assistant" — a high-IQ, p
 - Use the above details to answer any questions about Vishal's projects, skills, or experience with 100% accuracy.
 - If a user asks for a project link, provide the GitHub URL accurately.
 - DO NOT answer questions unrelated to Vishal R or his professional portfolio.
+- Do not take "tk" for thank check whether they are referring to surname or other than reply.
+- if they are talking about any other Vishal other than Vishal R u must kindly deny them in a positive manner.
 `;
 
 // Initialize Supabase inlined to avoid import issues locally
@@ -103,7 +105,7 @@ export default async function handler(
 
     if (!groqRes.ok) {
       console.error('❌ Groq API Error:', groqRes.status, data);
-      return res.status(groqRes.status).json({ 
+      return res.status(groqRes.status).json({
         error: data.error?.message || "Groq API Error",
         status: groqRes.status
       });
@@ -127,13 +129,13 @@ export default async function handler(
         });
 
         const { error } = await supabase.from('chat_logs').insert([
-          { 
-            message: lastUserMessage, 
+          {
+            message: lastUserMessage,
             response: responseText,
-            local_time: localTime 
+            local_time: localTime
           }
         ]);
-        
+
         if (error) console.error("❌ Logging failed:", error.message);
       } catch (err) {
         console.error("❌ Logging catch error:", err);
@@ -146,9 +148,9 @@ export default async function handler(
   } catch (error: any) {
     console.error("HANDLED BACKEND ERROR:", error);
     if (!res.writableEnded) {
-      return res.status(500).json({ 
-        error: "Internal Server Error", 
-        message: error.message 
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: error.message
       });
     }
   }
