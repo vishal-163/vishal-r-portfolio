@@ -42,7 +42,6 @@ Welcome to the source code for my interactive developer portfolio. This project 
    Create a `.env.local` file in the root directory and add the following keys:
    ```env
    GROQ_API_KEY=your_groq_api_key
-   RESEND_API_KEY=your_resend_api_key
    SUPABASE_URL=your_supabase_project_url
    SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
@@ -57,10 +56,10 @@ Welcome to the source code for my interactive developer portfolio. This project 
 
 ##  Architecture Overview
 
-The project was recently migrated from a monolithic HTML/JS structure to a scalable React 19 component architecture:
+The project is built on a scalable React 19 component architecture:
 - `src/components/`: Modularized UI sections (`HeroSection`, `AboutSection`, `ProjectsSection`, etc.)
+- `src/components/ChatWidget.tsx`: Fully integrated React component handling the AI chatbot state, UI, and Supabase client-side storage logic via hooks.
 - `api/`: Vercel Serverless functions for backend operations (`chat.ts`, `logs.ts`)
-- `public/script.js`: Core DOM interaction scripts, cursor tracking, and Supabase client-side storage logic.
 - `api-server.js`: Local mock server to handle `/api` routes during local development.
 
 ##  License

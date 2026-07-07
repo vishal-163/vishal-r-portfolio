@@ -1,3 +1,5 @@
+import { TiltCard } from './TiltCard';
+
 export function ProjectsSection() {
   return (
     <>
@@ -8,7 +10,7 @@ export function ProjectsSection() {
         <h2 className="sec-title">&lt;Featured Projects /&gt;</h2>
       </div>
       <div className="proj-grid">
-        <div className="tilt-card proj-card reveal">
+        <TiltCard className="proj-card reveal">
           <div className="proj-header">
             <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
               <div style={{display: 'flex', gap: 5}}>
@@ -20,14 +22,14 @@ export function ProjectsSection() {
             </div>
             <div style={{display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap'}}>
               <span className="proj-status s-done">✓ Completed</span>
-              <a className="proj-link" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank">⎋ Code</a>
+              <a className="proj-link" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank" rel="noreferrer">⎋ Code</a>
             </div>
           </div>
           <div className="proj-body">
             <p className="proj-desc">AI-powered mobile app that generates personalized travel itineraries based on user
               preferences, budget, and duration.</p>
             <details className="proj-details">
-              <summary>&gt; key_features.map()</summary>
+              <summary>&gt; key_features.map() <span className="click-hint">(Click to expand)</span></summary>
               <div className="proj-features">
                 <div className="proj-feat">Built a cross-platform mobile application generating personalized AI-based travel
                   itineraries based on user preferences, budget, and duration, reducing manual planning effort
@@ -47,8 +49,8 @@ export function ProjectsSection() {
             <span className="proj-tag">Flutter</span><span className="proj-tag">Supabase</span><span className="proj-tag">OpenAI
               API</span><span className="proj-tag">Gemini API</span><span className="proj-tag">PostgreSQL</span>
           </div>
-        </div>
-        <div className="tilt-card proj-card reveal" style={{transitionDelay: '.1s'}}>
+        </TiltCard>
+        <TiltCard className="proj-card reveal" style={{transitionDelay: '.1s'}}>
           <div className="proj-header">
             <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
               <div style={{display: 'flex', gap: 5}}>
@@ -64,7 +66,7 @@ export function ProjectsSection() {
             <p className="proj-desc">Defence-grade IoT system for real-time soldier health monitoring and automated
               emergency alerts.</p>
             <details className="proj-details">
-              <summary>&gt; key_features.map()</summary>
+              <summary>&gt; key_features.map() <span className="click-hint">(Click to expand)</span></summary>
               <div className="proj-features">
                 <div className="proj-feat">Designing a defence-grade wearable system for real-time soldier health monitoring
                   including heart rate, SpO2, temperature, and motion tracking.</div>
@@ -82,7 +84,7 @@ export function ProjectsSection() {
           <div className="proj-tags">
             <span className="proj-tag">ESP32</span><span className="proj-tag">Sensors</span><span className="proj-tag">LoRa</span><span className="proj-tag">GSM</span><span className="proj-tag">GPS</span>
           </div>
-        </div>
+        </TiltCard>
       </div>
     </div>
   </section>
