@@ -12,6 +12,7 @@ import { ProjectsSection } from './components/ProjectsSection';
 import { EducationSection } from './components/EducationSection';
 import { ContactSection } from './components/ContactSection';
 import { ChatWidget } from './components/ChatWidget';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,6 +48,7 @@ export default function App() {
       <EducationSection />
       <ContactSection />
       <ChatWidget />
+      <Analytics />
     </div>
   );
 }
