@@ -44,6 +44,11 @@ export function HeroSection() {
     document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleDownloadResume = () => {
+    fetch('/api/resume-action', { method: 'POST', keepalive: true }).catch(console.error);
+    window.open('/resume.pdf', '_blank');
+  };
+
   return (
     <section id="home" className="dot-bg">
       <div className="wrap">
@@ -68,7 +73,7 @@ export function HeroSection() {
             </p>
             <div className="hero-btns">
               <button className="btn-solid" onClick={() => navTo('#projects')}>&gt; view_projects()</button>
-              <a className="btn-outline" href="/resume.pdf" target="_blank" rel="noreferrer">↓ view_resume()</a>
+              <button className="btn-outline" onClick={handleDownloadResume}>↓ view_resume()</button>
               <button className="btn-outline" onClick={() => navTo('#contact')}>contact_me()</button>
             </div>
           </div>

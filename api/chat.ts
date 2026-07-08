@@ -81,9 +81,15 @@ export default async function handler(
       return res.status(400).json({ error: "Bad Request: Missing messages" });
     }
 
-    const { messages } = req.body;
+    const { messages, currentSection } = req.body;
+    
+    let finalSystemPrompt = systemPrompt;
+    if (currentSection) {
+      finalSystemPrompt += `\n\n[SYSTEM NOTE: The user is currently viewing the '${currentSection}' section of the portfolio. If relevant to their question, briefly acknowledge that you know what they are looking at!]`;
+    }
+
     const apiMessages = [
-      { role: "system", content: systemPrompt },
+      { role: "system", content: finalSystemPrompt },
       ...messages.slice(-10)
     ];
 

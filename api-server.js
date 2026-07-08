@@ -173,6 +173,55 @@ const server = http.createServer(async (req, res) => {
       }
     });
   }
+  else if (req.url === '/api/resume-action' && req.method === 'POST') {
+    // Mimic the Vercel serverless function for local development
+    try {
+      if (!supabase) {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: "Supabase missing" }));
+        return;
+      }
+      
+      const userAgentStr = req.headers["user-agent"] || "";
+      // Dynamic import to avoid missing module errors if not installed
+      import('ua-parser-js').then(({ UAParser }) => {
+        const parser = new UAParser(userAgentStr);
+        const os = parser.getOS();
+        const browser = parser.getBrowser();
+        const deviceOs = `${os.name || 'Unknown OS'} ${os.version || ''}`.trim();
+        const browserName = `${browser.name || 'Unknown Browser'} ${browser.version || ''}`.trim();
+
+        const localTime = new Date().toLocaleString('en-IN', {
+          timeZone: 'Asia/Kolkata',
+          dateStyle: 'medium',
+          timeStyle: 'medium'
+        });
+
+        // Localhost doesn't have Vercel headers
+        const location = "Localhost (Development)";
+
+        supabase.from('resume_downloads').insert([{
+          device_os: deviceOs,
+          browser: browserName,
+          location: location,
+          local_time: localTime
+        }]).then(({ error }) => {
+          if (error) console.error('Resume Logging Error:', error.message);
+          else console.log('Resume download logged locally!');
+          
+          res.statusCode = 200;
+          res.end(JSON.stringify({ success: true }));
+        });
+      }).catch(err => {
+        console.error("Local UAParser Error:", err);
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: "Parser Error" }));
+      });
+    } catch (err) {
+      res.statusCode = 500;
+      res.end(JSON.stringify({ error: "Server Error" }));
+    }
+  }
   else {
     res.statusCode = 404;
     res.end(JSON.stringify({ error: "Not Found" }));

@@ -16,7 +16,8 @@
     "@supabase/supabase-js": "^2.45.4",
     "@vercel/analytics": "^2.0.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "ua-parser-js": "^2.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -26,6 +27,7 @@
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
+    "@types/ua-parser-js": "^0.7.39",
     "@vercel/node": "^3.0.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "concurrently": "^10.0.3",
