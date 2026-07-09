@@ -622,17 +622,21 @@
       background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       line-height: 1.05;
       letter-spacing: -.02em;
       margin-bottom: 16px;
       position: relative;
       display: block;
-      text-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
     }
 
     .hero-name .vishal-part {
       display: inline-block;
       position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     @keyframes glitch-before {
