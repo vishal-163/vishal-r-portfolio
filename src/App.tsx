@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import './index.css';
 
 import { BootScreen } from './components/BootScreen';
-import { MatrixRain } from './components/MatrixRain';
 import { Cursor } from './components/Cursor';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -38,7 +37,6 @@ export default function App() {
   return (
     <div className="app-container" ref={containerRef}>
       <BootScreen />
-      <MatrixRain />
       <Cursor />
       <Navbar />
       <HeroSection />

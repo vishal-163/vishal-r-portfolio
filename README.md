@@ -1,10 +1,10 @@
 # Vishal R - Interactive Developer Portfolio
 
-Welcome to the source code for my interactive developer portfolio. This project serves as a showcase of my skills, projects, and experience as an aspiring Full Stack Developer, wrapped in a highly immersive and terminal-inspired design.
+Welcome to the source code for my interactive developer portfolio. This project serves as a showcase of my skills, projects, and experience as an aspiring Full Stack Developer, wrapped in an ultra-premium liquid glass aesthetic.
 
 ##  Features
 
-- **Immersive UI/UX**: Native CSS animations, Intersection Observers, and a custom Matrix rain canvas background that reacts dynamically to user interaction.
+- **Cinematic UI/UX**: Custom liquid glass design system, highly responsive structural layouts, smooth native CSS animations, and cinematic glass loading sequences.
 - **AI-Powered Chat Assistant**: An integrated AI widget powered by the Groq API (Llama 3.3 70b Versatile). Visitors can chat with an AI trained specifically on my resume, skills, and background.
 - **Serverless Backend Architecture**: Fully modularized API routes (`/api/chat`) designed to run seamlessly on Vercel's serverless edge network.
 - **Supabase Integration**: Secure, real-time logging of chat interactions and direct client-to-storage architecture for file handling.

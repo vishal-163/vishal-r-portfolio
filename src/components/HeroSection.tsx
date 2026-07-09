@@ -77,8 +77,8 @@ export function HeroSection() {
               <button className="btn-outline" onClick={() => navTo('#contact')}>contact_me()</button>
             </div>
           </div>
-          {/* RIGHT: photo + terminal */}
-          <div className="hero-right reveal" style={{transitionDelay: '.15s'}}>
+          {/* RIGHT: photo + term */}
+          <div className="reveal hero-right-col" style={{ transitionDelay: '200ms' }}>
             <div className="hero-photo-wrap">
               <img src="/photo.png" alt="Vishal R" loading="eager" />
             </div>
