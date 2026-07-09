@@ -12,7 +12,7 @@ function getBrowserInfo() {
   else if (ua.indexOf("Win") > -1) os = "Windows";
   else if (ua.indexOf("Linux") > -1) os = "Linux";
 
-  // iOS-specific browser tokens MUST be checked before generic ones
+  // iOS-specific browser tokens must come before generic ones
   // because all iOS browsers embed "Safari" in their UA string
   if (ua.indexOf("CriOS") > -1) browser = "Google Chrome";
   else if (ua.indexOf("FxiOS") > -1) browser = "Mozilla Firefox";
@@ -39,12 +39,12 @@ export function BootScreen() {
     const sequence = [
       "Initializing",
       "Detecting Environment",
-      `${os} • ${browser}`,
+      `${os} \u2022 ${browser}`,
       "Loading Interface"
     ];
 
     let i = 0;
-    
+
     // Initial fade in
     setTimeout(() => {
       setLoadingText(sequence[i]);
@@ -53,7 +53,7 @@ export function BootScreen() {
 
     const interval = setInterval(() => {
       setFadeState('out');
-      
+
       setTimeout(() => {
         i++;
         if (i < sequence.length) {
@@ -61,10 +61,10 @@ export function BootScreen() {
           setFadeState('in');
         } else {
           clearInterval(interval);
-          setTimeout(() => setIsDone(true), 400); // Short delay before sliding away
+          setTimeout(() => setIsDone(true), 500);
         }
-      }, 500); // 500ms fade out duration
-    }, 1800); // 1800ms display duration
+      }, 500);
+    }, 1800);
 
     return () => clearInterval(interval);
   }, []);
@@ -82,4 +82,3 @@ export function BootScreen() {
     </div>
   );
 }
-
