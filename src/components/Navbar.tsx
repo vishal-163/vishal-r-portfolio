@@ -52,7 +52,7 @@ export function Navbar() {
               </a>
             ))}
           </div>
-          <div className="nav-badge"> Available for work</div>
+          <div className="nav-badge glass-panel"> Available for work</div>
           <button 
             className="nav-burger" 
             id="burger" 

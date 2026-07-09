@@ -45,7 +45,7 @@ const TAB_COLORS: Record<TabType, string> = {
   frontend: 'var(--green)',
   backend: 'var(--cyan)',
   databases: 'var(--teal)',
-  ai: '#f59e0b',
+  ai: '#666666',
   tools: '#94a3b8'
 };
 
@@ -85,9 +85,9 @@ export function SkillsSection() {
         <div className="editor reveal">
           <div className="editor-tabs">
             <div className="editor-dots">
-              <div className="tdot" style={{ background: '#ff5f57' }} />
-              <div className="tdot" style={{ background: '#febc2e' }} />
-              <div className="tdot" style={{ background: '#28c840' }} />
+              <div className="tdot" style={{background: '#ff5f57'}} />
+              <div className="tdot" style={{background: '#febc2e'}} />
+              <div className="tdot" style={{background: '#28c840'}} />
             </div>
             {(Object.keys(SKILLS) as TabType[]).map((tab) => (
               <div

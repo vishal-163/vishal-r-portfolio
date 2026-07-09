@@ -82,18 +82,20 @@ export function HeroSection() {
             <div className="hero-photo-wrap">
               <img src="/photo.png" alt="Vishal R" loading="eager" />
             </div>
-            <div className="term hero-term-mini">
+            <div className="term hero-term-mini glass-panel">
               <div className="term-bar">
-                <div className="tdot" style={{background: '#ff5f57'}} />
-                <div className="tdot" style={{background: '#febc2e'}} />
-                <div className="tdot" style={{background: '#28c840'}} />
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="mac-dot" style={{background: '#ff5f57'}}></div>
+                  <div className="mac-dot" style={{background: '#febc2e'}}></div>
+                  <div className="mac-dot" style={{background: '#28c840'}}></div>
+                </div>
                 <span className="term-title">vishal@dev:~</span>
               </div>
               <div className="term-body">
                 <div><span className="json-prompt">vishal@dev:~$</span> <span className="json-cmd">cat status.json</span></div>
-                <div style={{marginTop: 10}}>{'{'}</div>
-                <div style={{paddingLeft: 18}}>
-                  <span className="json-key">"status"</span>: <span className="json-str">"🟢 Available"</span>,
+                <div>{'{'}</div>
+                <div className="json-line" style={{paddingLeft: 18}}>
+                  <span className="json-key">"status"</span>: <span className="json-str">"Available"</span>,
                 </div>
                 <div style={{paddingLeft: 18}}>
                   <span className="json-key">"location"</span>: <span className="json-str">"Bangalore, IN"</span>,
@@ -108,8 +110,8 @@ export function HeroSection() {
                   <span className="json-key">"grad"</span>: <span className="json-str">"2027"</span>
                 </div>
                 <div>{'}'}</div>
-                <div style={{marginTop: 8}}>
-                  <span className="json-prompt">vishal@dev:~$</span> <span style={{animation: 'blink 1s step-end infinite', color: 'var(--green)'}}>_</span>
+                <div>
+                  <span className="json-prompt">vishal@dev:~$</span>
                 </div>
               </div>
             </div>

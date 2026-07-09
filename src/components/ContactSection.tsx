@@ -10,19 +10,19 @@ export function ContactSection() {
       <p className="contact-intro reveal">Let's build something <span className="hl">extraordinary</span> together. I'm always
         open to discussing new projects, creative ideas, or opportunities.</p>
       <div className="contact-grid reveal">
-        <a className="contact-card" href="mailto:vishalravi163@gmail.com">
+        <a className="contact-card glass-panel" href="mailto:vishalravi163@gmail.com">
           <div className="cc-left"><span className="cc-type">✉ Email</span><span className="cc-val">vishalravi163@gmail.com</span>
           </div><span className="cc-arrow">↗</span>
         </a>
-        <a className="contact-card" href="tel:+918147741585">
+        <a className="contact-card glass-panel" href="tel:+918147741585">
           <div className="cc-left"><span className="cc-type">📱 Phone</span><span className="cc-val">+91 8147741585</span></div>
           <span className="cc-arrow">↗</span>
         </a>
-        <a className="contact-card" href="https://www.linkedin.com/in/vishal-ravi-653a8a33b/" target="_blank">
+        <a className="contact-card glass-panel" href="https://www.linkedin.com/in/vishal-ravi-653a8a33b/" target="_blank">
           <div className="cc-left"><span className="cc-type">💼 LinkedIn</span><span className="cc-val">linkedin/vishal-r</span>
           </div><span className="cc-arrow">↗</span>
         </a>
-        <a className="contact-card" href="https://github.com/vishal-163" target="_blank">
+        <a className="contact-card glass-panel" href="https://github.com/vishal-163" target="_blank">
           <div className="cc-left"><span className="cc-type">🐙 GitHub</span><span className="cc-val">github/vishal-163</span></div>
           <span className="cc-arrow">↗</span>
         </a>

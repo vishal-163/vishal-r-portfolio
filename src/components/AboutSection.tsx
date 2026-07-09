@@ -9,22 +9,22 @@ export function AboutSection() {
         <h2 className="sec-title">&lt;About Me /&gt;</h2>
       </div>
       <div className="about-cards">
-        <div className="tilt-card about-card reveal" style={{} as React.CSSProperties}>
+        <div className="tilt-card about-card reveal glass-panel" style={{} as React.CSSProperties}>
           <div className="about-icon">⌥</div>
           <div className="about-card-title">Full Stack Development</div>
           <div className="about-card-desc">End-to-end web applications with modern frameworks</div>
         </div>
-        <div className="tilt-card about-card reveal" style={{} as React.CSSProperties}>
+        <div className="tilt-card about-card reveal glass-panel" style={{} as React.CSSProperties}>
           <div className="about-icon">⊕</div>
           <div className="about-card-title">AI Integration</div>
           <div className="about-card-desc">Building intelligent systems with OpenAI &amp; Gemini</div>
         </div>
-        <div className="tilt-card about-card reveal" style={{} as React.CSSProperties}>
+        <div className="tilt-card about-card reveal glass-panel" style={{} as React.CSSProperties}>
           <div className="about-icon">≡</div>
           <div className="about-card-title">System Design</div>
           <div className="about-card-desc">Scalable architectures for production-grade apps</div>
         </div>
-        <div className="tilt-card about-card reveal" style={{} as React.CSSProperties}>
+        <div className="tilt-card about-card reveal glass-panel" style={{} as React.CSSProperties}>
           <div className="about-icon">◈</div>
           <div className="about-card-title">Problem Solving</div>
           <div className="about-card-desc">Creative solutions to complex engineering challenges</div>
@@ -39,7 +39,7 @@ export function AboutSection() {
         </div>
         <div className="term-body">
           <div style={{color: 'var(--dim)'}}>const aboutMe = {'{'}</div>
-          <div style={{paddingLeft: 20, marginTop: 8, fontSize: 'clamp(.88rem,1.6vw,.98rem)', lineHeight: '1.9', color: '#c8d8c8'}}>
+          <div style={{paddingLeft: 20, marginTop: 8, fontSize: 'clamp(.88rem,1.6vw,.98rem)', lineHeight: '1.9', color: '#cccccc'}}>
             I am a Computer Science student with aspiring experience in full stack development and AI-integrated
             systems.
             I have worked on scalable applications using modern technologies like <span className="code-hl">React</span>,

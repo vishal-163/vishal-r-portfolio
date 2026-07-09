@@ -25,7 +25,7 @@ export function TiltCard({ children, className = '', style = {} }: TiltCardProps
   return (
     <div
       ref={cardRef}
-      className={`tilt-card ${className}`}
+      className={`tilt-card glass-panel ${className}`}
       style={style}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
