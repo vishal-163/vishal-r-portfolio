@@ -9,6 +9,7 @@ export function ContactSection() {
   const [message, setMessage] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [progress, setProgress] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
@@ -56,29 +57,30 @@ export function ContactSection() {
     }, 150);
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "b4f6296b-4fc6-44c7-b6af-0d959cd311d3",
-          name: n,
-          email: e,
-          message: m,
-          subject: `New Terminal Contact from ${n}`,
-          from_name: "Vishal R Portfolio",
-          botcheck: false
+          service_id: "service_317o3rj",
+          template_id: "template_5we62an",
+          user_id: "ZjcavUupnqSz8vtcn",
+          template_params: {
+            name: n,
+            from_name: n,
+            email: e,
+            reply_to: e,
+            message: m,
+          }
         }),
       });
-      const result = await response.json();
       
       clearInterval(progressInterval);
       setProgress(100);
       
       setTimeout(() => {
-        if (result.success) {
+        if (response.ok) {
           setStep('success');
         } else {
           setStep('error');
@@ -137,8 +139,8 @@ export function ContactSection() {
             {step === 'name' && <span style={{ marginRight: 8 }}>Enter your name:</span>}
             {step === 'email' && <span style={{ marginRight: 8 }}>Enter your email:</span>}
             {step === 'message' && <span style={{ marginRight: 8 }}>Enter your message:</span>}
-            <span style={{ color: '#fff' }}>{inputValue}</span>
-            <span style={{ animation: 'blink 1s step-end infinite', color: 'var(--green)', marginLeft: 2 }}>█</span>
+            <span style={{ color: '#fff', whiteSpace: 'pre-wrap' }}>{inputValue}</span>
+            {isFocused && <span style={{ animation: 'blink 1s step-end infinite', color: 'var(--green)', marginLeft: 2 }}>█</span>}
           </div>
         )}
 
@@ -217,6 +219,8 @@ export function ContactSection() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 style={{ opacity: 0, position: 'absolute', left: -9999 }}
                 disabled={step === 'sending' || step === 'success' || step === 'error'}
                 autoComplete="off"

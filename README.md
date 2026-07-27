@@ -5,7 +5,7 @@ Welcome to the source code for my interactive developer portfolio. This project 
 ##  Features
 
 - **Cinematic UI/UX**: Custom premium liquid glass design system (optimized for performance), highly responsive structural layouts, smooth native CSS animations, and cinematic boot screen sequences.
-- **Interactive Terminal**: Fully functional CLI-style contact form that processes user input step-by-step with ASCII loading animations, powered by Web3Forms.
+- **Interactive Terminal**: Fully functional CLI-style contact form that processes user input step-by-step with ASCII loading animations, powered by EmailJS for reliable zero-spam delivery.
 - **AI-Powered Chat Assistant**: An integrated AI widget powered by the Groq API (Llama 3.3 70b Versatile). Visitors can chat with an AI trained specifically on my resume, skills, and background.
 - **Serverless Backend Architecture**: Fully modularized API routes (`/api/chat`) designed to run seamlessly on Vercel's serverless edge network.
 - **Supabase Integration**: Secure, real-time logging of chat interactions and direct client-to-storage architecture for file handling.
@@ -15,7 +15,7 @@ Welcome to the source code for my interactive developer portfolio. This project 
 ##  Tech Stack
 
 - **Frontend**: React 19, TypeScript, Vite, Vanilla CSS
-- **Backend / APIs**: Node.js, Vercel Serverless Functions, Web3Forms API
+- **Backend / APIs**: Node.js, Vercel Serverless Functions, EmailJS API
 - **AI Integration**: Groq API (Llama 3.3)
 - **Database & Storage**: Supabase (PostgreSQL)
 - **Deployment**: Vercel
