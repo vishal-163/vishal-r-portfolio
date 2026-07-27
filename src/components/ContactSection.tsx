@@ -67,6 +67,9 @@ export function ContactSection() {
           name: n,
           email: e,
           message: m,
+          subject: `New Terminal Contact from ${n}`,
+          from_name: "Vishal R Portfolio",
+          botcheck: false
         }),
       });
       const result = await response.json();
