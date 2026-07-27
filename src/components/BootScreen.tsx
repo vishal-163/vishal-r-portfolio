@@ -29,7 +29,7 @@ function getBrowserInfo() {
   return { browser, os };
 }
 
-export function BootScreen() {
+export function BootScreen({ onComplete }: { onComplete?: () => void }) {
   const [isDone, setIsDone] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [fadeState, setFadeState] = useState<'in' | 'out'>('out');
@@ -61,7 +61,10 @@ export function BootScreen() {
           setFadeState('in');
         } else {
           clearInterval(interval);
-          setTimeout(() => setIsDone(true), 500);
+          setTimeout(() => {
+            setIsDone(true);
+            if (onComplete) onComplete();
+          }, 500);
         }
       }, 500);
     }, 1800);

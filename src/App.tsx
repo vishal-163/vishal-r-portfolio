@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 import { BootScreen } from './components/BootScreen';
@@ -15,8 +15,11 @@ import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [bootDone, setBootDone] = useState(false);
 
   useEffect(() => {
+    if (!bootDone) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -32,21 +35,25 @@ export default function App() {
     revealElements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [bootDone]);
 
   return (
     <div className="app-container" ref={containerRef}>
-      <BootScreen />
-      <Cursor />
-      <Navbar />
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <EducationSection />
-      <ContactSection />
-      <ChatWidget />
-      <Analytics />
+      <BootScreen onComplete={() => setBootDone(true)} />
+      {bootDone && (
+        <>
+          <Cursor />
+          <Navbar />
+          <HeroSection />
+          <AboutSection />
+          <SkillsSection />
+          <ProjectsSection />
+          <EducationSection />
+          <ContactSection />
+          <ChatWidget />
+          <Analytics />
+        </>
+      )}
     </div>
   );
 }
