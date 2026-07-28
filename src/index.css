@@ -86,32 +86,25 @@
       --teal: #FFFFFF;
       --mono: 'JetBrains Mono', 'IBM Plex Mono', 'Space Mono', monospace;
       --sans: 'Inter', 'Geist', 'Space Grotesk', sans-serif;
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* ── CURSOR ── */
+    /* ── GLASS CURSOR ── */
     #cur {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 12px 3px rgba(255, 255, 255, 0.6)
+      display: none;
+      /* Just using the sleek ring */
     }
 
     #cur-ring {
       position: fixed;
       width: 32px;
       height: 32px;
-      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
       border-radius: 50%;
       pointer-events: none;
       z-index: 99998;
       transform: translate(-50%, -50%);
-      transition: width .2s, height .2s, border-color .2s
+      background: transparent;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 0 6px rgba(255, 255, 255, 0.1);
     }
 
     @media(hover:none) and (pointer:coarse) {
@@ -2428,7 +2421,7 @@
       border-radius: 50%;
       border: 2.5px solid rgba(255, 255, 255, 0.06);
       border-top-color: rgba(255, 255, 255, 0.85);
-      animation: apple-spin 1s cubic-bezier(0.6, 0.1, 0.4, 0.9) infinite;
+      animation: apple-spin 1s linear infinite;
       box-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
     }
 

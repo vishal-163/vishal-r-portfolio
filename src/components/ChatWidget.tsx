@@ -17,7 +17,7 @@ function TypingMessage({ content, onComplete }: { content: string, onComplete: (
 
     const typeWord = () => {
       if (currentIndex < words.length) {
-        setDisplayedText(prev => prev + (currentIndex > 0 ? ' ' : '') + words[currentIndex]);
+        setDisplayedText(words.slice(0, currentIndex + 1).join(' '));
 
         let delay = 30 + Math.random() * 40;
         if (words[currentIndex].match(/[.,!?]/)) delay += 150;

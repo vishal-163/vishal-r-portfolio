@@ -6,9 +6,14 @@ Welcome to the source code for my interactive developer portfolio. This project 
 
 - **Cinematic UI/UX**: Custom premium liquid glass design system (optimized for performance), highly responsive structural layouts, smooth native CSS animations, and cinematic boot screen sequences.
 - **Interactive Terminal**: Fully functional CLI-style contact form that processes user input step-by-step with ASCII loading animations, powered by EmailJS for reliable zero-spam delivery.
-- **AI-Powered Chat Assistant**: An integrated AI widget powered by the Groq API (Llama 3.3 70b Versatile). Visitors can chat with an AI trained specifically on my resume, skills, and background.
+- **AI-Powered Chat Assistant**: An integrated AI widget powered by the Groq API. Visitors can chat with an AI trained specifically on my resume, skills, and background.
 - **Serverless Backend Architecture**: Fully modularized API routes (`/api/chat`) designed to run seamlessly on Vercel's serverless edge network.
 - **Supabase Integration**: Secure, real-time logging of chat interactions and direct client-to-storage architecture for file handling.
+- **Advanced Terminal Validation**: The CLI contact form strictly enforces input constraints and actively detects/blocks common email domain typos (e.g., `gmil.com`) for a production-grade experience.
+- **Terminal Control System**: Added live terminal restarting mechanisms during input phases (including a functional macOS 'Close' dot Easter egg) for rapid mistake correction.
+- **Pure Glass Cursor**: Engineered a zero-latency, minimalist transparent glass ring cursor that seamlessly frames content without visual artifacting or blurry filters.
+- **Optimized Animations**: Rewrote critical CSS keyframe timelines (like the boot screen sequence) to guarantee mathematically perfect, stutter-free compositor loops.
+- **AI Streaming Stability**: Hardened the Chat Widget's simulated typewriter accumulation logic against React 18 Strict Mode double-invocation race conditions.
 - **Zero-Bloat Performance**: Built strictly with native DOM APIs and pure CSS over heavy UI animation libraries, resulting in an ultra-lightweight production footprint (~51 kB gzipped).
 - **Responsive Design**: Flawlessly adapts across desktop, tablet, and mobile environments.
 
@@ -16,7 +21,7 @@ Welcome to the source code for my interactive developer portfolio. This project 
 
 - **Frontend**: React 19, TypeScript, Vite, Vanilla CSS
 - **Backend / APIs**: Node.js, Vercel Serverless Functions, EmailJS API
-- **AI Integration**: Groq API (Llama 3.3)
+- **AI Integration**: Groq API
 - **Database & Storage**: Supabase (PostgreSQL)
 - **Deployment**: Vercel
 
@@ -91,7 +96,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 📬 Contact
+##  Contact
 
 - **Name**: Vishal R
 - **LinkedIn**: [Vishal R](https://www.linkedin.com/in/vishal-ravi-653a8a33b/)

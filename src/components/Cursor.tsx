@@ -60,31 +60,11 @@ export function Cursor() {
       const target = e.target as HTMLElement;
       if (!ringRef.current || !cursorRef.current) return;
       
-      const isClickable = target.tagName.toLowerCase() === 'a' || 
-                          target.tagName.toLowerCase() === 'button' ||
-                          target.closest('a') || 
-                          target.closest('button') ||
-                          target.classList.contains('clickable');
-
-      if (isClickable) {
-        ringRef.current.style.transform = 'translate(-50%, -50%) scale(1.5)';
-        ringRef.current.style.borderColor = 'rgba(255,255,255,0.8)';
-        ringRef.current.style.background = 'rgba(255,255,255,0.05)';
-        cursorRef.current.style.transform = 'translate(-50%, -50%) scale(0)';
-      } else {
-        ringRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
-        ringRef.current.style.borderColor = 'rgba(255,255,255,0.5)';
-        ringRef.current.style.background = 'transparent';
-        cursorRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
-      }
+      // No hover expansion - cursor stays the same size
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      if (!ringRef.current || !cursorRef.current) return;
-      ringRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
-      ringRef.current.style.borderColor = 'rgba(255,255,255,0.5)';
-      ringRef.current.style.background = 'transparent';
-      cursorRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+      // No hover expansion - cursor stays the same size
     };
 
     document.addEventListener('mouseover', handleMouseOver);

@@ -10,6 +10,7 @@ export function ContactSection() {
   const [inputValue, setInputValue] = useState('');
   const [progress, setProgress] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
+  const [terminalError, setTerminalError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
@@ -25,20 +26,59 @@ export function ContactSection() {
     inputRef.current?.focus();
   };
 
+  const resetTerminal = () => {
+    setStep('name');
+    setName('');
+    setEmail('');
+    setMessage('');
+    setInputValue('');
+    setProgress(0);
+    setTerminalError('');
+    // Slight delay to ensure focus happens after render
+    setTimeout(() => inputRef.current?.focus(), 10);
+  };
+
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const val = inputValue.trim();
 
-      if (step === 'name' && val) {
+      if (step === 'name') {
+        if (!val || val.length < 2) {
+          setTerminalError('Error: Name must be at least 2 characters.');
+          return;
+        }
         setName(val);
         setStep('email');
         setInputValue('');
-      } else if (step === 'email' && val) {
+      } else if (step === 'email') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!val || !emailRegex.test(val)) {
+          setTerminalError('Error: Invalid email format. Please enter a valid email.');
+          return;
+        }
+
+        const domain = val.split('@')[1].toLowerCase();
+        const gmailTypos = ['gmil.com', 'gamil.com', 'gmial.com', 'gmai.com', 'gmail.con', 'gmail.co'];
+        if (gmailTypos.includes(domain)) {
+          setTerminalError(`Error: Domain typo detected. Did you mean "gmail.com"?`);
+          return;
+        }
+
+        const yahooTypos = ['yaho.com', 'yahoo.con', 'yaho.co'];
+        if (yahooTypos.includes(domain)) {
+          setTerminalError(`Error: Domain typo detected. Did you mean "yahoo.com"?`);
+          return;
+        }
+
         setEmail(val);
         setStep('message');
         setInputValue('');
-      } else if (step === 'message' && val) {
+      } else if (step === 'message') {
+        if (!val) {
+          setTerminalError('Error: Message cannot be empty.');
+          return;
+        }
         setMessage(val);
         setInputValue('');
         setStep('sending');
@@ -134,14 +174,21 @@ export function ContactSection() {
         )}
 
         {(step === 'name' || step === 'email' || step === 'message') && (
-          <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap' }}>
-            <span style={{ color: 'var(--cyan)', marginRight: 8 }}>?</span>
-            {step === 'name' && <span style={{ marginRight: 8 }}>Enter your name:</span>}
-            {step === 'email' && <span style={{ marginRight: 8 }}>Enter your email:</span>}
-            {step === 'message' && <span style={{ marginRight: 8 }}>Enter your message:</span>}
-            <span style={{ color: '#fff', whiteSpace: 'pre-wrap' }}>{inputValue}</span>
-            {isFocused && <span style={{ animation: 'blink 1s step-end infinite', color: 'var(--green)', marginLeft: 2 }}>█</span>}
-          </div>
+          <>
+            <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap' }}>
+              <span style={{ color: 'var(--cyan)', marginRight: 8 }}>?</span>
+              {step === 'name' && <span style={{ marginRight: 8 }}>Enter your name:</span>}
+              {step === 'email' && <span style={{ marginRight: 8 }}>Enter your email:</span>}
+              {step === 'message' && <span style={{ marginRight: 8 }}>Enter your message:</span>}
+              <span style={{ color: '#fff', whiteSpace: 'pre-wrap' }}>{inputValue}</span>
+              {isFocused && <span style={{ animation: 'blink 1s step-end infinite', color: 'var(--green)', marginLeft: 2 }}>█</span>}
+            </div>
+            {terminalError && (
+              <div style={{ marginTop: 6, color: '#ff5f57' }}>
+                {terminalError}
+              </div>
+            )}
+          </>
         )}
 
         {step === 'sending' && (
@@ -163,6 +210,39 @@ export function ContactSection() {
         {step === 'error' && (
           <div style={{ marginTop: 12, color: '#ff5f57' }}>
             Error: Connection failed. Please check your network or use the email link above.
+          </div>
+        )}
+
+        {(step === 'success' || step === 'error') && (
+          <div style={{ marginTop: 24, paddingBottom: 16 }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                resetTerminal();
+              }}
+              className="clickable"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: 'var(--text)',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontFamily: 'var(--mono)',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseOver={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.1)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseOut={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.05)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              $ ./contact.sh --restart
+            </button>
           </div>
         )}
       </>
@@ -200,10 +280,44 @@ export function ContactSection() {
           </div>
 
           <div className="term reveal" style={{ position: 'relative' }}>
-            <div className="term-bar">
-              <div className="tdot" style={{ background: '#ff5f57' }} />
-              <div className="tdot" style={{ background: '#febc2e' }} />
-              <div className="tdot" style={{ background: '#28c840' }} />
+            <div className="term-bar" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px' }}>
+              <div style={{ display: 'flex', gap: '7px', alignItems: 'center' }}>
+                <div className="tdot clickable" onClick={resetTerminal} title="Reset Terminal" style={{ background: '#ff5f57', cursor: 'pointer' }} />
+                <div className="tdot" style={{ background: '#febc2e' }} />
+                <div className="tdot" style={{ background: '#28c840' }} />
+              </div>
+              {step !== 'name' && step !== 'sending' && step !== 'success' && step !== 'error' && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    resetTerminal();
+                  }}
+                  className="clickable"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: 'var(--text)',
+                    fontFamily: 'var(--mono)',
+                    fontSize: '0.75rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    padding: '4px 10px',
+                    borderRadius: '4px',
+                    backdropFilter: 'blur(4px)',
+                    WebkitBackdropFilter: 'blur(4px)'
+                  }}
+                  onMouseOver={(e) => {
+                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.1)';
+                    (e.target as HTMLButtonElement).style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                  }}
+                  onMouseOut={(e) => {
+                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.05)';
+                    (e.target as HTMLButtonElement).style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                  }}
+                >
+                  Restart
+                </button>
+              )}
             </div>
             <div
               className="term-body"
@@ -217,7 +331,10 @@ export function ContactSection() {
                 ref={inputRef}
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  if (terminalError) setTerminalError('');
+                }}
                 onKeyDown={handleKeyDown}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
