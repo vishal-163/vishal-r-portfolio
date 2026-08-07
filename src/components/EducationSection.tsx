@@ -8,7 +8,7 @@ export function EducationSection() {
         <h2 className="sec-title">&lt;Education &amp; Languages /&gt;</h2>
       </div>
       <div className="edu-grid">
-        <div className="term reveal">
+        <div className="term reveal reveal-edu-left">
           <div className="term-bar">
             <div className="tdot" style={{background: '#ff5f57'}} />
             <div className="tdot" style={{background: '#febc2e'}} />
@@ -27,15 +27,15 @@ export function EducationSection() {
             <div className="json-line" style={{paddingLeft: 16}}><span className="jk">"graduation"</span><span className="jp"> :
               </span><span className="jv">"Expected 2027"</span></div>
             <div className="json-line"><span className="jp">{'}'}</span></div>
-            <div className="tl-lbl">TIMELINE</div>
-            <div className="tl-item">
+            <div className="tl-lbl timeline-line-draw">TIMELINE</div>
+            <div className="tl-item timeline-node-pop" style={{ animationDelay: '0.1s' }}>
               <div className="tl-dot done" />
               <div>
                 <div className="tl-year">2023 — Started B.E.</div>
                 <div className="tl-desc">KSIT, Bangalore</div>
               </div>
             </div>
-            <div className="tl-item">
+            <div className="tl-item timeline-node-pop" style={{ animationDelay: '0.25s' }}>
               <div className="tl-dot" />
               <div>
                 <div className="tl-year">2027 — Expected Graduation</div>
@@ -44,7 +44,7 @@ export function EducationSection() {
             </div>
           </div>
         </div>
-        <div className="term reveal" style={{transitionDelay: '.1s'}}>
+        <div className="term reveal reveal-edu-right" style={{transitionDelay: '.15s'}}>
           <div className="term-bar">
             <div className="tdot" style={{background: '#ff5f57'}} />
             <div className="tdot" style={{background: '#febc2e'}} />

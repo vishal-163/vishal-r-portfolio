@@ -23,7 +23,7 @@ const RESEND_API_KEY = env.RESEND_API_KEY || process.env.RESEND_API_KEY;
 const GROQ_API_KEY = env.GROQ_API_KEY || process.env.GROQ_API_KEY;
 const SUPABASE_URL = env.SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = env.SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-const PORT = 3001;
+const PORT = 3002;
 
 const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY)
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)

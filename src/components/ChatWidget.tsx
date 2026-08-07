@@ -52,10 +52,19 @@ export function ChatWidget() {
   const [errorMsg, setErrorMsg] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const isAiBusy = isLoading || messages.some(m => m.isTyping);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    if (!isAiBusy && isOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isAiBusy, isOpen]);
 
   useEffect(() => {
     const handleEsc = (e: globalThis.KeyboardEvent) => {
@@ -105,7 +114,7 @@ export function ChatWidget() {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isAiBusy) return;
 
     setErrorMsg('');
     const text = input.trim();
@@ -199,16 +208,17 @@ export function ChatWidget() {
             )}
             <div className="input-form">
               <input
+                ref={inputRef}
                 type="text"
                 className="chat-input"
-                placeholder="Ask me anything..."
+                placeholder={isAiBusy ? "AI is replying..." : "Ask me anything..."}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-                disabled={isLoading}
+                disabled={isAiBusy}
                 style={{ paddingLeft: '16px' }}
               />
-              <button className="send-button" onClick={handleSend} disabled={isLoading || !input.trim()}>
+              <button className="send-button" onClick={handleSend} disabled={isAiBusy || !input.trim()}>
                 {isLoading ? (
                   <svg className="spinner" xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
                 ) : (

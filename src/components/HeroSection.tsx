@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 const PHRASES = [
-  'Aspiring Full Stack Developer', 
-  'Building Scalable Web & AI Systems', 
+  'Aspiring Full Stack Developer',
+  'Building Scalable Web & AI Systems',
   'CS Undergraduate'
 ];
 
@@ -54,7 +54,7 @@ export function HeroSection() {
       <div className="wrap">
         <div className="hero-grid">
           {/* LEFT: text */}
-          <div className="reveal">
+          <div className="reveal reveal-hero-left">
             <div className="hero-badge">ASPIRING FULL STACK DEVELOPER</div>
             <div>
               <div className="hero-name">
@@ -72,41 +72,41 @@ export function HeroSection() {
               and I enjoy working across both frontend and backend to create efficient systems.
             </p>
             <div className="hero-btns">
-              <button className="btn-solid" onClick={() => navTo('#projects')}>&gt; view_projects()</button>
-              <button className="btn-outline" onClick={handleDownloadResume}>↓ view_resume()</button>
-              <button className="btn-outline" onClick={() => navTo('#contact')}>contact_me()</button>
+              <button className="btn-solid hero-btn-boot" style={{ animationDelay: '0.1s' }} onClick={() => navTo('#projects')}>&gt; view_projects()</button>
+              <button className="btn-outline hero-btn-boot" style={{ animationDelay: '0.2s' }} onClick={handleDownloadResume}>↓ view_resume()</button>
+              <button className="btn-outline hero-btn-boot" style={{ animationDelay: '0.3s' }} onClick={() => navTo('#contact')}>contact_me()</button>
             </div>
           </div>
           {/* RIGHT: photo + term */}
-          <div className="reveal hero-right-col" style={{ transitionDelay: '200ms' }}>
+          <div className="reveal reveal-hero-right" style={{ transitionDelay: '150ms' }}>
             <div className="hero-photo-wrap">
               <img src="/photo.png" alt="Vishal R" loading="eager" />
             </div>
             <div className="term hero-term-mini glass-panel">
               <div className="term-bar">
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <div className="mac-dot" style={{background: '#ff5f57'}}></div>
-                  <div className="mac-dot" style={{background: '#febc2e'}}></div>
-                  <div className="mac-dot" style={{background: '#28c840'}}></div>
+                  <div className="mac-dot" style={{ background: '#ff5f57' }}></div>
+                  <div className="mac-dot" style={{ background: '#febc2e' }}></div>
+                  <div className="mac-dot" style={{ background: '#28c840' }}></div>
                 </div>
                 <span className="term-title">vishal@dev:~</span>
               </div>
               <div className="term-body">
                 <div><span className="json-prompt">vishal@dev:~$</span> <span className="json-cmd">cat status.json</span></div>
                 <div>{'{'}</div>
-                <div className="json-line" style={{paddingLeft: 18}}>
+                <div className="json-line" style={{ paddingLeft: 18 }}>
                   <span className="json-key">"status"</span>: <span className="json-str">"Available"</span>,
                 </div>
-                <div style={{paddingLeft: 18}}>
+                <div style={{ paddingLeft: 18 }}>
                   <span className="json-key">"location"</span>: <span className="json-str">"Bangalore, IN"</span>,
                 </div>
-                <div style={{paddingLeft: 18}}>
+                <div style={{ paddingLeft: 18 }}>
                   <span className="json-key">"focus"</span>: <span className="json-str">"Full Stack + AI"</span>,
                 </div>
-                <div style={{paddingLeft: 18}}>
+                <div style={{ paddingLeft: 18 }}>
                   <span className="json-key">"education"</span>: <span className="json-str">"B.E. CSE @ KSIT"</span>,
                 </div>
-                <div style={{paddingLeft: 18}}>
+                <div style={{ paddingLeft: 18 }}>
                   <span className="json-key">"grad"</span>: <span className="json-str">"2027"</span>
                 </div>
                 <div>{'}'}</div>

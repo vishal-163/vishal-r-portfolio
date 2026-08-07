@@ -20,21 +20,24 @@ export default function App() {
   useEffect(() => {
     if (!bootDone) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('vis');
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
+    const checkReveals = () => {
+      const elements = document.querySelectorAll('.reveal, .reveal-hero-left, .reveal-hero-right, .reveal-about-card, .reveal-skills, .reveal-proj-left, .reveal-proj-right, .reveal-edu-left, .reveal-edu-right');
+      const triggerBottom = window.innerHeight * 0.92;
+      elements.forEach((el) => {
+        const top = el.getBoundingClientRect().top;
+        if (top < triggerBottom) {
+          el.classList.add('vis');
+        }
+      });
+    };
 
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach((el) => observer.observe(el));
+    window.addEventListener('scroll', checkReveals, { passive: true });
+    const timer = setTimeout(checkReveals, 100);
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', checkReveals);
+    };
   }, [bootDone]);
 
   return (

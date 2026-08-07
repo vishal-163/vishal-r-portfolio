@@ -1,33 +1,70 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [pillStyle, setPillStyle] = useState({ left: 0, width: 0, textLeft: 0, textWidth: 0 });
+
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+
+  const updatePill = (section: string) => {
+    const activeEl = linkRefs.current[section];
+    if (activeEl) {
+      const textEl = activeEl.querySelector('.nav-txt') as HTMLElement | null;
+      const left = activeEl.offsetLeft;
+      const width = activeEl.offsetWidth;
+      const textLeft = textEl ? activeEl.offsetLeft + textEl.offsetLeft : left;
+      const textWidth = textEl ? textEl.offsetWidth : width;
+      setPillStyle({ left, width, textLeft, textWidth });
+    }
+  };
+
+  useEffect(() => {
+    updatePill(activeSection);
+  }, [activeSection]);
+
+  useEffect(() => {
+    const handleResize = () => updatePill(activeSection);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeSection]);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+      const progEl = document.getElementById('prog');
+      if (progEl) {
+        progEl.style.width = `${progress}%`;
+      }
+
+      // Smooth section detection based on viewport focus point
+      const sections = ['home', 'about', 'skills', 'projects', 'education', 'contact'];
+      let current = 'home';
+      let minDistance = Infinity;
+      const targetY = window.innerHeight * 0.35;
+
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const distance = Math.abs(rect.top - targetY);
+          if (rect.top <= targetY + 120 && distance < minDistance) {
+            minDistance = distance;
+            current = id;
+          }
+        }
+      });
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    // Intersection Observer for Active Links
-    const sections = document.querySelectorAll('section[id]');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, { threshold: 0.4 });
-
-    sections.forEach((s) => observer.observe(s));
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
     };
   }, []);
 
@@ -35,6 +72,7 @@ export function Navbar() {
 
   return (
     <>
+      <div id="prog" />
       <nav id="nav" className={scrolled ? 'scrolled' : ''}>
         <div className="wrap nav-inner">
           <div className="nav-logo">
@@ -42,13 +80,30 @@ export function Navbar() {
             Vishal R
           </div>
           <div className="nav-links">
+            <div
+              className="nav-active-pill-box"
+              style={{
+                transform: `translateX(${pillStyle.left}px)`,
+                width: `${pillStyle.width}px`,
+                opacity: pillStyle.width > 0 ? 1 : 0
+              }}
+            />
+            <div
+              className="nav-active-underline"
+              style={{
+                transform: `translateX(${pillStyle.textLeft}px)`,
+                width: `${pillStyle.textWidth}px`,
+                opacity: pillStyle.textWidth > 0 ? 1 : 0
+              }}
+            />
             {navLinks.map(link => (
               <a 
                 key={link}
+                ref={(el) => { linkRefs.current[link] = el; }}
                 href={`#${link}`} 
                 className={activeSection === link ? 'active' : ''}
               >
-                {link}
+                <span className="nav-txt">{link}</span>
               </a>
             ))}
           </div>
@@ -71,7 +126,7 @@ export function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className={activeSection === link ? 'active' : ''}
           >
-            {link}
+            <span className="nav-txt">{link}</span>
           </a>
         ))}
       </div>

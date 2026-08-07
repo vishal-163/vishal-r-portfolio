@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 type TabType = 'frontend' | 'backend' | 'databases' | 'ai' | 'tools';
 
@@ -51,38 +51,13 @@ const TAB_COLORS: Record<TabType, string> = {
 
 export function SkillsSection() {
   const [activeTab, setActiveTab] = useState<TabType>('frontend');
-  const [animateBars, setAnimateBars] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    // Reset animation trigger when tab changes
-    setAnimateBars(false);
-    const timer = setTimeout(() => setAnimateBars(true), 60);
-    return () => clearTimeout(timer);
-  }, [activeTab]);
-
-  useEffect(() => {
-    // Animate bars on initial scroll into view
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setAnimateBars(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <section id="skills" className="dot-bg" ref={sectionRef}>
+    <section id="skills" className="dot-bg">
       <div className="wrap">
-        <div className="reveal">
-          <div className="sec-num">02</div>
-          <h2 className="sec-title">&lt;Tech Stack /&gt;</h2>
-        </div>
-        <div className="editor reveal">
+        <div className="sec-num reveal">02</div>
+        <h2 className="sec-title reveal">&lt;Tech Stack /&gt;</h2>
+        <div className="editor reveal reveal-skills">
           <div className="editor-tabs">
             <div className="editor-dots">
               <div className="tdot" style={{background: '#ff5f57'}} />
@@ -114,18 +89,21 @@ export function SkillsSection() {
                 </div>
               ))}
             </div>
-            <div className="editor-panel">
+            <div className="editor-panel" key={activeTab}>
               <div className="skill-pane active">
                 <div className="skill-interface">
                   interface {activeTab === 'ai' ? 'ai_ml' : activeTab} {'{'}
                 </div>
-                {SKILLS[activeTab].map((skill) => (
+                {SKILLS[activeTab].map((skill, index) => (
                   <div className="skill-row" key={skill.name}>
                     <span className="skill-name">{skill.name}</span>
                     <div className="skill-bar-wrap">
                       <div
-                        className="skill-bar"
-                        style={{ width: animateBars ? `${skill.value}%` : '0%' }}
+                        className="skill-bar animate-bar"
+                        style={{
+                          '--target-width': `${skill.value}%`,
+                          animationDelay: `${index * 0.06}s`
+                        } as React.CSSProperties}
                       />
                     </div>
                     <span className="skill-pct">{skill.value}%</span>

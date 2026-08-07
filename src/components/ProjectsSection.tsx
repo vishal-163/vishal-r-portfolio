@@ -10,7 +10,7 @@ export function ProjectsSection() {
         <h2 className="sec-title">&lt;Featured Projects /&gt;</h2>
       </div>
       <div className="proj-grid">
-        <TiltCard className="proj-card reveal">
+        <TiltCard className="proj-card reveal reveal-proj-left">
           <div className="proj-header">
             <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
               <div style={{display: 'flex', gap: 5}}>
@@ -22,7 +22,7 @@ export function ProjectsSection() {
             </div>
             <div style={{display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap'}}>
               <span className="proj-status s-done">✓ Completed</span>
-              <a className="proj-link" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank" rel="noreferrer">⎋ Code</a>
+              <a className="proj-link" href="https://github.com/vishal-163/AI-TRIP-PLANNER.git" target="_blank" rel="noreferrer">⎋ View Code</a>
             </div>
           </div>
           <div className="proj-body">
@@ -50,7 +50,7 @@ export function ProjectsSection() {
               API</span><span className="proj-tag">Gemini API</span><span className="proj-tag">PostgreSQL</span>
           </div>
         </TiltCard>
-        <TiltCard className="proj-card reveal" style={{transitionDelay: '.1s'}}>
+        <TiltCard className="proj-card reveal reveal-proj-right" style={{transitionDelay: '.15s'}}>
           <div className="proj-header">
             <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
               <div style={{display: 'flex', gap: 5}}>
