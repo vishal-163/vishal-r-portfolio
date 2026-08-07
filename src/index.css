@@ -786,16 +786,8 @@ section::after {
   background: rgba(255, 255, 255, 0.05)
 }
 
-@media(max-width:768px) {
-
-  .nav-links,
-  .nav-badge {
-    display: none
-  }
-
-  .nav-burger {
-    display: flex
-  }
+.nav-burger {
+  display: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -816,12 +808,6 @@ section::after {
   gap: clamp(32px, 5vw, 64px);
   align-items: center;
   width: 100%
-}
-
-@media(max-width:768px) {
-  .hero-grid {
-    grid-template-columns: 1fr
-  }
 }
 
 /* Scanline overlay */
@@ -2039,16 +2025,6 @@ section::after {
   grid-template-columns: 180px 1fr
 }
 
-@media(max-width:600px) {
-  .editor-layout {
-    grid-template-columns: 1fr
-  }
-
-  .editor-sidebar {
-    display: none
-  }
-}
-
 .editor-sidebar {
   border-right: 1px solid var(--border);
   padding: 14px 0;
@@ -2866,9 +2842,14 @@ nav,
 /* Apply guards to cards to prevent horizontal scroll on tiny screens */
 .proj-card,
 .skill-group,
-.contact-card {
+.contact-card,
+.term,
+.about-card,
+.glass-panel {
   word-break: break-word;
   overflow-wrap: break-word;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @media(max-width: 768px) {
