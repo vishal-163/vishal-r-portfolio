@@ -610,7 +610,8 @@ section::after {
   font-family: var(--mono);
   font-size: 1rem;
   font-weight: 700;
-  color: #fff
+  color: #fff;
+  white-space: nowrap;
 }
 
 .nav-logo-box {
@@ -742,18 +743,24 @@ section::after {
 .nav-burger {
   display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
-  padding: 6px;
-  cursor: none
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
 }
 
 .nav-burger span {
   display: block;
   width: 20px;
-  height: 1.5px;
-  background: var(--dim);
+  height: 2px;
+  background: #ffffff;
   border-radius: 2px;
-  transition: all .2s
+  transition: all 0.2s ease;
 }
 
 #nav-mob {
@@ -762,32 +769,41 @@ section::after {
   top: 64px;
   left: 0;
   right: 0;
-  background: rgba(5, 15, 10, .98);
+  background: rgba(8, 10, 16, 0.96);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 0;
-  z-index: 999
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  z-index: 999;
 }
 
 #nav-mob a {
-  display: block;
-  padding: 12px 24px;
+  padding: 12px 18px;
   font-family: var(--mono);
-  font-size: .95rem;
+  font-size: 0.95rem;
   color: var(--dim);
-  transition: color .15s, background .15s;
+  border-radius: 8px;
+  transition: all 0.2s ease;
   min-height: 44px;
   display: flex;
-  align-items: center
+  align-items: center;
+  margin-bottom: 4px;
+  text-decoration: none;
 }
 
-#nav-mob a:hover {
-  color: var(--green);
-  background: rgba(255, 255, 255, 0.05)
+#nav-mob a::before {
+  content: './';
+  color: var(--accent);
+  margin-right: 6px;
+  opacity: 0.7;
 }
 
-.nav-burger {
-  display: none !important;
+#nav-mob a:hover,
+#nav-mob a.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -2852,16 +2868,27 @@ nav,
   backface-visibility: hidden;
 }
 
-@media(max-width: 768px) {
-
-  /* Hero layout fix: align items to center when stacked */
-  .hero-right-col {
-    align-items: center !important;
+@media(max-width:768px) {
+  .nav-links,
+  .nav-badge {
+    display: none !important;
   }
 
-  .hero-photo-wrap {
-    margin: 0 auto;
+  .nav-burger {
+    display: flex !important;
   }
 
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
+@media(max-width:600px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-sidebar {
+    display: none;
+  }
 }
