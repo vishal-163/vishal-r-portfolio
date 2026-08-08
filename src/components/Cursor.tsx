@@ -25,8 +25,7 @@ export function Cursor() {
       mx = e.clientX;
       my = e.clientY;
       if (cursorRef.current) {
-        cursorRef.current.style.left = `${mx}px`;
-        cursorRef.current.style.top = `${my}px`;
+        cursorRef.current.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
       }
     };
 
@@ -34,8 +33,7 @@ export function Cursor() {
       rx += (mx - rx) * 0.12;
       ry += (my - ry) * 0.12;
       if (ringRef.current) {
-        ringRef.current.style.left = `${rx}px`;
-        ringRef.current.style.top = `${ry}px`;
+        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
       }
       animationFrameId = requestAnimationFrame(loop);
     };
@@ -44,12 +42,17 @@ export function Cursor() {
     animationFrameId = requestAnimationFrame(loop);
 
     // Scroll Progress Logic
+    let scrollAnimationFrame: number | null = null;
     const onScroll = () => {
-      if (!progRef.current) return;
-      const scrollY = window.scrollY;
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const width = (scrollY / maxScroll) * 100;
-      progRef.current.style.width = `${Math.min(100, Math.max(0, width))}%`;
+      if (scrollAnimationFrame) return;
+      scrollAnimationFrame = requestAnimationFrame(() => {
+        if (!progRef.current) return;
+        const scrollY = window.scrollY;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const width = maxScroll > 0 ? (scrollY / maxScroll) : 0;
+        progRef.current.style.transform = `scaleX(${Math.min(1, Math.max(0, width))})`;
+        scrollAnimationFrame = null;
+      });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });

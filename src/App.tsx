@@ -20,24 +20,23 @@ export default function App() {
   useEffect(() => {
     if (!bootDone) return;
 
-    const checkReveals = () => {
-      const elements = document.querySelectorAll('.reveal, .reveal-hero-left, .reveal-hero-right, .reveal-about-card, .reveal-skills, .reveal-proj-left, .reveal-proj-right, .reveal-edu-left, .reveal-edu-right');
-      const triggerBottom = window.innerHeight * 0.92;
-      elements.forEach((el) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < triggerBottom) {
-          el.classList.add('vis');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('vis');
+          observer.unobserve(entry.target);
         }
       });
-    };
+    }, {
+      root: null,
+      rootMargin: '0px 0px -8% 0px',
+      threshold: 0
+    });
 
-    window.addEventListener('scroll', checkReveals, { passive: true });
-    const timer = setTimeout(checkReveals, 100);
+    const elements = document.querySelectorAll('.reveal, .reveal-hero-left, .reveal-hero-right, .reveal-about-card, .reveal-skills, .reveal-proj-left, .reveal-proj-right, .reveal-edu-left, .reveal-edu-right');
+    elements.forEach((el) => observer.observe(el));
 
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('scroll', checkReveals);
-    };
+    return () => observer.disconnect();
   }, [bootDone]);
 
   return (
