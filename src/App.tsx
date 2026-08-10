@@ -41,10 +41,10 @@ export default function App() {
 
   return (
     <div className="app-container" ref={containerRef}>
+      <Cursor />
       <BootScreen onComplete={() => setBootDone(true)} />
       {bootDone && (
         <>
-          <Cursor />
           <Navbar />
           <HeroSection />
           <AboutSection />

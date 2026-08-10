@@ -2774,81 +2774,160 @@ nav,
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-       GLASS SPINNER LOADING SCREEN
+       RENDER-STYLE DEPLOYMENT BOOT SCREEN
     ═══════════════════════════════════════════════════════════════════════ */
-.apple-boot-overlay {
-  background: #0A0A0A;
+.render-boot-overlay {
+  background: #0B0B0B;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   position: fixed;
   inset: 0;
   z-index: 9999;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+  transition: opacity 0.8s ease, visibility 0.8s;
   opacity: 1;
   visibility: visible;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #FFFFFF;
 }
 
-.apple-boot-overlay.done {
+.render-boot-overlay.done {
   opacity: 0;
   visibility: hidden;
 }
 
-.apple-boot-content {
+/* TOP BAR */
+.render-boot-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  width: 100%;
+}
+
+.render-boot-brand {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.render-boot-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #AAAAAA;
+  text-transform: uppercase;
+}
+
+/* SPINNER */
+.render-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: render-spin 1s linear infinite;
+}
+
+@keyframes render-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* DIVIDER */
+.render-boot-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* CONSOLE CONTAINER */
+.render-boot-console-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 3rem 2rem;
+  overflow: hidden;
+}
+
+.render-boot-console {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 32px;
+  gap: 1.75rem;
+  width: max-content;
 }
 
-.apple-spinner {
-  width: 48px;
-  height: 48px;
-  position: relative;
+.render-boot-log-entry {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  opacity: 0;
+  animation: render-fade-in 0.4s ease forwards;
+}
+
+.render-boot-timestamp {
+  color: #666666;
+  flex-shrink: 0;
+}
+
+.render-boot-logtext {
+  color: #E0E0E0;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.75rem;
 }
 
-.spinner-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.render-boot-logtext.highlight {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.render-inline-spinner {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #FFFFFF;
   border-radius: 50%;
-  border: 2.5px solid rgba(255, 255, 255, 0.06);
-  border-top-color: rgba(255, 255, 255, 0.85);
-  animation: apple-spin 1s linear infinite;
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+  animation: render-spin 0.8s linear infinite;
+  display: inline-block;
 }
 
-@keyframes apple-spin {
-  0% {
-    transform: rotate(0deg);
+@keyframes render-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .render-boot-topbar {
+    padding: 1rem 1.25rem;
   }
-
-  100% {
-    transform: rotate(360deg);
+  
+  .render-boot-console-container {
+    padding: 2rem 1.25rem;
+  }
+  
+  .render-boot-log-entry {
+    gap: 0.75rem;
+    font-size: 0.65rem;
   }
 }
 
-.apple-boot-text {
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.75);
-  font-weight: 400;
-  transition: opacity 0.45s ease, transform 0.45s ease;
-  text-align: center;
-}
-
-.apple-boot-text.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.apple-boot-text.fade-out {
-  opacity: 0;
-  transform: translateY(-6px);
+@media (min-width: 1440px) {
+  .render-boot-console {
+    max-width: 1000px;
+    gap: 1.25rem;
+  }
+  .render-boot-log-entry {
+    font-size: 0.95rem;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
