@@ -59,14 +59,13 @@ export function Cursor() {
     onScroll();
 
     // Hover effect logic
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+    const handleMouseOver = () => {
       if (!ringRef.current || !cursorRef.current) return;
       
       // No hover expansion - cursor stays the same size
     };
 
-    const handleMouseOut = (e: MouseEvent) => {
+    const handleMouseOut = () => {
       // No hover expansion - cursor stays the same size
     };
 

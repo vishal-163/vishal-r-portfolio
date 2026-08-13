@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, KeyboardEvent } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface Message {
   id: string;

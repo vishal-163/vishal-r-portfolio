@@ -31,11 +31,6 @@ function getTimestamp() {
   return now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-interface LogEntry {
-  time: string;
-  text: string;
-}
-
 export function BootScreen({ onComplete }: { onComplete?: () => void }) {
   const [isDone, setIsDone] = useState(false);
   const [timestamps, setTimestamps] = useState<string[]>([]);
