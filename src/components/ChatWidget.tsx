@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: string;
@@ -35,10 +36,10 @@ function TypingMessage({ content, onComplete }: { content: string, onComplete: (
   }, [content, onComplete]);
 
   return (
-    <>
-      {displayedText}
+    <div className="markdown-container">
+      <ReactMarkdown>{displayedText}</ReactMarkdown>
       <span className="typing-cursor" />
-    </>
+    </div>
   );
 }
 
@@ -49,10 +50,12 @@ export function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const isAiBusy = isLoading || messages.some(m => m.isTyping);
 
@@ -83,7 +86,6 @@ export function ChatWidget() {
       const el = document.getElementById(id);
       if (el) {
         const rect = el.getBoundingClientRect();
-        // Check distance to center of screen for more natural section detection
         const distance = Math.abs(rect.top - window.innerHeight / 3);
         if (distance < minDistance) {
           minDistance = distance;
@@ -98,19 +100,23 @@ export function ChatWidget() {
     setIsOpen(true);
     if (messages.length === 1 && messages[0].id === '1') {
       const section = getCurrentSection();
-      let displaySection = section;
-      if (section === 'home') displaySection = 'Home';
-      else displaySection = section.charAt(0).toUpperCase() + section.slice(1);
-      
+      const displaySection = section.charAt(0).toUpperCase() + section.slice(1);
       setMessages([
-        { 
-          id: '1', 
-          role: 'assistant', 
-          content: `Hi! I'm Vishal's AI Assistant. I see you're looking at the ${displaySection} section! What would you like to know more about it?`,
-          isTyping: true 
+        {
+          id: '1',
+          role: 'assistant',
+          content: `Hi! I'm Vishal's AI Assistant. I can see you're on the ${displaySection} section — feel free to ask me anything about Vishal's work, skills, or projects!`,
+          isTyping: true
         }
       ]);
     }
+  };
+
+  const handleStop = () => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    setIsGenerating(false);
+    setIsLoading(false);
   };
 
   const handleSend = async () => {
@@ -123,9 +129,14 @@ export function ChatWidget() {
     const userMessage: Message = { id: crypto.randomUUID(), role: 'user', content: text };
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+    setIsGenerating(true);
+
+    // Create a new AbortController for this request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
-      const history = messages.filter(m => m.role !== 'system').slice(-14).concat(userMessage);
+      const history = messages.filter(m => m.role !== 'system').concat(userMessage);
       const apiMessages = history.map((m) => ({
         role: m.role,
         content: m.content
@@ -136,11 +147,17 @@ export function ChatWidget() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages, currentSection })
+        body: JSON.stringify({ messages: apiMessages, currentSection }),
+        signal: controller.signal
       });
 
-      if (!res.ok) throw new Error(`Server error (${res.status})`);
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const msg = res.status === 429
+          ? (data.error || "I'm a bit overwhelmed right now. Try again in a moment.")
+          : (data.error || `Error ${res.status}: something went wrong.`);
+        throw new Error(msg);
+      }
       const botText = data.message || "I couldn't understand that.";
 
       const botMessage: Message = {
@@ -152,11 +169,17 @@ export function ChatWidget() {
 
       setMessages(prev => [...prev, botMessage]);
     } catch (err: any) {
+      // Aborted by user — silently stop, no error message
+      if (err.name === 'AbortError') {
+        return;
+      }
       console.error(err);
       setErrorMsg(err.message || 'Failed to get response.');
       setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'system', content: `⚠️ ${err.message}` }]);
     } finally {
       setIsLoading(false);
+      setIsGenerating(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -185,7 +208,9 @@ export function ChatWidget() {
                   {m.isTyping ? (
                     <TypingMessage content={m.content} onComplete={() => handleTypingComplete(m.id)} />
                   ) : (
-                    m.content
+                    <div className="markdown-container">
+                      <ReactMarkdown>{m.content}</ReactMarkdown>
+                    </div>
                   )}
                 </div>
               </div>
@@ -218,13 +243,22 @@ export function ChatWidget() {
                 disabled={isAiBusy}
                 style={{ paddingLeft: '16px' }}
               />
-              <button className="send-button" onClick={handleSend} disabled={isAiBusy || !input.trim()}>
-                {isLoading ? (
-                  <svg className="spinner" xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
-                )}
-              </button>
+              {isGenerating ? (
+                <button className="send-button" onClick={handleStop} title="Stop generation">
+                  {/* Stop icon — filled square */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="#ffffff" stroke="none">
+                    <rect x={4} y={4} width={16} height={16} rx={2} />
+                  </svg>
+                </button>
+              ) : (
+                <button className="send-button" onClick={handleSend} disabled={isAiBusy || !input.trim()}>
+                  {isLoading ? (
+                    <svg className="spinner" xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>

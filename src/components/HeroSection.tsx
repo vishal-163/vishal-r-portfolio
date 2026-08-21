@@ -12,7 +12,7 @@ export function HeroSection() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     const currentPhrase = PHRASES[phraseIndex];
 
     const type = () => {
@@ -37,7 +37,9 @@ export function HeroSection() {
       timeout = setTimeout(type, delay);
     }
 
-    return () => clearTimeout(timeout);
+    return () => {
+      if (timeout !== undefined) clearTimeout(timeout);
+    };
   }, [text, isDeleting, phraseIndex]);
 
   const navTo = (id: string) => {

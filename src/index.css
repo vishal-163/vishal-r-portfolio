@@ -1459,6 +1459,35 @@ section::after {
   border-bottom-left-radius: 4px;
 }
 
+.markdown-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.markdown-container p {
+  margin: 0;
+}
+
+.markdown-container p:last-child {
+  display: inline;
+}
+
+.markdown-container ul, .markdown-container ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.markdown-container h1, .markdown-container h2, .markdown-container h3, .markdown-container h4 {
+  margin: 4px 0;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.markdown-container strong {
+  color: #ffffff;
+}
+
 .thinking-indicator {
   display: flex;
   align-items: center;
@@ -2180,6 +2209,14 @@ section::after {
   color: #fff
 }
 
+.proj-type {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
 .proj-status {
   font-family: var(--mono);
   font-size: .72rem;
@@ -2201,6 +2238,12 @@ section::after {
   background: rgba(255, 255, 255, 0.08);
   color: var(--cyan);
   border: 1px solid rgba(255, 255, 255, 0.25)
+}
+
+.proj-link-active {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .proj-body {
