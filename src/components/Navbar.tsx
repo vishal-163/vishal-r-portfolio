@@ -1,10 +1,41 @@
 import { useState, useEffect, useRef } from 'react';
 
+function getBrowserInfo() {
+  const ua = navigator.userAgent;
+  let browser = "UNKNOWN_BROWSER";
+  let os = "UNKNOWN_OS";
+
+  if (ua.indexOf("iPhone") > -1 || ua.indexOf("iPad") > -1 || ua.indexOf("iPod") > -1) os = "IOS";
+  else if (ua.indexOf("Android") > -1) os = "ANDROID";
+  else if (ua.indexOf("Mac") > -1) os = "MACOS";
+  else if (ua.indexOf("Win") > -1) os = "WINDOWS";
+  else if (ua.indexOf("Linux") > -1) os = "LINUX";
+
+  if (ua.indexOf("CriOS") > -1) browser = "CHROME";
+  else if (ua.indexOf("FxiOS") > -1) browser = "FIREFOX";
+  else if (ua.indexOf("EdgiOS") > -1) browser = "EDGE";
+  else if (ua.indexOf("OPiOS") > -1) browser = "OPERA";
+  else if (ua.indexOf("SamsungBrowser") > -1) browser = "SAMSUNG_INTERNET";
+  else if (ua.indexOf("Firefox") > -1) browser = "FIREFOX";
+  else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) browser = "OPERA";
+  else if (ua.indexOf("Trident") > -1) browser = "IE";
+  else if (ua.indexOf("Edg") > -1) browser = "EDGE";
+  else if (ua.indexOf("Chrome") > -1) browser = "CHROME";
+  else if (ua.indexOf("Safari") > -1) browser = "SAFARI";
+
+  return { browser, os };
+}
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [pillStyle, setPillStyle] = useState({ left: 0, width: 0, textLeft: 0, textWidth: 0 });
+  const [browserInfo, setBrowserInfo] = useState({ os: 'UNKNOWN_OS', browser: 'UNKNOWN_BROWSER' });
+
+  useEffect(() => {
+    setBrowserInfo(getBrowserInfo());
+  }, []);
 
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
@@ -77,7 +108,7 @@ export function Navbar() {
         <div className="wrap nav-inner">
           <div className="nav-logo">
             <div className="nav-logo-box">VR</div>
-            Vishal R
+            <span className="nav-logo-name">Vishal R</span>
           </div>
           <div className="nav-links">
             <div
@@ -107,10 +138,13 @@ export function Navbar() {
               </a>
             ))}
           </div>
-          <div className="nav-badge glass-panel"> Available for work</div>
-          <button 
-            className="nav-burger" 
-            id="burger" 
+          <div className="nav-badge glass-panel" style={{ fontFamily: 'monospace', fontSize: '0.8rem', letterSpacing: '1px' }}>
+            <span className="badge-desktop">{`> OS: ${browserInfo.os} | BROWSER: ${browserInfo.browser}`}</span>
+            <span className="badge-mobile">{`> ${browserInfo.os} | ${browserInfo.browser}`}</span>
+          </div>
+          <button
+            className="nav-burger"
+            id="burger"
             aria-label="Menu"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -119,6 +153,9 @@ export function Navbar() {
         </div>
       </nav>
       <div id="nav-mob" style={{ display: mobileMenuOpen ? 'block' : 'none' }}>
+        <div className="nav-badge-mob glass-panel" style={{ fontFamily: 'monospace', fontSize: '0.78rem', letterSpacing: '1px', marginBottom: '10px' }}>
+          {`> ${browserInfo.os} | ${browserInfo.browser}`}
+        </div>
         {navLinks.map(link => (
           <a 
             key={link}
