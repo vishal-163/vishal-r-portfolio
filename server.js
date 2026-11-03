@@ -185,7 +185,23 @@ function extractResponse(raw) {
 }
 
 const app = express();
-app.use(cors());
+const allowedOrigins = [
+  'https://vishalravi.com',
+  'https://www.vishalravi.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:3002'
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.pages.dev')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Fallback allow for development flexibility
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 // --- /api/chat ---

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiBaseUrl } from '../config';
 
 const PHRASES = [
   'Aspiring Full Stack Developer',
@@ -47,7 +48,8 @@ export function HeroSection() {
   };
 
   const handleDownloadResume = () => {
-    fetch('/api/resume-action', { method: 'POST', keepalive: true }).catch(console.error);
+    const baseUrl = getApiBaseUrl();
+    fetch(`${baseUrl}/api/resume-action`, { method: 'POST', keepalive: true }).catch(console.error);
     window.open('/resume.pdf', '_blank');
   };
 

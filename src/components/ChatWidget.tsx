@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { getApiBaseUrl } from '../config';
 
 interface Message {
   id: string;
@@ -144,7 +145,10 @@ export function ChatWidget() {
 
       const currentSection = getCurrentSection();
 
-      const res = await fetch('/api/chat', {
+      const baseUrl = getApiBaseUrl();
+      const targetUrl = `${baseUrl}/api/chat`;
+      console.log('🔍 API target:', targetUrl);
+      const res = await fetch(targetUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: apiMessages, currentSection }),
